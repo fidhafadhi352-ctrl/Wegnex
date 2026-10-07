@@ -16,29 +16,17 @@ from PIL import Image as PILImage
 from user.account.models import Category
 from .models import Product, ProductVariant, VariantImage
 
-
-# ---------------------------------------------------------------------------
-# Auth helper
-# ---------------------------------------------------------------------------
-
 def is_admin(user):
     return user.is_authenticated and (user.is_staff or user.is_superuser) and user.is_active
 
 
 def _save_cropped_image(b64_data, folder, filename_prefix='img'):
-    """
-    Convert a base64-encoded cropped image (from Cropper.js) into a
-    Django ContentFile, resized to a maximum of 1200px on the longest side,
-    saved as JPEG (quality 90).
-    Returns a ContentFile ready to assign to an ImageField.
-    """
     if ',' in b64_data:
         b64_data = b64_data.split(',', 1)[1]
 
     raw = base64.b64decode(b64_data)
     img = PILImage.open(BytesIO(raw)).convert('RGB')
 
-    # Resize — keep aspect ratio, max 1200px
     max_size = 1200
     w, h = img.size
     if max(w, h) > max_size:
@@ -52,26 +40,18 @@ def _save_cropped_image(b64_data, folder, filename_prefix='img'):
     filename = f"{filename_prefix}_{uuid.uuid4().hex[:8]}.jpg"
     return ContentFile(out.read(), name=filename)
 
-
-# ===========================================================================
-# PAGE 1 — PRODUCT LIST
-# ===========================================================================
-
 @never_cache
 def product_list(request):
-    """Page 1 — list all products, search, pagination, add/edit/delete."""
     if not is_admin(request.user):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
 
     base_qs = Product.objects.filter(is_deleted=False).select_related('category')
 
-    # Stats
     total_products = base_qs.count()
     active_products = base_qs.filter(is_active=True).count()
     inactive_products = base_qs.filter(is_active=False).count()
 
-    # Search
     search_query = request.GET.get('search', '').strip()
     if search_query:
         qs = base_qs.filter(
@@ -84,7 +64,6 @@ def product_list(request):
 
     qs = qs.order_by('-created_at', '-id')
 
-    # Pagination
     paginator = Paginator(qs, 8)
     try:
         page_obj = paginator.get_page(request.GET.get('page', 1))
@@ -104,7 +83,6 @@ def product_list(request):
         'inactive_products': inactive_products,
         'categories': categories,
     })
-
 
 @never_cache
 @require_http_methods(["POST"])
@@ -215,14 +193,8 @@ def toggle_product_status(request, product_id):
     messages.success(request, f"Product '{product.name}' is now {label}.")
     return redirect('admin_product_list')
 
-
-# ===========================================================================
-# PAGE 2 — VARIANT MANAGEMENT
-# ===========================================================================
-
 @never_cache
 def variant_management(request, product_id):
-    """Page 2 — manage all variants of a specific product."""
     if not is_admin(request.user):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
@@ -240,7 +212,6 @@ def variant_management(request, product_id):
 @never_cache
 @require_http_methods(["POST"])
 def add_variant(request, product_id):
-    """Add a new variant to a product. Requires minimum 3 cropped images."""
     if not is_admin(request.user):
         return redirect("admin_login")
 
@@ -255,7 +226,6 @@ def add_variant(request, product_id):
     sku = request.POST.get('sku', '').strip()
     is_active = request.POST.get('is_active') in ['on', '1', 'true', 'True']
 
-    # Cropped images (base64) from Cropper.js
     cropped_images = request.POST.getlist('cropped_images[]')
 
     if not price:
@@ -284,7 +254,6 @@ def add_variant(request, product_id):
     except ValueError:
         stock_val = 0
 
-    # Validate minimum 3 images
     valid_images = [img for img in cropped_images if img and img.startswith('data:image')]
     if len(valid_images) < 3:
         messages.error(request, "Please upload at least 3 images for each variant.")
@@ -302,19 +271,16 @@ def add_variant(request, product_id):
         is_active=is_active,
     )
 
-    # Save all cropped images
     for i, b64 in enumerate(valid_images):
         try:
             content_file = _save_cropped_image(b64, 'products/variants', filename_prefix=f'v{variant.id}')
             vi = VariantImage(variant=variant, order=i, is_primary=(i == 0))
             vi.image.save(content_file.name, content_file, save=True)
         except Exception as e:
-            # Skip a bad image but don't crash the whole request
             pass
 
     messages.success(request, f"Variant added successfully to '{product.name}'.")
 
-    # Auto-set as default if it's the first (or only) active variant
     if not product.variants.filter(is_deleted=False, is_default=True).exclude(id=variant.id).exists():
         variant.is_default = True
         variant.save()
@@ -325,7 +291,6 @@ def add_variant(request, product_id):
 @never_cache
 @require_http_methods(["POST"])
 def edit_variant(request, product_id, variant_id):
-    """Edit an existing variant."""
     if not is_admin(request.user):
         return redirect("admin_login")
 
@@ -365,11 +330,9 @@ def edit_variant(request, product_id, variant_id):
     except ValueError:
         stock_val = 0
 
-    # Soft-delete selected images
     if delete_image_ids:
         VariantImage.objects.filter(id__in=delete_image_ids, variant=variant).delete()
 
-    # Count remaining + new images
     remaining_count = variant.images.count()
     new_valid = [img for img in new_cropped_images if img and img.startswith('data:image')]
 
@@ -377,7 +340,6 @@ def edit_variant(request, product_id, variant_id):
         messages.error(request, "At least 3 images are required per variant.")
         return redirect('variant_management', product_id=product_id)
 
-    # Add new images
     next_order = variant.images.count()
     for i, b64 in enumerate(new_valid):
         try:
@@ -387,7 +349,6 @@ def edit_variant(request, product_id, variant_id):
         except Exception:
             pass
 
-    # Ensure at least one primary image
     if not variant.images.filter(is_primary=True).exists():
         first = variant.images.first()
         if first:
@@ -417,7 +378,7 @@ def delete_variant(request, product_id, variant_id):
     variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
     was_default = variant.is_default
     variant.soft_delete()
-    # If deleted variant was default, promote the next available one
+
     if was_default:
         next_v = product.variants.filter(is_deleted=False).order_by('created_at').first()
         if next_v:
@@ -443,7 +404,6 @@ def toggle_variant_status(request, product_id, variant_id):
 
 @never_cache
 def get_product_json(request, product_id):
-    """Return product data as JSON for pre-filling the edit modal."""
     if not is_admin(request.user):
         return JsonResponse({'error': 'Unauthorized'}, status=403)
     product = get_object_or_404(Product, id=product_id)
@@ -461,17 +421,14 @@ def get_product_json(request, product_id):
 @never_cache
 @require_POST
 def set_default_variant(request, product_id, variant_id):
-    """Mark one variant as default — unsets all others for that product."""
     if not is_admin(request.user):
         return redirect("admin_login")
 
     product = get_object_or_404(Product, id=product_id, is_deleted=False)
     variant = get_object_or_404(ProductVariant, id=variant_id, product=product, is_deleted=False)
 
-    # Clear existing default on all variants of this product
     product.variants.filter(is_deleted=False).update(is_default=False)
 
-    # Set the chosen one as default
     variant.is_default = True
     variant.save()
 
