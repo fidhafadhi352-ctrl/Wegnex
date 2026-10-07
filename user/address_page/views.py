@@ -7,7 +7,6 @@ import re
 
 
 def validate_address_data(data):
-    """Validate address input fields and return errors list and cleaned dictionary."""
     errors = []
     full_name = data.get("full_name", "").strip()
     street_address = data.get("street_address", "").strip()
@@ -18,7 +17,6 @@ def validate_address_data(data):
     phone_number = data.get("phone_number", "").strip()
     address_type = data.get("address_type", "Home").strip()
 
-    # Full name
     if not full_name:
         errors.append("Full name is required.")
     elif len(full_name) < 3:
@@ -26,37 +24,31 @@ def validate_address_data(data):
     elif not re.match(r'^[A-Za-z\s\.]+$', full_name):
         errors.append("Full name can contain only letters, spaces, and periods.")
 
-    # Street address
     if not street_address:
         errors.append("Street address is required.")
     elif len(street_address) < 5:
         errors.append("Street address must be at least 5 characters.")
 
-    # City
     if not city:
         errors.append("City is required.")
     elif not re.match(r'^[A-Za-z\s]+$', city):
         errors.append("City can contain only letters and spaces.")
 
-    # State
     if not state:
         errors.append("State is required.")
     elif not re.match(r'^[A-Za-z\s]+$', state):
         errors.append("State can contain only letters and spaces.")
 
-    # Pincode
     if not pincode:
         errors.append("Pincode is required.")
     elif not re.match(r'^\d{6}$', pincode):
         errors.append("Pincode must contain exactly 6 digits.")
 
-    # Country
     if not country:
         errors.append("Country is required.")
     elif not re.match(r'^[A-Za-z\s]+$', country):
         errors.append("Country can contain only letters and spaces.")
 
-    # Phone number
     if not phone_number:
         errors.append("Phone number is required.")
     else:
@@ -68,7 +60,6 @@ def validate_address_data(data):
         else:
             phone_number = cleaned_phone
 
-    # Address type
     if address_type not in ['Home', 'Work', 'Other']:
         address_type = 'Home'
 
@@ -121,7 +112,6 @@ def add_address(request):
                 "form_data": request.POST,
             })
 
-        # If user has no existing address, set this one as default
         has_existing = Add_Address.objects.filter(user=request.user).exists()
         if not has_existing:
             is_default = True
