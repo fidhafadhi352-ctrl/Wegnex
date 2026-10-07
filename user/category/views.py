@@ -4,7 +4,7 @@ from admin_panel.product_management.models import Product
 
 
 def category(request):
-    """Show all active, non-deleted categories as cards."""
+
     categories = Category.objects.filter(is_active=True, is_deleted=False)
 
     context = {
@@ -19,7 +19,7 @@ def category(request):
 
 
 def category_products(request, category_id):
-    """Show products filtered by a specific category."""
+
     cat = get_object_or_404(Category, id=category_id, is_active=True, is_deleted=False)
 
     products = Product.objects.filter(
