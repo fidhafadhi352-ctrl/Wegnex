@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 def product_list(request):
-    """User-facing product listing — show only active, non-deleted products added by admin."""
+
     products = Product.objects.filter(
         is_active=True,
         is_deleted=False,
@@ -15,7 +15,6 @@ def product_list(request):
         Q(category__isnull=True) | Q(category__is_active=True, category__is_deleted=False)
     ).prefetch_related('variants__images').distinct()
 
-    # Category filter
     category_param = request.GET.get('category')
     if category_param:
         if category_param.isdigit():
@@ -23,7 +22,6 @@ def product_list(request):
         else:
             products = products.filter(category__name__iexact=category_param)
 
-    # Search filter
     search_param = request.GET.get('search')
     if search_param:
         products = products.filter(
@@ -33,7 +31,6 @@ def product_list(request):
             Q(category__name__icontains=search_param)
         )
 
-    # Sorting
     sort = request.GET.get('sort')
     if sort == 'price-low':
         products = products.order_by('variants__price')
@@ -69,7 +66,7 @@ def product_list(request):
 import json
 
 def product_detail(request, product_id):
-    """User-facing product detail page matching luxury design mockup."""
+    
     product = get_object_or_404(
         Product.objects.filter(
             Q(category__isnull=True) | Q(category__is_active=True, category__is_deleted=False)
@@ -79,24 +76,19 @@ def product_detail(request, product_id):
         is_deleted=False,
     )
 
-    # Get all active variants
     variants = list(product.variants.filter(is_active=True, is_deleted=False).prefetch_related('images'))
 
-    # Default variant
     default_variant = next((v for v in variants if v.is_default), None) or (variants[0] if variants else None)
 
-    # Gather images for gallery — ONLY up to 3 images from this specific variant!
     variant_images = []
     if default_variant:
         variant_images = list(default_variant.images.all()[:3])
 
-    # Main image
     main_image = None
     if variant_images:
         primary = next((img for img in variant_images if img.is_primary), None)
         main_image = primary or variant_images[0]
 
-    # Prepare variants payload so switching variants updates the 3 images dynamically
     variants_payload = []
     for var in variants:
         imgs = [img.image.url for img in var.images.all()[:3] if img.image]
@@ -112,7 +104,6 @@ def product_detail(request, product_id):
             'images': imgs,
         })
 
-    # Related products from same category or other active products
     related_products = list(Product.objects.filter(
         is_active=True,
         is_deleted=False,
