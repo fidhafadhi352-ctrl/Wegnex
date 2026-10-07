@@ -267,7 +267,6 @@ def otpprofile_view(request):
         otp.is_used = True
         otp.save()
 
-        # Check if email wasn't taken by another account while waiting
         if User.objects.filter(email=new_email).exclude(id=request.user.id).exists():
             messages.error(request, "This email address was claimed by another account. Please use a different email.")
             if "pending_new_email" in request.session:
