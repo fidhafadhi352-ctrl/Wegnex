@@ -9,7 +9,6 @@ from user.account.models import Category
 
 
 def is_admin_authorized(user):
-    """Ensure the user is authenticated, active, and has staff/superuser privileges."""
     return user.is_authenticated and (user.is_staff or user.is_superuser) and user.is_active
 
 
@@ -19,15 +18,14 @@ def category_management(request):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
 
-    # Base Queryset — only non-deleted categories
+    
     base_qs = Category.objects.filter(is_deleted=False)
 
-    # Statistics (3 stat cards — no soft-delete card)
     total_categories = base_qs.count()
     active_categories = base_qs.filter(is_active=True).count()
     inactive_categories = base_qs.filter(is_active=False).count()
 
-    # Backend Search with Cancel/Clear button support
+    
     search_query = request.GET.get('search', '').strip()
     if search_query:
         categories_qs = base_qs.filter(
@@ -36,10 +34,10 @@ def category_management(request):
     else:
         categories_qs = base_qs
 
-    # Sorting: fixed descending (newest first) — no dropdown
+    
     categories_qs = categories_qs.order_by('-created_at', '-id')
 
-    # Backend Pagination — 6 per page
+    
     paginator = Paginator(categories_qs, 6)
     page_number = request.GET.get('page', 1)
     try:
@@ -74,7 +72,7 @@ def add_category(request):
         is_featured = request.POST.get("is_featured") in ["true", "True", "1", "on"]
         image = request.FILES.get("image")
 
-        # Name validations
+        
         if not name:
             messages.error(request, "Category name is required.")
             return redirect("category_management")
@@ -83,12 +81,12 @@ def add_category(request):
             messages.error(request, "Category name must be between 2 and 100 characters.")
             return redirect("category_management")
 
-        # Check unique name (case-insensitive for non-deleted categories)
+        
         if Category.objects.filter(name__iexact=name, is_deleted=False).exists():
             messages.error(request, f"A category with the name '{name}' already exists.")
             return redirect("category_management")
 
-        # Validate image if provided
+        
         if image:
             valid_extensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif']
             ext = '.' + image.name.split('.')[-1].lower() if '.' in image.name else ''
@@ -121,7 +119,7 @@ def edit_category(request, category_id):
 
     category = get_object_or_404(Category, id=category_id)
 
-    # Support fetching category details via JSON for modal population
+    
     if request.method == "GET":
         if request.headers.get("x-requested-with") == "XMLHttpRequest" or request.GET.get("format") == "json":
             return JsonResponse({
@@ -153,7 +151,7 @@ def edit_category(request, category_id):
             messages.error(request, "Category name must be between 2 and 100 characters.")
             return redirect("category_management")
 
-        # Duplicate check excluding current category
+       
         if Category.objects.filter(name__iexact=name, is_deleted=False).exclude(id=category.id).exists():
             messages.error(request, f"Another category with the name '{name}' already exists.")
             return redirect("category_management")
@@ -185,7 +183,7 @@ def edit_category(request, category_id):
 @never_cache
 @require_POST
 def delete_category(request, category_id):
-    """Soft-delete category and all its products."""
+    
     if not is_admin_authorized(request.user):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
@@ -203,7 +201,7 @@ def delete_category(request, category_id):
 @never_cache
 @require_POST
 def restore_category(request, category_id):
-    """Restore soft-deleted category and its products."""
+    
     if not is_admin_authorized(request.user):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
@@ -217,7 +215,7 @@ def restore_category(request, category_id):
 @never_cache
 @require_POST
 def toggle_category_status(request, category_id):
-    """Toggle Active / Inactive status of category and its products."""
+    
     if not is_admin_authorized(request.user):
         messages.error(request, "Please log in with administrator privileges.")
         return redirect("admin_login")
