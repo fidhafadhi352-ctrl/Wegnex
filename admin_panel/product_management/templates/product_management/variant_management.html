@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wegnex | Variants — {{ product.name }}</title>
+    <!-- Cropper.js CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#0d0d0d; color:#f5f5f5; font-family:Arial,Helvetica,sans-serif; font-size:13px; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar { position:fixed; left:0; top:0; width:180px; height:100vh; background:#111111; border-right:1px solid #292929; padding:30px 10px; }
+        .logo { padding-left:12px; margin-bottom:45px; }
+        .logo h2 { font-size:17px; font-weight:400; letter-spacing:1px; }
+        .logo p { color:#777; font-size:9px; margin-top:6px; letter-spacing:1px; }
+        .menu { list-style:none; }
+        .menu li { height:38px; display:flex; align-items:center; gap:12px; padding:0 12px; margin-bottom:3px; color:#858585; font-size:10px; letter-spacing:1px; border-radius:4px; transition:.2s; cursor:pointer; }
+        .menu li a { display:flex; align-items:center; gap:12px; width:100%; height:100%; color:inherit; text-decoration:none; }
+        .menu li span:first-child { width:14px; text-align:center; font-size:14px; }
+        .menu li:hover { background:#1c1c1c; color:#fff; }
+        .menu li.active { color:#fff; border-left:2px solid #fff; padding-left:10px; background:#191919; }
+        .logout-link { position:absolute; bottom:35px; left:22px; color:#777; font-size:10px; letter-spacing:1px; text-decoration:none; transition:.2s; }
+        .logout-link:hover { color:#fff; }
+
+        .main { margin-left:180px; min-height:100vh; }
+
+        /* ===== TOPBAR ===== */
+        .topbar { height:55px; border-bottom:1px solid #292929; display:flex; align-items:center; justify-content:space-between; padding:0 20px; background:#101010; }
+        .brand-section { display:flex; align-items:center; gap:0; }
+        .brand { font-size:15px; font-weight:bold; }
+        .admin-title { margin-left:18px; padding-left:22px; border-left:1px solid #333; color:#777; font-size:9px; letter-spacing:1.5px; }
+        .top-right { display:flex; align-items:center; gap:18px; color:#777; font-size:12px; }
+        .admin-profile { display:flex; align-items:center; gap:8px; color:#fff; font-size:9px; letter-spacing:1px; }
+        .profile-circle { width:25px; height:25px; border-radius:50%; background:linear-gradient(135deg,#444,#1c1c1c); border:1px solid #555; }
+
+        .content { padding:20px; }
+
+        /* ===== BACK BREADCRUMB ===== */
+        .breadcrumb { display:flex; align-items:center; gap:8px; margin-bottom:18px; font-size:9px; letter-spacing:.8px; color:#666; }
+        .breadcrumb a { color:#888; text-decoration:none; transition:.2s; }
+        .breadcrumb a:hover { color:#fff; }
+        .breadcrumb-sep { color:#444; }
+
+        /* ===== PRODUCT INFO CARD ===== */
+        .product-card {
+            background:#181818; border:1px solid #2b2b2b; border-radius:3px;
+            padding:16px 18px; margin-bottom:18px;
+            display:flex; align-items:center; justify-content:space-between;
+        }
+        .product-card-left { display:flex; align-items:center; gap:14px; }
+        .product-icon { width:44px; height:44px; background:#202020; border:1px solid #333; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; overflow:hidden; }
+        .product-icon img { width:100%; height:100%; object-fit:cover; }
+        .product-card-name { font-size:14px; font-weight:600; color:#f5f5f5; margin-bottom:4px; }
+        .product-card-meta { font-size:9px; color:#666; letter-spacing:.5px; }
+        .product-card-meta span { margin-right:14px; }
+        .add-variant-btn { background:#f5f5f5; border:none; color:#111; padding:9px 16px; border-radius:3px; font-size:11px; cursor:pointer; transition:.2s; font-weight:600; }
+        .add-variant-btn:hover { background:#ddd; }
+
+        /* ===== MESSAGES ===== */
+        .messages-wrap { margin-bottom:16px; }
+        .msg { padding:10px 14px; border-radius:3px; font-size:11px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+        .msg.success { background:#0e2415; border:1px solid #1a4a25; color:#6ee87e; }
+        .msg.error { background:#220e0e; border:1px solid #4a1a1a; color:#e87e7e; }
+        .msg-close { background:none; border:none; color:inherit; font-size:14px; cursor:pointer; opacity:.6; }
+        .msg-close:hover { opacity:1; }
+
+        /* ===== VARIANTS GRID ===== */
+        .variants-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:14px; margin-bottom:20px; }
+
+        .variant-card { background:#181818; border:1px solid #2b2b2b; border-radius:4px; overflow:hidden; transition:.2s; }
+        .variant-card:hover { border-color:#3a3a3a; }
+
+        .variant-images { display:flex; gap:2px; height:90px; background:#111; overflow:hidden; }
+        .variant-img-slot { flex:1; overflow:hidden; position:relative; background:#1a1a1a; display:flex; align-items:center; justify-content:center; font-size:20px; color:#333; }
+        .variant-img-slot img { width:100%; height:100%; object-fit:cover; }
+        .variant-img-primary-badge { position:absolute; top:3px; left:3px; background:#f5f5f5; color:#111; font-size:6px; padding:1px 4px; border-radius:2px; font-weight:700; letter-spacing:.5px; }
+
+        .variant-info { padding:12px 14px; }
+        .variant-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+        .variant-name { font-size:11px; font-weight:600; color:#eee; }
+        .variant-status { font-size:7px; padding:2px 6px; border:1px solid #555; border-radius:2px; color:#ccc; }
+        .variant-status.on { background:#f5f5f5; color:#111; border:none; font-weight:700; }
+        .variant-status.off { color:#777; border-color:#333; }
+
+        .variant-attrs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+        .attr-chip { background:#202020; border:1px solid #2b2b2b; border-radius:2px; font-size:8px; color:#aaa; padding:2px 7px; letter-spacing:.3px; }
+
+        .variant-price { font-size:14px; font-weight:700; color:#f5f5f5; margin-bottom:4px; }
+        .variant-compare { font-size:9px; color:#666; text-decoration:line-through; margin-left:6px; }
+        .variant-stock { font-size:9px; color:#888; margin-bottom:10px; }
+
+        .variant-actions { display:flex; gap:5px; flex-wrap:wrap; }
+        .vact-btn { background:transparent; border:1px solid #2e2e2e; color:#888; font-size:10px; padding:4px 8px; border-radius:3px; cursor:pointer; transition:.2s; font-family:Arial,Helvetica,sans-serif; }
+        .vact-btn:hover { color:#fff; border-color:#555; background:#1a1a1a; }
+        .vact-btn.toggle-on { color:#6ee87e; border-color:#1e4426; }
+        .vact-btn.toggle-on:hover { background:#0e2415; }
+        .vact-btn.toggle-off { color:#777; border-color:#2e2e2e; }
+        .vact-btn.delete:hover { color:#e87e7e; border-color:#5c2020; background:#1a0b0b; }
+        .vact-btn.set-default { color:#c8a84b; border-color:#4a3a10; }
+        .vact-btn.set-default:hover { background:#1e1608; border-color:#c8a84b; color:#e8c86b; }
+        .variant-card.is-default { border-color:#4a3a10; }
+        .variant-card.is-default:hover { border-color:#c8a84b; }
+        .default-badge { font-size:7px; background:#c8a84b; color:#111; padding:2px 6px; border-radius:2px; font-weight:700; margin-left:6px; letter-spacing:.5px; vertical-align:middle; }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state { background:#181818; border:1px solid #2b2b2b; border-radius:3px; padding:50px 20px; text-align:center; }
+        .empty-icon { font-size:36px; color:#333; margin-bottom:12px; }
+        .empty-state h3 { font-size:13px; font-weight:400; color:#888; margin-bottom:6px; }
+        .empty-state p { font-size:10px; color:#555; line-height:1.6; }
+
+        /* ===== BIG MODAL (Add/Edit Variant) ===== */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.82); display:flex; align-items:center; justify-content:center; padding:20px; z-index:1000; opacity:0; visibility:hidden; transition:opacity .2s,visibility .2s; }
+        .modal-overlay.open { opacity:1; visibility:visible; }
+        .modal { background:#181818; border:1px solid #2b2b2b; border-radius:4px; width:100%; max-width:720px; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; }
+        .modal-header { height:48px; padding:0 17px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #252525; background:#141414; flex-shrink:0; }
+        .modal-header-title { font-size:9px; letter-spacing:1.2px; font-weight:500; color:#ddd; }
+        .modal-x { background:transparent; border:none; color:#777; font-size:16px; cursor:pointer; transition:.2s; }
+        .modal-x:hover { color:#fff; }
+        .modal-body { padding:20px 17px; overflow-y:auto; }
+        .modal-footer { padding:12px 17px; border-top:1px solid #252525; background:#141414; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-shrink:0; }
+        .modal-footer-left { font-size:9px; color:#666; }
+        .modal-footer-right { display:flex; gap:8px; }
+
+        /* Form */
+        .form-section-title { font-size:8px; color:#666; letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #202020; }
+        .form-group { margin-bottom:14px; }
+        .form-label { display:block; color:#888; font-size:9px; letter-spacing:.8px; text-transform:uppercase; margin-bottom:6px; }
+        .form-input { width:100%; background:#111; border:1px solid #2a2a2a; border-radius:3px; padding:9px 11px; color:#f0f0f0; font-size:11px; font-family:Arial,Helvetica,sans-serif; outline:none; transition:border-color .2s; }
+        .form-input:focus { border-color:#555; }
+        .form-row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .form-row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+        .checkbox-row { display:flex; gap:16px; }
+        .checkbox-item { display:flex; align-items:center; gap:7px; font-size:10px; color:#aaa; cursor:pointer; }
+        .checkbox-item input[type="checkbox"] { appearance:none; width:14px; height:14px; border:1px solid #444; border-radius:2px; background:#111; cursor:pointer; position:relative; outline:none; }
+        .checkbox-item input[type="checkbox"]:checked { background:#f5f5f5; border-color:#f5f5f5; }
+        .checkbox-item input[type="checkbox"]:checked::after { content:"✓"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#111; font-size:9px; font-weight:bold; }
+
+        /* Image upload area */
+        .images-section { margin-top:8px; }
+        .images-section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+        .img-req-note { font-size:9px; color:#666; }
+        .img-req-note strong { color:#e87e7e; }
+
+        .img-slots-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:12px; }
+        .img-slot {
+            aspect-ratio:1; background:#111; border:1px dashed #2a2a2a; border-radius:3px;
+            display:flex; align-items:center; justify-content:center;
+            position:relative; overflow:hidden; cursor:pointer; transition:border-color .2s;
+        }
+        .img-slot:hover { border-color:#555; }
+        .img-slot.filled { border-style:solid; border-color:#333; }
+        .img-slot img { width:100%; height:100%; object-fit:cover; }
+        .img-slot-num { font-size:9px; color:#444; }
+        .img-slot-badge { position:absolute; top:3px; left:3px; background:#f5f5f5; color:#111; font-size:6px; padding:1px 4px; border-radius:2px; font-weight:700; }
+        .img-slot-remove { position:absolute; top:3px; right:3px; background:rgba(0,0,0,.7); border:none; color:#e87e7e; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; cursor:pointer; }
+
+        .upload-trigger { display:flex; align-items:center; justify-content:center; gap:8px; background:#111; border:1px solid #2a2a2a; border-radius:3px; padding:10px; cursor:pointer; transition:border-color .2s; font-size:10px; color:#666; }
+        .upload-trigger:hover { border-color:#555; color:#aaa; }
+
+        /* Existing images (edit mode) */
+        .existing-imgs-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px; }
+        .existing-img-item { aspect-ratio:1; position:relative; border-radius:3px; overflow:hidden; border:1px solid #333; }
+        .existing-img-item img { width:100%; height:100%; object-fit:cover; }
+        .existing-del-chk { position:absolute; bottom:3px; right:3px; }
+        .existing-del-chk input { appearance:none; width:14px; height:14px; background:rgba(0,0,0,.7); border:1px solid #666; border-radius:2px; cursor:pointer; position:relative; outline:none; }
+        .existing-del-chk input:checked { background:#e87e7e; border-color:#e87e7e; }
+        .existing-del-chk input:checked::after { content:"✕"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#fff; font-size:8px; }
+        .del-img-label { position:absolute; bottom:0; left:0; right:0; background:rgba(220,50,50,.6); text-align:center; font-size:8px; padding:2px; pointer-events:none; opacity:0; transition:.2s; }
+        .existing-del-chk input:checked ~ .del-img-label { opacity:1; }
+
+        /* Cropper overlay */
+        .cropper-overlay { position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:2000; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:20px; opacity:0; visibility:hidden; transition:opacity .2s,visibility .2s; }
+        .cropper-overlay.open { opacity:1; visibility:visible; }
+        .cropper-box { background:#181818; border:1px solid #2b2b2b; border-radius:4px; overflow:hidden; max-width:680px; width:100%; }
+        .cropper-header { height:44px; padding:0 15px; background:#141414; border-bottom:1px solid #252525; display:flex; align-items:center; justify-content:space-between; font-size:9px; letter-spacing:1px; color:#ddd; }
+        .cropper-canvas-wrap { width:100%; height:360px; background:#0a0a0a; overflow:hidden; }
+        .cropper-canvas-wrap img { max-width:100%; }
+        .cropper-footer { padding:12px 15px; background:#141414; border-top:1px solid #252525; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+        .cropper-ratio-btns { display:flex; gap:6px; }
+        .ratio-btn { background:transparent; border:1px solid #2e2e2e; color:#888; font-size:9px; padding:4px 8px; border-radius:3px; cursor:pointer; transition:.2s; font-family:Arial,Helvetica,sans-serif; }
+        .ratio-btn:hover, .ratio-btn.active { background:#f5f5f5; color:#111; border-color:#f5f5f5; }
+        .crop-action-btns { display:flex; gap:8px; }
+        .btn-crop-cancel { background:transparent; border:1px solid #333; color:#888; padding:7px 14px; border-radius:3px; font-size:10px; cursor:pointer; font-family:Arial,Helvetica,sans-serif; }
+        .btn-crop-confirm { background:#f5f5f5; border:none; color:#111; padding:7px 14px; border-radius:3px; font-size:10px; cursor:pointer; font-weight:600; font-family:Arial,Helvetica,sans-serif; }
+
+        /* Confirm/delete modals */
+        .del-warn { background:#1a0b0b; border:1px solid #3a1515; border-radius:3px; padding:12px; font-size:10px; color:#ddd; line-height:1.6; }
+        .del-warn strong { color:#e87e7e; }
+        .btn-cancel { background:transparent; border:1px solid #333; color:#888; padding:8px 16px; border-radius:3px; font-size:10px; font-family:Arial,Helvetica,sans-serif; cursor:pointer; transition:.2s; }
+        .btn-cancel:hover { border-color:#555; color:#fff; }
+        .btn-save { background:#f5f5f5; border:none; color:#111; padding:8px 16px; border-radius:3px; font-size:10px; font-family:Arial,Helvetica,sans-serif; cursor:pointer; font-weight:600; transition:.2s; }
+        .btn-save:hover { background:#ddd; }
+        .btn-danger { background:#8b1a1a; border:none; color:#fff; padding:8px 16px; border-radius:3px; font-size:10px; cursor:pointer; transition:.2s; font-family:Arial,Helvetica,sans-serif; }
+        .btn-danger:hover { background:#a02020; }
+
+        @media (max-width:700px) {
+            .sidebar { width:65px; }
+            .logo h2,.logo p,.menu li span:last-child,.logout-link { display:none; }
+            .main { margin-left:65px; }
+            .menu li { justify-content:center; }
+            .content { padding:12px; }
+            .modal { max-width:100%; }
+            .form-row2, .form-row3 { grid-template-columns:1fr; }
+            .img-slots-grid { grid-template-columns:repeat(3,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo"><h2>HOROLOGY</h2><p>Management Suite</p></div>
+        <ul class="menu">
+            <li><a href="{% url 'admin_dashboard' %}"><span>▦</span><span>DASHBOARD</span></a></li>
+            <li><span>♧</span><span>ORDERS</span></li>
+            <li class="active"><a href="{% url 'admin_product_list' %}"><span>♧</span><span>PRODUCTS</span></a></li>
+            <li><a href="{% url 'category_management' %}"><span>♢</span><span>CATEGORIES</span></a></li>
+            <li><span>♙</span><span>CUSTOMERS</span></li>
+            <li><span>♜</span><span>COUPONS</span></li>
+            <li><span>▣</span><span>REVIEWS</span></li>
+        </ul>
+        <a href="{% url 'admin_logout' %}" class="logout-link">⇥ &nbsp; LOGOUT</a>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <header class="topbar">
+            <div class="brand-section">
+                <div class="brand">WEGNEX</div>
+                <div class="admin-title">VARIANT MANAGEMENT</div>
+            </div>
+            <div class="top-right">
+                <span>♧</span><span>✉</span>
+                <div class="admin-profile">
+                    <div class="profile-circle"></div>
+                    {{ admin_user.username|upper }}
+                </div>
+            </div>
+        </header>
+
+        <section class="content">
+
+            <!-- BREADCRUMB -->
+            <div class="breadcrumb">
+                <a href="{% url 'admin_product_list' %}">Products</a>
+                <span class="breadcrumb-sep">›</span>
+                <span>{{ product.name }}</span>
+                <span class="breadcrumb-sep">›</span>
+                <span>Variants</span>
+            </div>
+
+            {% if messages %}
+                <div class="messages-wrap" id="messagesWrap">
+                    {% for message in messages %}
+                        <div class="msg {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                            <span>{{ message }}</span>
+                            <button class="msg-close" onclick="this.parentElement.remove()">×</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- PRODUCT INFO CARD -->
+            <div class="product-card">
+                <div class="product-card-left">
+                    <div class="product-icon">
+                        {% with thumb=product.thumbnail %}
+                            {% if thumb %}<img src="{{ thumb.url }}" alt="{{ product.name }}">{% else %}⌚{% endif %}
+                        {% endwith %}
+                    </div>
+                    <div>
+                        <div class="product-card-name">{{ product.name }}</div>
+                        <div class="product-card-meta">
+                            <span>Brand: {{ product.brand|default:"—" }}</span>
+                            <span>Category: {{ product.category.name|default:"—" }}</span>
+                            <span>{{ product.variant_count }} variant{{ product.variant_count|pluralize }}</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-variant-btn" onclick="openAddVariantModal()">+ Add Variant</button>
+            </div>
+
+            <!-- VARIANTS GRID -->
+            {% if variants %}
+                <div class="variants-grid">
+                    {% for variant in variants %}
+                        <div class="variant-card {% if variant.is_default %}is-default{% endif %}">
+
+                            <!-- Images strip -->
+                            <div class="variant-images">
+                                {% for img in variant.images.all %}
+                                    <div class="variant-img-slot">
+                                        <img src="{{ img.image.url }}" alt="Variant image {{ forloop.counter }}">
+                                        {% if img.is_primary %}<span class="variant-img-primary-badge">MAIN</span>{% endif %}
+                                    </div>
+                                {% empty %}
+                                    <div class="variant-img-slot" style="flex:1;">⌚</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="variant-info">
+                                <div class="variant-header">
+                                    <div class="variant-name">
+                                        {% if variant.color %}{{ variant.color }}{% endif %}
+                                        {% if variant.case_size %}&nbsp;{{ variant.case_size }}{% endif %}
+                                        {% if not variant.color and not variant.case_size %}Variant #{{ variant.id }}{% endif %}
+                                        {% if variant.is_default %}<span class="default-badge">★ DEFAULT</span>{% endif %}
+                                    </div>
+                                    <span class="variant-status {% if variant.is_active %}on{% else %}off{% endif %}">
+                                        {% if variant.is_active %}ACTIVE{% else %}INACTIVE{% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="variant-attrs">
+                                    {% if variant.color %}<span class="attr-chip">{{ variant.color }}</span>{% endif %}
+                                    {% if variant.case_size %}<span class="attr-chip">{{ variant.case_size }}</span>{% endif %}
+                                    {% if variant.strap_material %}<span class="attr-chip">{{ variant.strap_material }}</span>{% endif %}
+                                    {% if variant.sku %}<span class="attr-chip">SKU: {{ variant.sku }}</span>{% endif %}
+                                </div>
+
+                                <div>
+                                    <span class="variant-price">₹{{ variant.price }}</span>
+                                    {% if variant.compare_at_price %}
+                                        <span class="variant-compare">₹{{ variant.compare_at_price }}</span>
+                                        <span style="font-size:9px; color:#6ee87e; margin-left:4px;">{{ variant.discount_percent }}% OFF</span>
+                                    {% endif %}
+                                </div>
+                                <div class="variant-stock">Stock: {{ variant.stock }} units</div>
+
+                                <div class="variant-actions">
+                                    <!-- Edit -->
+                                    <button type="button" class="vact-btn"
+                                        onclick="openEditVariantModal(
+                                            '{{ variant.id }}',
+                                            '{{ variant.color|escapejs }}',
+                                            '{{ variant.strap_material|escapejs }}',
+                                            '{{ variant.case_size|escapejs }}',
+                                            '{{ variant.price }}',
+                                            '{{ variant.compare_at_price|default:'' }}',
+                                            '{{ variant.stock }}',
+                                            '{{ variant.sku|escapejs }}',
+                                            {{ variant.is_active|yesno:'true,false' }},
+                                            {{ variant.images.count }}
+                                        )">
+                                        ✎ Edit
+                                    </button>
+                                    <!-- Toggle -->
+                                    <form method="POST" action="{% url 'toggle_variant_status' product.id variant.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="vact-btn {% if variant.is_active %}toggle-on{% else %}toggle-off{% endif %}">
+                                            {% if variant.is_active %}● Active{% else %}○ Inactive{% endif %}
+                                        </button>
+                                    </form>
+                                    <!-- Set Default -->
+                                    {% if not variant.is_default %}
+                                    <form method="POST" action="{% url 'set_default_variant' product.id variant.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="vact-btn set-default" title="Set as default variant">★ Default</button>
+                                    </form>
+                                    {% endif %}
+                                    <!-- Delete -->
+                                    <button type="button" class="vact-btn delete"
+                                        onclick="openDelVariantModal('{{ variant.id }}','{% if variant.color %}{{ variant.color|escapejs }}{% else %}Variant #{{ variant.id }}{% endif %}')">
+                                        ✕ Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">◈</div>
+                    <h3>No variants yet</h3>
+                    <p>Click <strong>+ Add Variant</strong> to add the first variant.<br>Each variant needs at least 3 images, a price, and stock info.</p>
+                </div>
+            {% endif %}
+
+        </section>
+    </main>
+
+
+    <!-- =========================================
+         ADD VARIANT MODAL
+    ========================================== -->
+    <div class="modal-overlay" id="addVariantModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-header-title">ADD VARIANT — {{ product.name|upper }}</span>
+                <button class="modal-x" onclick="closeAddVariantModal()">✕</button>
+            </div>
+            <form method="POST" action="{% url 'add_variant' product.id %}" id="addVariantForm">
+                {% csrf_token %}
+                <!-- Hidden fields for cropped images -->
+                <div id="addCroppedContainer"></div>
+
+                <div class="modal-body">
+
+                    <div class="form-section-title">VARIANT ATTRIBUTES</div>
+                    <div class="form-row3">
+                        <div class="form-group">
+                            <label class="form-label">Color</label>
+                            <input type="text" name="color" class="form-input" placeholder="e.g. Midnight Blue" maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Case Size</label>
+                            <input type="text" name="case_size" class="form-input" placeholder="e.g. 41mm" maxlength="40">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Strap Material</label>
+                            <input type="text" name="strap_material" class="form-input" placeholder="e.g. Leather" maxlength="80">
+                        </div>
+                    </div>
+
+                    <div class="form-section-title" style="margin-top:8px;">PRICING & STOCK</div>
+                    <div class="form-row3">
+                        <div class="form-group">
+                            <label class="form-label">Price (₹) *</label>
+                            <input type="number" name="price" class="form-input" placeholder="e.g. 450000" step="0.01" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MRP / Compare Price</label>
+                            <input type="number" name="compare_at_price" class="form-input" placeholder="e.g. 500000" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock Qty</label>
+                            <input type="number" name="stock" class="form-input" placeholder="0" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row2">
+                        <div class="form-group">
+                            <label class="form-label">SKU</label>
+                            <input type="text" name="sku" class="form-input" placeholder="Optional SKU" maxlength="100">
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:flex-end; padding-bottom:2px;">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_active" checked>
+                                <span>Active in store</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- IMAGES SECTION -->
+                    <div class="form-section-title" style="margin-top:4px;">VARIANT IMAGES</div>
+                    <div class="images-section">
+                        <div class="images-section-head">
+                            <div class="img-req-note">Minimum <strong>3 images</strong> required. Click a slot or "Add Image" to upload &amp; crop.</div>
+                        </div>
+
+                        <!-- 5 image slots (min 3 required, up to 5 shown) -->
+                        <div class="img-slots-grid" id="addSlotGrid">
+                            <!-- Slots rendered by JS -->
+                        </div>
+
+                        <div class="upload-trigger" id="addUploadTrigger" onclick="triggerUpload('add')">
+                            <span>⊕</span> <span>Add Image (click to upload &amp; crop)</span>
+                        </div>
+                        <input type="file" id="addFileInput" accept="image/*" style="display:none;" onchange="onFileSelected(this,'add')">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="modal-footer-left" id="addImgCountNote" style="color:#e87e7e;">0 / 3 images minimum</div>
+                    <div class="modal-footer-right">
+                        <button type="button" class="btn-cancel" onclick="closeAddVariantModal()">Cancel</button>
+                        <button type="submit" class="btn-save" id="addSaveBtn">Save Variant</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         EDIT VARIANT MODAL
+    ========================================== -->
+    <div class="modal-overlay" id="editVariantModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-header-title">EDIT VARIANT</span>
+                <button class="modal-x" onclick="closeEditVariantModal()">✕</button>
+            </div>
+            <form method="POST" id="editVariantForm" action="">
+                {% csrf_token %}
+                <div id="editCroppedContainer"></div>
+
+                <div class="modal-body">
+
+                    <div class="form-section-title">VARIANT ATTRIBUTES</div>
+                    <div class="form-row3">
+                        <div class="form-group">
+                            <label class="form-label">Color</label>
+                            <input type="text" name="color" id="eColor" class="form-input" maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Case Size</label>
+                            <input type="text" name="case_size" id="eCaseSize" class="form-input" maxlength="40">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Strap Material</label>
+                            <input type="text" name="strap_material" id="eStrap" class="form-input" maxlength="80">
+                        </div>
+                    </div>
+
+                    <div class="form-section-title" style="margin-top:8px;">PRICING & STOCK</div>
+                    <div class="form-row3">
+                        <div class="form-group">
+                            <label class="form-label">Price (₹) *</label>
+                            <input type="number" name="price" id="ePrice" class="form-input" step="0.01" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MRP / Compare Price</label>
+                            <input type="number" name="compare_at_price" id="eCompare" class="form-input" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock Qty</label>
+                            <input type="number" name="stock" id="eStock" class="form-input" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row2">
+                        <div class="form-group">
+                            <label class="form-label">SKU</label>
+                            <input type="text" name="sku" id="eSku" class="form-input" maxlength="100">
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:flex-end; padding-bottom:2px;">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_active" id="eIsActive">
+                                <span>Active in store</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- EXISTING IMAGES -->
+                    <div class="form-section-title" style="margin-top:4px;">EXISTING IMAGES</div>
+                    <div id="existingImgsWrap" style="margin-bottom:12px;">
+                        <!-- Filled by JS via inline data below -->
+                    </div>
+
+                    <!-- NEW IMAGES -->
+                    <div class="form-section-title">ADD NEW IMAGES</div>
+                    <div class="img-slots-grid" id="editSlotGrid"></div>
+                    <div class="upload-trigger" onclick="triggerUpload('edit')">
+                        <span>⊕</span> <span>Add Image (click to upload &amp; crop)</span>
+                    </div>
+                    <input type="file" id="editFileInput" accept="image/*" style="display:none;" onchange="onFileSelected(this,'edit')">
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="modal-footer-left" id="editImgCountNote" style="color:#aaa;"></div>
+                    <div class="modal-footer-right">
+                        <button type="button" class="btn-cancel" onclick="closeEditVariantModal()">Cancel</button>
+                        <button type="submit" class="btn-save">Update Variant</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         DELETE VARIANT MODAL
+    ========================================== -->
+    <div class="modal-overlay" id="delVariantModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <span class="modal-header-title">DELETE VARIANT</span>
+                <button class="modal-x" onclick="closeDelVariantModal()">✕</button>
+            </div>
+            <form method="POST" id="delVariantForm" action="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="del-warn">
+                        Delete variant <strong id="delVarName"></strong>?<br><br>
+                        This variant and all its images will be <strong>soft-deleted</strong> and hidden from the store.
+                    </div>
+                </div>
+                <div class="modal-footer" style="justify-content:flex-end;">
+                    <button type="button" class="btn-cancel" onclick="closeDelVariantModal()">Cancel</button>
+                    <button type="submit" class="btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         CROPPER OVERLAY
+    ========================================== -->
+    <div class="cropper-overlay" id="cropperOverlay">
+        <div class="cropper-box">
+            <div class="cropper-header">
+                <span>CROP IMAGE</span>
+                <span style="color:#666;font-size:9px;">Drag to reposition · Scroll to zoom</span>
+            </div>
+            <div class="cropper-canvas-wrap">
+                <img id="cropperImg" src="" alt="Crop">
+            </div>
+            <div class="cropper-footer">
+                <div class="cropper-ratio-btns">
+                    <button type="button" class="ratio-btn active" onclick="setRatio(1,1,'1:1')">1:1</button>
+                    <button type="button" class="ratio-btn" onclick="setRatio(4,3,'4:3')">4:3</button>
+                    <button type="button" class="ratio-btn" onclick="setRatio(16,9,'16:9')">16:9</button>
+                    <button type="button" class="ratio-btn" onclick="setRatio(NaN,NaN,'Free')">Free</button>
+                </div>
+                <div class="crop-action-btns">
+                    <button type="button" class="btn-crop-cancel" onclick="cancelCrop()">Cancel</button>
+                    <button type="button" class="btn-crop-confirm" onclick="confirmCrop()">✓ Crop &amp; Use</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Cropper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script>
+    // ============================================================
+    //  STATE
+    // ============================================================
+    var cropperInstance = null;
+    var currentCropContext = 'add'; // 'add' or 'edit'
+
+    // Add context
+    var addCroppedImages = [];   // array of base64 data URLs
+    var MAX_SLOTS = 8;
+
+    // Edit context
+    var editCroppedImages = [];
+    var editVariantId = null;
+    var editExistingCount = 0;
+
+    // ============================================================
+    //  MODALS
+    // ============================================================
+    function openAddVariantModal(){
+        addCroppedImages = [];
+        document.getElementById('addVariantForm').reset();
+        document.getElementById('addCroppedContainer').innerHTML = '';
+        renderAddSlots();
+        updateAddImgNote();
+        document.getElementById('addVariantModal').classList.add('open');
+    }
+    function closeAddVariantModal(){ document.getElementById('addVariantModal').classList.remove('open'); }
+
+    function openEditVariantModal(id, color, strap, caseSize, price, comparePrice, stock, sku, isActive, imgCount){
+        editVariantId = id;
+        editCroppedImages = [];
+        editExistingCount = imgCount;
+
+        document.getElementById('editVariantForm').action =
+            '/admin_panel/product_management/{{ product.id }}/variants/edit/' + id + '/';
+
+        document.getElementById('eColor').value = color;
+        document.getElementById('eStrap').value = strap;
+        document.getElementById('eCaseSize').value = caseSize;
+        document.getElementById('ePrice').value = price;
+        document.getElementById('eCompare').value = comparePrice;
+        document.getElementById('eStock').value = stock;
+        document.getElementById('eSku').value = sku;
+        document.getElementById('eIsActive').checked = isActive;
+
+        document.getElementById('editCroppedContainer').innerHTML = '';
+
+        // Render existing images with delete checkboxes
+        renderExistingImages(id);
+        renderEditSlots();
+        updateEditImgNote();
+
+        document.getElementById('editVariantModal').classList.add('open');
+    }
+    function closeEditVariantModal(){ document.getElementById('editVariantModal').classList.remove('open'); }
+
+    function openDelVariantModal(id, name){
+        document.getElementById('delVariantForm').action =
+            '/admin_panel/product_management/{{ product.id }}/variants/delete/' + id + '/';
+        document.getElementById('delVarName').textContent = name;
+        document.getElementById('delVariantModal').classList.add('open');
+    }
+    function closeDelVariantModal(){ document.getElementById('delVariantModal').classList.remove('open'); }
+
+    // ============================================================
+    //  RENDER IMAGE SLOTS
+    // ============================================================
+    function renderAddSlots(){
+        var grid = document.getElementById('addSlotGrid');
+        grid.innerHTML = '';
+        for(var i = 0; i < addCroppedImages.length; i++){
+            grid.appendChild(makeSlot(i, addCroppedImages[i], 'add'));
+        }
+        // Show upload trigger always
+        var trigger = document.getElementById('addUploadTrigger');
+        trigger.style.display = addCroppedImages.length >= MAX_SLOTS ? 'none' : 'flex';
+    }
+
+    function renderEditSlots(){
+        var grid = document.getElementById('editSlotGrid');
+        grid.innerHTML = '';
+        for(var i = 0; i < editCroppedImages.length; i++){
+            grid.appendChild(makeSlot(i, editCroppedImages[i], 'edit'));
+        }
+    }
+
+    function makeSlot(idx, dataUrl, ctx){
+        var div = document.createElement('div');
+        div.className = 'img-slot filled';
+        div.innerHTML = '<img src="' + dataUrl + '" alt="Slot ' + (idx+1) + '">' +
+            (idx===0 && ctx==='add' ? '<span class="img-slot-badge">MAIN</span>' : '') +
+            '<button type="button" class="img-slot-remove" onclick="removeSlot(' + idx + ',\'' + ctx + '\')">✕</button>';
+        return div;
+    }
+
+    function removeSlot(idx, ctx){
+        if(ctx==='add'){
+            addCroppedImages.splice(idx,1);
+            renderAddSlots();
+            updateAddImgNote();
+            syncCroppedInputs('add');
+        } else {
+            editCroppedImages.splice(idx,1);
+            renderEditSlots();
+            updateEditImgNote();
+            syncCroppedInputs('edit');
+        }
+    }
+
+    // ============================================================
+    //  EXISTING IMAGES (edit mode)
+    // ============================================================
+    // We embed the variant images data in page so we don't need AJAX
+    var VARIANT_IMAGES = {
+        {% for variant in variants %}
+        '{{ variant.id }}': [
+            {% for img in variant.images.all %}
+            { id: {{ img.id }}, url: '{{ img.image.url }}', primary: {{ img.is_primary|yesno:'true,false' }} },
+            {% endfor %}
+        ],
+        {% endfor %}
+    };
+
+    function renderExistingImages(variantId){
+        var wrap = document.getElementById('existingImgsWrap');
+        wrap.innerHTML = '';
+        var imgs = VARIANT_IMAGES[variantId] || [];
+        if(!imgs.length){ wrap.innerHTML = '<div style="font-size:9px;color:#555;margin-bottom:8px;">No existing images.</div>'; return; }
+        var grid = document.createElement('div');
+        grid.className = 'existing-imgs-grid';
+        imgs.forEach(function(img){
+            var item = document.createElement('div');
+            item.className = 'existing-img-item';
+            item.innerHTML =
+                '<img src="' + img.url + '" alt="img">' +
+                '<div class="existing-del-chk">' +
+                    '<input type="checkbox" name="delete_images[]" value="' + img.id + '" id="delImg' + img.id + '">' +
+                    '<label for="delImg' + img.id + '" class="del-img-label">REMOVE</label>' +
+                '</div>' +
+                (img.primary ? '<span class="variant-img-primary-badge" style="top:3px;left:3px;">MAIN</span>' : '');
+            grid.appendChild(item);
+        });
+        wrap.appendChild(grid);
+        var note = document.createElement('div');
+        note.style.cssText = 'font-size:9px;color:#666;margin-bottom:12px;';
+        note.textContent = 'Check images to remove them. Keep at least 3 total.';
+        wrap.appendChild(note);
+    }
+
+    // ============================================================
+    //  UPLOAD & CROP
+    // ============================================================
+    function triggerUpload(ctx){
+        currentCropContext = ctx;
+        var input = ctx==='add'
+            ? document.getElementById('addFileInput')
+            : document.getElementById('editFileInput');
+        input.value = '';
+        input.click();
+    }
+
+    function onFileSelected(input, ctx){
+        if(!input.files || !input.files[0]) return;
+        var file = input.files[0];
+        // Validate type & size (5 MB)
+        if(!file.type.startsWith('image/')){
+            alert('Please select an image file (JPG, PNG, WEBP).');
+            return;
+        }
+        if(file.size > 5 * 1024 * 1024){
+            alert('Image must be under 5 MB.');
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e){
+            openCropper(e.target.result, ctx);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function openCropper(src, ctx){
+        currentCropContext = ctx;
+        var img = document.getElementById('cropperImg');
+        img.src = src;
+
+        if(cropperInstance){ cropperInstance.destroy(); cropperInstance = null; }
+
+        document.getElementById('cropperOverlay').classList.add('open');
+
+        // Small delay to let overlay render
+        setTimeout(function(){
+            cropperInstance = new Cropper(img, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 0.9,
+                responsive: true,
+                checkCrossOrigin: false,
+            });
+        }, 80);
+    }
+
+    function setRatio(w, h, label){
+        if(cropperInstance) cropperInstance.setAspectRatio(w/h);
+        document.querySelectorAll('.ratio-btn').forEach(function(b){ b.classList.remove('active'); });
+        event.target.classList.add('active');
+    }
+
+    function cancelCrop(){
+        document.getElementById('cropperOverlay').classList.remove('open');
+        if(cropperInstance){ cropperInstance.destroy(); cropperInstance = null; }
+    }
+
+    function confirmCrop(){
+        if(!cropperInstance) return;
+        var canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1200, maxHeight: 1200 });
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+        if(currentCropContext === 'add'){
+            addCroppedImages.push(dataUrl);
+            renderAddSlots();
+            updateAddImgNote();
+            syncCroppedInputs('add');
+        } else {
+            editCroppedImages.push(dataUrl);
+            renderEditSlots();
+            updateEditImgNote();
+            syncCroppedInputs('edit');
+        }
+
+        cancelCrop();
+    }
+
+    // ============================================================
+    //  SYNC HIDDEN INPUTS (base64 → POST)
+    // ============================================================
+    function syncCroppedInputs(ctx){
+        var container = ctx === 'add'
+            ? document.getElementById('addCroppedContainer')
+            : document.getElementById('editCroppedContainer');
+        container.innerHTML = '';
+
+        var images = ctx === 'add' ? addCroppedImages : editCroppedImages;
+        images.forEach(function(dataUrl){
+            var inp = document.createElement('input');
+            inp.type = 'hidden';
+            inp.name = 'cropped_images[]';
+            inp.value = dataUrl;
+            container.appendChild(inp);
+        });
+    }
+
+    // ============================================================
+    //  IMG COUNT NOTES
+    // ============================================================
+    function updateAddImgNote(){
+        var note = document.getElementById('addImgCountNote');
+        var n = addCroppedImages.length;
+        if(n < 3){
+            note.style.color = '#e87e7e';
+            note.textContent = n + ' / 3 images minimum';
+        } else {
+            note.style.color = '#6ee87e';
+            note.textContent = '✓ ' + n + ' images added';
+        }
+    }
+
+    function updateEditImgNote(){
+        var note = document.getElementById('editImgCountNote');
+        note.style.color = '#aaa';
+        note.textContent = editCroppedImages.length + ' new image(s) selected';
+    }
+
+    // ============================================================
+    //  ADD FORM SUBMIT GUARD (min 3)
+    // ============================================================
+    document.getElementById('addVariantForm').addEventListener('submit', function(e){
+        syncCroppedInputs('add');
+        if(addCroppedImages.length < 3){
+            e.preventDefault();
+            alert('Please add at least 3 images before saving.');
+        }
+    });
+
+    document.getElementById('editVariantForm').addEventListener('submit', function(e){
+        syncCroppedInputs('edit');
+    });
+
+    // ============================================================
+    //  ESC / BACKDROP CLOSE
+    // ============================================================
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+            if(document.getElementById('cropperOverlay').classList.contains('open')){ cancelCrop(); return; }
+            closeAddVariantModal();
+            closeEditVariantModal();
+            closeDelVariantModal();
+        }
+    });
+    ['addVariantModal','editVariantModal','delVariantModal'].forEach(function(id){
+        var ov = document.getElementById(id);
+        ov.addEventListener('click', function(e){ if(e.target===ov){ ov.classList.remove('open'); } });
+    });
+
+    // ============================================================
+    //  AUTO DISMISS MESSAGES
+    // ============================================================
+    setTimeout(function(){
+        var w = document.getElementById('messagesWrap');
+        if(w){ w.style.transition='opacity .5s'; w.style.opacity='0'; setTimeout(function(){ w.remove(); }, 500); }
+    }, 5000);
+    </script>
+</body>
+</html>

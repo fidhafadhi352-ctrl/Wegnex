@@ -1,0 +1,373 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WEGNEX | Logout</title>
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #090909;
+            color: #ffffff;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        /* ================= BACKGROUND ================= */
+
+        .background {
+            position: fixed;
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(50, 50, 50, 0.08),
+                    transparent 55%
+                );
+
+            z-index: -1;
+        }
+
+        /* ================= MODAL ================= */
+
+        .logout-modal {
+            width: 315px;
+            min-height: 388px;
+
+            background: #181818;
+
+            border: 1px solid #4a3a14;
+
+            border-radius: 7px;
+
+            padding: 25px 26px;
+
+            position: relative;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.65);
+        }
+
+        /* ================= CLOSE ================= */
+
+        .close-btn {
+            position: absolute;
+
+            top: 11px;
+            right: 12px;
+
+            background: transparent;
+
+            border: none;
+
+            color: #cfcfcf;
+
+            font-size: 19px;
+
+            font-weight: 300;
+
+            cursor: pointer;
+
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #d9af27;
+        }
+
+        /* ================= ICON ================= */
+
+        .logout-icon {
+            width: 53px;
+            height: 53px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid #574514;
+
+            border-radius: 8px;
+
+            background: #1b1b1b;
+
+            box-shadow:
+                0 0 20px rgba(215, 174, 38, 0.08);
+        }
+
+        .logout-icon i {
+            color: #e0b62d;
+
+            font-size: 24px;
+        }
+
+        /* ================= TITLE ================= */
+
+        .modal-title {
+            text-align: center;
+
+            color: #ffffff;
+
+            font-size: 8px;
+
+            font-weight: 600;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 17px;
+        }
+
+        /* ================= DESCRIPTION ================= */
+
+        .description {
+            text-align: center;
+
+            color: #b4b0a7;
+
+            font-size: 10px;
+
+            line-height: 1.8;
+
+            font-weight: 300;
+
+            margin-bottom: 24px;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .logout-btn,
+        .cancel-btn {
+            width: 100%;
+
+            height: 37px;
+
+            font-family: 'Poppins', sans-serif;
+
+            font-size: 8px;
+
+            font-weight: 600;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+        }
+
+        /* Logout */
+
+        .logout-btn {
+            border: none;
+
+            background: #dbb331;
+
+            color: #111111;
+
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #edc442;
+        }
+
+        /* Cancel */
+
+        .cancel-btn {
+            border: 1px solid #d0a827;
+
+            background: transparent;
+
+            color: #ffffff;
+
+            transition: 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(218, 176, 42, 0.08);
+
+            color: #e2bd36;
+        }
+
+        /* ================= BOTTOM LINE ================= */
+
+        .bottom-info {
+            border-top: 1px solid #292929;
+
+            margin-top: 20px;
+
+            padding-top: 14px;
+
+            text-align: center;
+
+            color: #777;
+
+            font-size: 7px;
+
+            line-height: 1.5;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 500px) {
+
+            .logout-modal {
+                width: calc(100% - 40px);
+
+                max-width: 315px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="background"></div>
+
+
+    <!-- ================= LOGOUT MODAL ================= -->
+
+    <div class="logout-modal">
+
+
+        <!-- CLOSE BUTTON -->
+
+        <button
+            type="button"
+            class="close-btn"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+
+        <!-- LOGOUT ICON -->
+
+        <div class="logout-icon">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h2 class="modal-title">
+            LOG OUT?
+        </h2>
+
+
+        <!-- DESCRIPTION -->
+
+        <p class="description">
+
+            Are you sure you want to sign out of your
+            Wegnex account? You can sign in again
+            anytime to access your orders, wishlist,
+            wallet, and luxury watch collections.
+
+        </p>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <!-- LOG OUT -->
+
+            <form method="POST" action="{% url 'logout' %}">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="logout-btn"
+                >
+                    LOG OUT
+                </button>
+
+            </form>
+
+
+            <!-- CANCEL -->
+
+            <button
+                type="button"
+                class="cancel-btn"
+                onclick="closeModal()"
+            >
+                CANCEL
+            </button>
+
+        </div>
+
+
+        <!-- BOTTOM INFO -->
+
+        <div class="bottom-info">
+
+            Your shopping cart and wishlist will remain
+            saved in your<br>
+            Wegnex account.
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function closeModal() {
+
+            // Previous page-ilottu pokum
+            window.history.back();
+
+        }
+
+    </script>
+
+</body>
+</html>

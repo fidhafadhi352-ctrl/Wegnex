@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wegnex | Category Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d0d0d;
+            color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+        }
+
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 180px;
+            height: 100vh;
+            background: #111111;
+            border-right: 1px solid #292929;
+            padding: 30px 10px;
+        }
+
+        .logo {
+            padding-left: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo h2 {
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 3px;
+            color: #858585;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .menu li span:first-child {
+            width: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .menu li:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .menu li.active {
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+            background: #191919;
+        }
+
+        .logout-link {
+            position: absolute;
+            bottom: 35px;
+            left: 22px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .logout-link:hover {
+            color: #fff;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 180px;
+            min-height: 100vh;
+        }
+
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 55px;
+            border-bottom: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: #101010;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .admin-title {
+            margin-left: 18px;
+            padding-left: 22px;
+            border-left: 1px solid #333;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        .profile-circle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #444, #1c1c1c);
+            border: 1px solid #555;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 20px;
+        }
+
+
+        /* ================= PAGE HEADER ================= */
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .page-header-left h1 {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #f5f5f5;
+        }
+
+        .page-header-left p {
+            color: #777;
+            font-size: 8px;
+            letter-spacing: .8px;
+            margin-top: 4px;
+        }
+
+        .add-btn {
+            background: #f5f5f5;
+            border: none;
+            color: #111;
+            padding: 10px 17px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: .2s;
+            letter-spacing: .5px;
+        }
+
+        .add-btn:hover {
+            background: #ddd;
+        }
+
+
+        /* ================= MESSAGES ================= */
+
+        .messages-wrap {
+            margin-bottom: 16px;
+        }
+
+        .msg {
+            padding: 10px 14px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .msg.success {
+            background: #0e2415;
+            border: 1px solid #1a4a25;
+            color: #6ee87e;
+        }
+
+        .msg.error {
+            background: #220e0e;
+            border: 1px solid #4a1a1a;
+            color: #e87e7e;
+        }
+
+        .msg-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: .6;
+        }
+
+        .msg-close:hover { opacity: 1; }
+
+
+        /* ================= STAT CARDS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            height: 98px;
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            padding: 18px;
+            border-radius: 3px;
+            transition: .2s;
+        }
+
+        .stat-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        .stat-title {
+            color: #888;
+            font-size: 8px;
+            letter-spacing: 1.3px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-bottom {
+            font-size: 8px;
+            color: #aaa;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #fff;
+            margin-right: 5px;
+        }
+
+
+        /* ================= PANEL / TABLE CARD ================= */
+
+        .panel {
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            height: 48px;
+            padding: 0 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #252525;
+        }
+
+        .panel-title {
+            font-size: 9px;
+            letter-spacing: 1.2px;
+            font-weight: 500;
+        }
+
+        /* Search in panel header */
+        .search-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+            padding: 0 8px;
+            height: 26px;
+        }
+
+        .search-input-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ddd;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 180px;
+        }
+
+        .search-input-box input::placeholder {
+            color: #555;
+        }
+
+        .search-icon {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .clear-btn {
+            background: #2a2a2a;
+            border: none;
+            color: #aaa;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .clear-btn:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        .search-submit {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 0;
+            transition: .2s;
+        }
+
+        .search-submit:hover { color: #fff; }
+
+
+        /* ================= TABLE ================= */
+
+        .cat-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cat-table thead tr {
+            background: #202020;
+        }
+
+        .cat-table th {
+            height: 36px;
+            text-align: left;
+            padding: 0 17px;
+            color: #777;
+            font-size: 8px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .cat-table td {
+            padding: 12px 17px;
+            border-top: 1px solid #292929;
+            color: #ddd;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .cat-table tbody tr:hover {
+            background: #1c1c1c;
+        }
+
+        .sl-no {
+            color: #555;
+            font-size: 10px;
+        }
+
+        .cat-id {
+            color: #666;
+            font-size: 10px;
+            letter-spacing: .5px;
+        }
+
+        .cat-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cat-thumb {
+            width: 30px;
+            height: 30px;
+            background: #292929;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 2px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .cat-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cat-name-txt {
+            font-size: 11px;
+            color: #eee;
+            font-weight: 600;
+        }
+
+        .cat-desc-txt {
+            color: #666;
+            font-size: 9px;
+            margin-top: 2px;
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Status pill */
+        .status {
+            font-size: 7px;
+            padding: 3px 7px;
+            border: 1px solid #555;
+            border-radius: 3px;
+            color: #ccc;
+            display: inline-block;
+        }
+
+        .status.active {
+            background: #f5f5f5;
+            color: #111;
+            border: none;
+            font-weight: 600;
+        }
+
+        .status.inactive {
+            background: transparent;
+            color: #777;
+            border-color: #3a3a3a;
+        }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .act-btn {
+            background: transparent;
+            border: 1px solid #2e2e2e;
+            color: #888;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: .2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .act-btn:hover {
+            color: #fff;
+            border-color: #555;
+            background: #1a1a1a;
+        }
+
+        .act-btn.edit:hover {
+            border-color: #888;
+            color: #f5f5f5;
+        }
+
+        .act-btn.toggle-on {
+            color: #6ee87e;
+            border-color: #1e4426;
+        }
+
+        .act-btn.toggle-on:hover {
+            background: #0e2415;
+            border-color: #2e6433;
+        }
+
+        .act-btn.toggle-off {
+            color: #777;
+            border-color: #2e2e2e;
+        }
+
+        .act-btn.toggle-off:hover {
+            background: #1a1a1a;
+            border-color: #444;
+            color: #aaa;
+        }
+
+        .act-btn.delete:hover {
+            color: #e87e7e;
+            border-color: #5c2020;
+            background: #1a0b0b;
+        }
+
+
+        /* ================= TABLE FOOTER / PAGINATION ================= */
+
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 17px;
+            border-top: 1px solid #252525;
+            background: #141414;
+        }
+
+        .entries-info {
+            color: #666;
+            font-size: 9px;
+            letter-spacing: .5px;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pg-btn {
+            min-width: 26px;
+            height: 26px;
+            padding: 0 6px;
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            color: #888;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .pg-btn:hover:not(.disabled):not(.current) {
+            color: #fff;
+            border-color: #555;
+            background: #1c1c1c;
+        }
+
+        .pg-btn.current {
+            background: #f5f5f5;
+            border-color: #f5f5f5;
+            color: #111;
+            font-weight: 600;
+        }
+
+        .pg-btn.disabled {
+            opacity: .3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+
+        /* ================= EMPTY STATE ================= */
+
+        .empty-state {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .empty-state p {
+            color: #666;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .empty-state .empty-icon {
+            font-size: 30px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+
+        /* ================= MODALS ================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .2s, visibility .2s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 460px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            height: 48px;
+            padding: 0 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #252525;
+            background: #141414;
+        }
+
+        .modal-header-title {
+            font-size: 9px;
+            letter-spacing: 1.2px;
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        .modal-x {
+            background: transparent;
+            border: none;
+            color: #777;
+            font-size: 16px;
+            cursor: pointer;
+            line-height: 1;
+            transition: .2s;
+        }
+
+        .modal-x:hover { color: #fff; }
+
+        .modal-body {
+            padding: 20px 17px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            color: #888;
+            font-size: 9px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+            padding: 9px 11px;
+            color: #f0f0f0;
+            font-size: 11px;
+            font-family: Arial, Helvetica, sans-serif;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: #555;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 72px;
+        }
+
+        .img-upload-wrap {
+            background: #111;
+            border: 1px dashed #2a2a2a;
+            border-radius: 3px;
+            padding: 14px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .img-upload-wrap:hover {
+            border-color: #555;
+        }
+
+        .img-upload-wrap input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .img-upload-placeholder {
+            font-size: 9px;
+            color: #555;
+            letter-spacing: .5px;
+        }
+
+        .img-preview-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .img-preview {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 2px;
+            border: 1px solid #333;
+        }
+
+        .img-preview-meta {
+            font-size: 9px;
+            color: #888;
+        }
+
+        .checkbox-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #444;
+            border-radius: 2px;
+            background: #111;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked {
+            background: #f5f5f5;
+            border-color: #f5f5f5;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #111;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            padding: 12px 17px;
+            border-top: 1px solid #252525;
+            background: #141414;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-cancel:hover {
+            border-color: #555;
+            color: #fff;
+        }
+
+        .btn-save {
+            background: #f5f5f5;
+            border: none;
+            color: #111;
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            cursor: pointer;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .btn-save:hover { background: #ddd; }
+
+        .btn-danger-solid {
+            background: #8b1a1a;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-danger-solid:hover { background: #a02020; }
+
+        .del-warn {
+            background: #1a0b0b;
+            border: 1px solid #3a1515;
+            border-radius: 3px;
+            padding: 12px;
+            font-size: 10px;
+            color: #ddd;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .del-warn strong {
+            color: #e87e7e;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 65px;
+            }
+            .logo h2,
+            .logo p,
+            .menu li span:last-child,
+            .logout-link {
+                display: none;
+            }
+            .main {
+                margin-left: 65px;
+            }
+            .menu li {
+                justify-content: center;
+            }
+            .content {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .admin-title {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <span>♧</span>
+                <span>ORDERS</span>
+            </li>
+
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <span>♙</span>
+                <span>CUSTOMERS</span>
+            </li>
+
+            <li>
+                <span>♜</span>
+                <span>COUPONS</span>
+            </li>
+
+            <li>
+                <span>▣</span>
+                <span>REVIEWS</span>
+            </li>
+
+        </ul>
+
+        <a href="{% url 'admin_logout' %}" class="logout-link">⇥ &nbsp; LOGOUT</a>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand-section">
+
+                <div class="brand">WEGNEX</div>
+
+                <div class="admin-title">CATEGORY MANAGEMENT</div>
+
+            </div>
+
+            <div class="top-right">
+
+                <span>♧</span>
+
+                <span>✉</span>
+
+                <div class="admin-profile">
+                    <div class="profile-circle"></div>
+                    {{ admin_user.username|upper }}
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+
+            <!-- MESSAGES -->
+
+            {% if messages %}
+                <div class="messages-wrap" id="messagesWrap">
+                    {% for message in messages %}
+                        <div class="msg {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                            <span>{{ message }}</span>
+                            <button class="msg-close" onclick="this.parentElement.remove()">×</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>CATEGORIES</h1>
+                    <p>MANAGE WATCH COLLECTION CATEGORIES</p>
+                </div>
+                <button class="add-btn" onclick="openAddModal()">
+                    + &nbsp; Add Category
+                </button>
+            </div>
+
+
+            <!-- STAT CARDS (only 3 — no soft-delete card) -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-title">TOTAL CATEGORIES</div>
+                    <div class="stat-value">{{ total_categories }}</div>
+                    <div class="stat-bottom">
+                        <span class="dot"></span>
+                        ALL COLLECTIONS
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">ACTIVE CATEGORIES</div>
+                    <div class="stat-value">{{ active_categories }}</div>
+                    <div class="stat-bottom">⌁ LIVE IN STORE</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">INACTIVE CATEGORIES</div>
+                    <div class="stat-value">{{ inactive_categories }}</div>
+                    <div class="stat-bottom">
+                        <span class="dot" style="background:#666;"></span>
+                        HIDDEN FROM STORE
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- CATEGORY TABLE PANEL -->
+
+            <div class="panel">
+
+
+                <!-- Panel Header: Title + Search -->
+
+                <div class="panel-header">
+
+                    <div class="panel-title">CATEGORY LIST &nbsp; <span style="color:#555; font-size:8px;">SORTED BY NEWEST</span></div>
+
+                    <!-- Backend Search with Cancel/Clear button -->
+                    <form method="GET" action="{% url 'category_management' %}" class="search-wrap" id="searchForm">
+
+                        <div class="search-input-box">
+
+                            <span class="search-icon">⌕</span>
+
+                            <input
+                                type="text"
+                                name="search"
+                                id="searchInput"
+                                value="{{ search_query }}"
+                                placeholder="Search categories..."
+                                autocomplete="off"
+                            >
+
+                            {% if search_query %}
+                                <a
+                                    href="{% url 'category_management' %}"
+                                    class="clear-btn"
+                                    id="backendClearBtn"
+                                    title="Clear search"
+                                >✕</a>
+                            {% else %}
+                                <button
+                                    type="button"
+                                    class="clear-btn"
+                                    id="feClearBtn"
+                                    style="display:none;"
+                                    title="Clear"
+                                >✕</button>
+                            {% endif %}
+
+                        </div>
+
+                        <button type="submit" class="search-submit" title="Search">↵</button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- Table -->
+
+                <table class="cat-table">
+
+                    <thead>
+                        <tr>
+                            <th style="width:60px;">SL NO</th>
+                            <th style="width:110px;">ID</th>
+                            <th>CATEGORY NAME</th>
+                            <th style="width:110px;">STATUS</th>
+                            <th style="width:160px; text-align:right; padding-right:17px;">ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="catTableBody">
+
+                        {% if categories %}
+
+                            {% for cat in categories %}
+                                <tr>
+
+                                    <td class="sl-no">
+                                        {{ forloop.counter0|add:page_obj.start_index|stringformat:"02d" }}
+                                    </td>
+
+                                    <td class="cat-id">CT-{{ cat.id|stringformat:"03d" }}</td>
+
+                                    <td>
+                                        <div class="cat-name-cell">
+                                            <div class="cat-thumb">
+                                                {% if cat.image %}
+                                                    <img src="{{ cat.image.url }}" alt="{{ cat.name }}">
+                                                {% else %}
+                                                    ⌚
+                                                {% endif %}
+                                            </div>
+                                            <div>
+                                                <div class="cat-name-txt">{{ cat.name }}</div>
+                                                <div class="cat-desc-txt" title="{{ cat.description }}">
+                                                    {{ cat.description|default:"No description." }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        {% if cat.is_active %}
+                                            <span class="status active">ACTIVE</span>
+                                        {% else %}
+                                            <span class="status inactive">INACTIVE</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- Actions: Edit, Toggle Active/Inactive, Delete -->
+                                    <td style="text-align:right; padding-right:17px;">
+                                        <div class="actions" style="justify-content:flex-end;">
+
+                                            <!-- Edit -->
+                                            <button
+                                                type="button"
+                                                class="act-btn edit"
+                                                title="Edit"
+                                                onclick="openEditModal('{{ cat.id }}', '{{ cat.name|escapejs }}', '{{ cat.description|escapejs }}', '{% if cat.image %}{{ cat.image.url }}{% endif %}', {{ cat.is_active|yesno:'true,false' }}, {{ cat.is_featured|yesno:'true,false' }})"
+                                            >
+                                                ✎ Edit
+                                            </button>
+
+                                            <!-- Toggle Active / Inactive -->
+                                            <form method="POST" action="{% url 'toggle_category_status' cat.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button
+                                                    type="submit"
+                                                    class="act-btn {% if cat.is_active %}toggle-on{% else %}toggle-off{% endif %}"
+                                                    title="{% if cat.is_active %}Deactivate{% else %}Activate{% endif %}"
+                                                >
+                                                    {% if cat.is_active %}● Active{% else %}○ Inactive{% endif %}
+                                                </button>
+                                            </form>
+
+                                            <!-- Soft Delete -->
+                                            <button
+                                                type="button"
+                                                class="act-btn delete"
+                                                title="Delete"
+                                                onclick="openDeleteModal('{{ cat.id }}', '{{ cat.name|escapejs }}')"
+                                            >
+                                                ✕ Delete
+                                            </button>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">◈</div>
+                                        <div style="color:#aaa; font-size:12px; font-weight:600; margin-bottom:6px;">No categories found</div>
+                                        <p>
+                                            {% if search_query %}
+                                                No results for "{{ search_query }}". &nbsp;
+                                                <a href="{% url 'category_management' %}" style="color:#888; text-decoration:underline;">Clear search</a>
+                                            {% else %}
+                                                No categories added yet.
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+
+                <!-- Table Footer / Pagination -->
+
+                <div class="table-footer">
+
+                    <div class="entries-info">
+                        SHOWING {{ page_obj.start_index|default:0 }}&ndash;{{ page_obj.end_index|default:0 }} OF {{ paginator.count|default:0 }} CATEGORIES
+                    </div>
+
+                    <div class="pagination">
+
+                        {% if page_obj.has_previous %}
+                            <a
+                                href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                                class="pg-btn"
+                            >‹</a>
+                        {% else %}
+                            <span class="pg-btn disabled">‹</span>
+                        {% endif %}
+
+                        {% for num in paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="pg-btn current">{{ num }}</span>
+                            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                                <a
+                                    href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                                    class="pg-btn"
+                                >{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a
+                                href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                                class="pg-btn"
+                            >›</a>
+                        {% else %}
+                            <span class="pg-btn disabled">›</span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         MODAL 1: ADD CATEGORY
+    ========================================== -->
+
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+
+            <div class="modal-header">
+                <span class="modal-header-title">ADD CATEGORY</span>
+                <button class="modal-x" onclick="closeAddModal()">✕</button>
+            </div>
+
+            <form method="POST" action="{% url 'add_category' %}" enctype="multipart/form-data" id="addForm">
+                {% csrf_token %}
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="form-label">Category Name *</label>
+                        <input type="text" name="name" class="form-input" placeholder="e.g. Luxury Watches" required maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-textarea" placeholder="Brief description..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Image</label>
+                        <div class="img-upload-wrap">
+                            <input
+                                type="file"
+                                name="image"
+                                id="addImgInput"
+                                accept="image/*"
+                                onchange="previewImg(this,'addImgPreview','addImgBox','addImgName')"
+                            >
+                            <div id="addUploadHint" class="img-upload-placeholder">
+                                CLICK TO UPLOAD &nbsp; · &nbsp; PNG JPG WEBP &nbsp; UP TO 5MB
+                            </div>
+                            <div class="img-preview-row" id="addImgBox" style="display:none; justify-content:flex-start;">
+                                <img src="" id="addImgPreview" class="img-preview" alt="preview">
+                                <div class="img-preview-meta">
+                                    <div style="color:#6ee87e; margin-bottom:3px;">✓ Image selected</div>
+                                    <div id="addImgName" style="color:#aaa;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-row">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_active" checked>
+                                <span>Active in store</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_featured">
+                                <span>Featured</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Create Category</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         MODAL 2: EDIT CATEGORY
+    ========================================== -->
+
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+
+            <div class="modal-header">
+                <span class="modal-header-title">EDIT CATEGORY</span>
+                <button class="modal-x" onclick="closeEditModal()">✕</button>
+            </div>
+
+            <form method="POST" id="editForm" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="form-label">Category Name *</label>
+                        <input type="text" name="name" id="editName" class="form-input" required maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" id="editDesc" class="form-textarea"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Image</label>
+
+                        <div id="currentImgWrap" style="margin-bottom:8px; display:none;">
+                            <div style="font-size:9px; color:#666; margin-bottom:6px; letter-spacing:.5px;">CURRENT IMAGE</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <img src="" id="currentImg" class="img-preview" alt="current">
+                                <label class="checkbox-item" style="font-size:9px; color:#888;">
+                                    <input type="checkbox" name="remove_image" value="1" id="removeImgChk">
+                                    <span>Remove image</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="img-upload-wrap">
+                            <input
+                                type="file"
+                                name="image"
+                                id="editImgInput"
+                                accept="image/*"
+                                onchange="previewImg(this,'editImgPreview','editImgBox','editImgName')"
+                            >
+                            <div id="editUploadHint" class="img-upload-placeholder">
+                                CLICK TO REPLACE IMAGE
+                            </div>
+                            <div class="img-preview-row" id="editImgBox" style="display:none; justify-content:flex-start;">
+                                <img src="" id="editImgPreview" class="img-preview" alt="new preview">
+                                <div class="img-preview-meta">
+                                    <div style="color:#6ee87e; margin-bottom:3px;">✓ New image selected</div>
+                                    <div id="editImgName" style="color:#aaa;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-row">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_active" id="editIsActive">
+                                <span>Active in store</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="is_featured" id="editIsFeatured">
+                                <span>Featured</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         MODAL 3: DELETE CONFIRMATION
+    ========================================== -->
+
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal" style="max-width:400px;">
+
+            <div class="modal-header">
+                <span class="modal-header-title">DELETE CATEGORY</span>
+                <button class="modal-x" onclick="closeDeleteModal()">✕</button>
+            </div>
+
+            <form method="POST" id="deleteForm" action="">
+                {% csrf_token %}
+
+                <div class="modal-body">
+                    <div class="del-warn">
+                        Are you sure you want to delete <strong id="delCatName"></strong>?
+                        <br><br>
+                        <strong>Warning:</strong> Deleting this category will also immediately remove all associated products from the user store. It can be restored later if needed.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn-danger-solid">Delete</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+
+        /* ========= MODAL HELPERS ========= */
+
+        function openAddModal() {
+            document.getElementById('addForm').reset();
+            document.getElementById('addImgBox').style.display = 'none';
+            document.getElementById('addUploadHint').style.display = 'block';
+            document.getElementById('addModal').classList.add('open');
+            document.querySelector('#addForm .form-input').focus();
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('open');
+        }
+
+        function openEditModal(id, name, desc, imageUrl, isActive, isFeatured) {
+            const form = document.getElementById('editForm');
+            form.action = '/admin_panel/category_management/edit/' + id + '/';
+
+            document.getElementById('editName').value = name;
+            document.getElementById('editDesc').value = desc;
+            document.getElementById('editIsActive').checked = isActive;
+            document.getElementById('editIsFeatured').checked = isFeatured;
+
+            const curWrap = document.getElementById('currentImgWrap');
+            const curImg = document.getElementById('currentImg');
+            const remChk = document.getElementById('removeImgChk');
+            remChk.checked = false;
+
+            if (imageUrl) {
+                curImg.src = imageUrl;
+                curWrap.style.display = 'block';
+            } else {
+                curWrap.style.display = 'none';
+            }
+
+            document.getElementById('editImgBox').style.display = 'none';
+            document.getElementById('editUploadHint').style.display = 'block';
+            document.getElementById('editImgInput').value = '';
+
+            document.getElementById('editModal').classList.add('open');
+            document.getElementById('editName').focus();
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('open');
+        }
+
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteForm').action = '/admin_panel/category_management/delete/' + id + '/';
+            document.getElementById('delCatName').textContent = name;
+            document.getElementById('deleteModal').classList.add('open');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('open');
+        }
+
+        /* ========= IMAGE PREVIEW ========= */
+
+        function previewImg(input, previewId, boxId, nameId) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).src = e.target.result;
+                    document.getElementById(boxId).style.display = 'flex';
+                    document.getElementById(nameId).textContent = file.name;
+
+                    if (boxId === 'addImgBox') {
+                        document.getElementById('addUploadHint').style.display = 'none';
+                    } else {
+                        document.getElementById('editUploadHint').style.display = 'none';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        /* ========= SEARCH CLEAR ========= */
+
+        const searchInput = document.getElementById('searchInput');
+        const feClearBtn = document.getElementById('feClearBtn');
+
+        if (searchInput && feClearBtn) {
+            searchInput.addEventListener('input', function() {
+                feClearBtn.style.display = this.value.trim() ? 'flex' : 'none';
+            });
+            feClearBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                feClearBtn.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+
+        /* ========= ESC / BACKDROP CLOSE ========= */
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAddModal();
+                closeEditModal();
+                closeDeleteModal();
+            }
+        });
+
+        document.querySelectorAll('.modal-overlay').forEach(function(ov) {
+            ov.addEventListener('click', function(e) {
+                if (e.target === ov) {
+                    closeAddModal();
+                    closeEditModal();
+                    closeDeleteModal();
+                }
+            });
+        });
+
+        /* ========= AUTO-DISMISS MESSAGES ========= */
+
+        setTimeout(function() {
+            const w = document.getElementById('messagesWrap');
+            if (w) {
+                w.style.transition = 'opacity .5s';
+                w.style.opacity = '0';
+                setTimeout(function() { w.remove(); }, 500);
+            }
+        }, 5000);
+
+    </script>
+
+
+</body>
+</html>

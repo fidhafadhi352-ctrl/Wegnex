@@ -1,0 +1,651 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Verify your new WEGNEX account email with the 6-digit verification code sent to your inbox.">
+    <title>WEGNEX | Verify New Email</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold:        #D4AF37;
+            --gold-light:  #F0CC5A;
+            --gold-glow:   rgba(212, 175, 55, 0.18);
+            --bg-deep:     #070707;
+            --bg-card:     #111111;
+            --bg-input:    #181818;
+            --border:      #242424;
+            --text-main:   #FFFFFF;
+            --text-muted:  #888888;
+            --error-bg:    #1f0d0d;
+            --error-brd:   #5c2020;
+            --error-clr:   #ff8585;
+            --success-bg:  #0d1f12;
+            --success-brd: #205c2a;
+            --success-clr: #7ee88a;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-deep);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* ── Page Layout: Exact 50% / 50% split ──────────── */
+        .page {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Left Hero: Spans up to screen center (50%) ───── */
+        .hero {
+            width: 50%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to left,  rgba(7,7,7,0.98) 0%, rgba(7,7,7,0.52) 48%, rgba(7,7,7,0.12) 100%),
+                linear-gradient(to top,   rgba(7,7,7,0.72) 0%, rgba(7,7,7,0.0)  55%);
+        }
+
+        .hero-brand {
+            position: relative;
+            z-index: 3;
+        }
+
+        .brand-wordmark {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .brand-watch-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            border: 1px solid rgba(212,175,55,0.25);
+            background: rgba(212,175,55,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-watch-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(700%) hue-rotate(5deg) brightness(95%);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 3;
+            max-width: 330px;
+        }
+
+        .hero-headline {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -1.2px;
+            margin-bottom: 12px;
+        }
+
+        .hero-headline .gold {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            font-size: 11.5px;
+            line-height: 1.8;
+            color: #9c9c9c;
+            margin-bottom: 16px;
+        }
+
+        .gold-rule {
+            width: 36px;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold), transparent);
+            border-radius: 2px;
+        }
+
+        /* ── Right Form Panel: Exact 50% ─────────────────── */
+        .form-panel {
+            width: 50%;
+            height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            overflow-y: auto;
+        }
+
+        .form-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        .form-panel::-webkit-scrollbar-thumb {
+            background: #252525;
+            border-radius: 4px;
+        }
+
+        /* ── OTP Card: Same style as Login/Signup ───────── */
+        .otp-card {
+            width: 100%;
+            max-width: 410px;
+            background: var(--bg-card);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: 18px;
+            padding: 26px 28px 22px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+            text-align: center;
+        }
+
+        .card-accent {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* ── Card Header ─────────────────────────────────── */
+        .card-header-area {
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .card-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+
+        .card-logo-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--gold);
+        }
+
+        .card-logo-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .email-highlight {
+            color: var(--gold);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        /* ── Messages ────────────────────────────────────── */
+        .message-list {
+            list-style: none;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .message-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: var(--error-bg);
+            border: 1px solid var(--error-brd);
+            color: var(--error-clr);
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .message-list li::before {
+            content: '\F33A';
+            font-family: 'bootstrap-icons';
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .message-list li.success {
+            background: var(--success-bg);
+            border-color: var(--success-brd);
+            color: var(--success-clr);
+        }
+
+        .message-list li.success::before {
+            content: '\F26A';
+        }
+
+        /* ── OTP Inputs Grid ─────────────────────────────── */
+        .otp-inputs-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0 18px;
+        }
+
+        .otp-digit {
+            width: 44px;
+            height: 48px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .otp-digit:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+            background: #202020;
+        }
+
+        /* ── Timer & Resend ──────────────────────────────── */
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 18px;
+            padding: 0 4px;
+        }
+
+        .timer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #999;
+        }
+
+        .timer-badge i {
+            color: var(--gold);
+            font-size: 12px;
+        }
+
+        .resend-btn {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            transition: color 0.2s;
+            padding: 0;
+        }
+
+        .resend-btn:hover {
+            color: var(--gold-light);
+            text-decoration: underline;
+        }
+
+        .resend-btn.disabled {
+            color: #555;
+            cursor: not-allowed;
+            text-decoration: none;
+            pointer-events: none;
+        }
+
+        /* ── Submit Button ───────────────────────────────── */
+        .btn-verify {
+            width: 100%;
+            height: 42px;
+            background: var(--gold);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .btn-verify:hover {
+            background: var(--gold-light);
+        }
+
+        /* ── Footer ──────────────────────────────────────── */
+        .card-footer-text {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .card-footer-text a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .card-footer-text a:hover {
+            color: var(--gold-light);
+        }
+
+        .card-legal {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+            font-size: 8px;
+            color: #383838;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 960px) {
+            html, body {
+                height: auto;
+                overflow: auto;
+            }
+            .page {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+            .hero {
+                display: none;
+            }
+            .form-panel {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 24px 16px;
+            }
+            .otp-card {
+                max-width: 440px;
+                margin: auto;
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- LEFT: HERO (Exact 50%) -->
+    <div class="hero">
+
+        <img
+            class="hero-img"
+            src="{% static 'images/watch.jpg' %}"
+            alt="Luxury Wegnex Watch"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-brand">
+            <span class="brand-wordmark">WEGNEX</span>
+            <div class="brand-watch-icon">
+                <img src="{% static 'images/watch-logo.png' %}" alt="Wegnex Logo">
+            </div>
+        </div>
+
+        <div class="hero-copy">
+            <h1 class="hero-headline">
+                Verify &<br>
+                Secure Your<br>
+                <span class="gold">New Email.</span>
+            </h1>
+
+            <p class="hero-desc">
+                Protecting your account identity with luxury-grade authentication.
+                Enter the code sent to your new email to finalize the update.
+            </p>
+
+            <div class="gold-rule"></div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT: FORM (Exact 50%) -->
+    <div class="form-panel">
+
+        <div class="otp-card">
+
+            <div class="card-accent"></div>
+
+            <!-- Header -->
+            <div class="card-header-area">
+                <div class="card-logo">
+                    <div class="card-logo-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <span class="card-logo-text">WEGNEX</span>
+                </div>
+                <h1 class="card-title">Verify New Email</h1>
+                <p class="card-subtitle">
+                    Enter the 6-digit code sent to<br>
+                    <span class="email-highlight">{{ new_email }}</span>
+                </p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                <ul class="message-list">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- OTP Form -->
+            <form method="POST" action="{% url 'otpprofile' %}" id="profileOtpForm">
+                {% csrf_token %}
+
+                <div class="otp-inputs-wrapper">
+                    <input type="text" class="otp-digit" name="otp1" maxlength="1" inputmode="numeric" autocomplete="one-time-code" autofocus required>
+                    <input type="text" class="otp-digit" name="otp2" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-digit" name="otp3" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-digit" name="otp4" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-digit" name="otp5" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-digit" name="otp6" maxlength="1" inputmode="numeric" required>
+                </div>
+
+                <!-- Timer & Resend Row -->
+                <div class="timer-row">
+                    <span class="timer-badge">
+                        <i class="bi bi-clock"></i>
+                        <span id="timerText">Expires in 02:00</span>
+                    </span>
+
+                    <a href="{% url 'resend_profile_otp' %}" class="resend-btn disabled" id="resendBtn">
+                        Resend Code
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-verify">
+                    <i class="bi bi-check-circle" style="margin-right:6px;"></i>
+                    Verify & Update Email
+                </button>
+
+            </form>
+
+            <!-- Back to Edit Profile -->
+            <p class="card-footer-text">
+                Wrong email or changed your mind?
+                <a href="{% url 'editprofile' %}">Back to Edit Profile</a>
+            </p>
+
+            <!-- Legal -->
+            <div class="card-legal">
+                <span>© 2026 WEGNEX</span>
+                <span>Privacy Policy · Terms of Service</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // OTP Auto-focus & Navigation
+    const digits = Array.from(document.querySelectorAll('.otp-digit'));
+
+    digits.forEach((input, index) => {
+        // Only allow numbers and auto-advance to next box
+        input.addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+
+            if (this.value && index < digits.length - 1) {
+                digits[index + 1].focus();
+            }
+        });
+
+        // Backspace & arrow keys handling
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Backspace') {
+                if (!this.value && index > 0) {
+                    digits[index - 1].focus();
+                }
+            } else if (e.key === 'ArrowLeft' && index > 0) {
+                digits[index - 1].focus();
+            } else if (e.key === 'ArrowRight' && index < digits.length - 1) {
+                digits[index + 1].focus();
+            }
+        });
+
+        // Paste support: paste 6-digit code anywhere without auto-submitting
+        input.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+            const numbers = pasteData.replace(/[^0-9]/g, '').slice(0, 6);
+
+            if (numbers.length > 0) {
+                numbers.split('').forEach((num, i) => {
+                    if (digits[i]) {
+                        digits[i].value = num;
+                    }
+                });
+
+                const nextFocus = Math.min(numbers.length, digits.length - 1);
+                digits[nextFocus].focus();
+            }
+        });
+    });
+
+    // 2-minute countdown timer with Resend activation
+    let timeLeft = 120;
+    const timerText = document.getElementById('timerText');
+    const resendBtn = document.getElementById('resendBtn');
+
+    const countdown = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            timerText.textContent = "Code expired";
+            timerText.style.color = "#ff8585";
+            resendBtn.classList.remove('disabled');
+        } else {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            timerText.textContent = `Expires in 0${m}:${s < 10 ? '0' : ''}${s}`;
+            // Enable resend after 30 seconds so user isn't stuck if email was slow
+            if (timeLeft <= 90) {
+                resendBtn.classList.remove('disabled');
+            }
+        }
+    }, 1000);
+</script>
+
+<script>
+    // Auto-dismiss messages after 5 seconds
+    (function () {
+        setTimeout(function () {
+            var msgList = document.querySelector('.message-list');
+            if (msgList) {
+                msgList.style.transition = 'opacity 0.4s ease';
+                msgList.style.opacity = '0';
+                setTimeout(function () { msgList.remove(); }, 400);
+            }
+        }, 5000);
+    })();
+</script>
+
+</body>
+</html>

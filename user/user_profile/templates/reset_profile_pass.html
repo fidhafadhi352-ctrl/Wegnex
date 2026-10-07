@@ -1,0 +1,600 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WEGNEX | Set New Password</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #111;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 50% 50%;
+        }
+
+        /* ================= LEFT ================= */
+
+        .left-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .watch-image {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.05),
+                rgba(0,0,0,0.15) 45%,
+                rgba(0,0,0,0.80) 100%
+            );
+        }
+
+        .left-content {
+            position: absolute;
+
+            left: 45px;
+            bottom: 95px;
+
+            z-index: 2;
+
+            max-width: 390px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #e1b52c;
+
+            font-size: 16px;
+            font-weight: 400;
+
+            margin-bottom: 12px;
+        }
+
+        .brand::before {
+            content: "";
+
+            width: 22px;
+            height: 1px;
+
+            background: #d8ad24;
+        }
+
+        .left-content h1 {
+            font-size: 45px;
+            line-height: 1.08;
+
+            font-weight: 600;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 20px;
+        }
+
+        .left-content p {
+            color: #aaa;
+
+            font-size: 12px;
+            line-height: 1.8;
+
+            font-weight: 300;
+
+            max-width: 350px;
+        }
+
+        /* ================= RIGHT ================= */
+
+        .right-section {
+            min-height: 100vh;
+
+            background: #111;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 40px;
+        }
+
+        .password-box {
+            width: 325px;
+        }
+
+        .security-title {
+            color: #d5ad26;
+
+            font-size: 8px;
+
+            font-weight: 600;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 8px;
+        }
+
+        .password-box h2 {
+            font-size: 23px;
+
+            font-weight: 400;
+
+            margin-bottom: 6px;
+        }
+
+        .description {
+            color: #aaa;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+            margin-bottom: 35px;
+        }
+
+        /* ================= INPUT ================= */
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+
+            color: #888;
+
+            font-size: 7px;
+
+            font-weight: 500;
+
+            letter-spacing: 1.4px;
+
+            margin-bottom: 7px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 37px;
+
+            background: #000;
+
+            border: none;
+            border-bottom: 1px solid #444;
+
+            outline: none;
+
+            color: white;
+
+            padding: 0 40px 0 10px;
+
+            font-family: 'Poppins', sans-serif;
+
+            font-size: 10px;
+        }
+
+        .input-wrapper input:focus {
+            border-bottom-color: #d8ad27;
+        }
+
+        .eye-button {
+            position: absolute;
+
+            right: 7px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: #777;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+        .eye-button:hover {
+            color: #d8ad27;
+        }
+
+        /* ================= PASSWORD RULES ================= */
+
+        .password-rules {
+            background: #171717;
+
+            border: 1px solid #242424;
+
+            border-radius: 3px;
+
+            padding: 13px 15px;
+
+            margin-top: 28px;
+            margin-bottom: 40px;
+        }
+
+        .rule {
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            color: #858585;
+
+            font-size: 8px;
+
+            line-height: 2.25;
+        }
+
+        .rule i {
+            color: #777;
+            font-size: 9px;
+        }
+
+        /* ================= BUTTON ================= */
+
+        .update-btn {
+            width: 100%;
+            height: 40px;
+
+            border: none;
+
+            background: linear-gradient(
+                to right,
+                #e8c23b,
+                #d19e08
+            );
+
+            color: #111;
+
+            font-family: 'Poppins', sans-serif;
+
+            font-size: 8px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.8px;
+
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: linear-gradient(
+                to right,
+                #f1ce4d,
+                #dfae16
+            );
+        }
+
+        /* ================= BACK ================= */
+
+        .back-login {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #ccc;
+
+            text-decoration: none;
+
+            font-size: 8px;
+
+            letter-spacing: 1px;
+        }
+
+        .back-login:hover {
+            color: #d8ad27;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .left-section {
+                height: 500px;
+            }
+
+            .right-section {
+                min-height: 550px;
+            }
+
+            .left-content {
+                left: 30px;
+                bottom: 45px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .left-section {
+                height: 430px;
+            }
+
+            .left-content {
+                left: 25px;
+                bottom: 35px;
+            }
+
+            .left-content h1 {
+                font-size: 35px;
+            }
+
+            .password-box {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- ================= LEFT SIDE ================= -->
+
+    <section class="left-section">
+
+        <!-- WATCH IMAGE -->
+
+        <img
+            src="{% static 'images/change-password-watch.jpg' %}"
+            alt="WEGNEX Luxury Watch"
+            class="watch-image"
+        >
+
+        <!-- Dark overlay -->
+
+        <div class="image-overlay"></div>
+
+
+        <!-- Text over image -->
+
+        <div class="left-content">
+
+            <div class="brand">
+                WEGNEX HOROLOGY
+            </div>
+
+            <h1>
+                SECURE YOUR<br>
+                ACCESS.
+            </h1>
+
+            <p>
+                Create a new secure password for your Wegnex
+                account and continue exploring our exclusive luxury
+                watch collection.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= RIGHT SIDE ================= -->
+
+    <section class="right-section">
+
+        <div class="password-box">
+
+            <div class="security-title">
+                SECURITY PROTOCOL V3.0
+            </div>
+
+            <h2>
+                SET NEW PASSWORD
+            </h2>
+
+            <p class="description">
+                Create a strong password to protect your Wegnex
+                account and luxury purchases.
+            </p>
+
+
+            <!-- FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- NEW PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="new_password">
+                        NEW PASSWORD
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="new_password"
+                            name="new_password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="eye-button"
+                            onclick="togglePassword('new_password', this)"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="confirm_password">
+                        CONFIRM NEW PASSWORD
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="eye-button"
+                            onclick="togglePassword('confirm_password', this)"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD RULES -->
+
+                <div class="password-rules">
+
+                    <div class="rule">
+                        <i class="bi bi-circle"></i>
+                        <span>Minimum 8 characters</span>
+                    </div>
+
+                    <div class="rule">
+                        <i class="bi bi-circle"></i>
+                        <span>Include uppercase &amp; lowercase</span>
+                    </div>
+
+                    <div class="rule">
+                        <i class="bi bi-circle"></i>
+                        <span>Include at least one number</span>
+                    </div>
+
+                    <div class="rule">
+                        <i class="bi bi-circle"></i>
+                        <span>Include special character (@#$%)</span>
+                    </div>
+
+                </div>
+
+
+                <!-- UPDATE PASSWORD -->
+
+                <button
+                    type="submit"
+                    class="update-btn"
+                >
+                    UPDATE PASSWORD
+                </button>
+
+            </form>
+
+
+            <!-- BACK TO LOGIN -->
+
+            <a
+                href="{% url 'login' %}"
+                class="back-login"
+            >
+                <i class="bi bi-arrow-left"></i>
+                BACK TO LOGIN
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    function togglePassword(inputId, button) {
+
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector("i");
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            input.type = "password";
+
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WEGNEX | Filter Watches</title>
+
+    <!-- Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #050505;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* =====================================
+           FILTER MODAL
+        ===================================== */
+
+        .filter-modal {
+            width: 325px;
+
+            background: #0b0b0b;
+
+            border: 1px solid #222;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.8);
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================
+           HEADER
+        ===================================== */
+
+        .filter-header {
+            padding: 17px 20px 14px;
+
+            border-bottom: 1px solid #222;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .filter-title {
+            color: #d4af37;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .filter-subtitle {
+            color: #777;
+
+            font-size: 6px;
+
+            margin-top: 2px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .close-btn {
+            background: transparent;
+
+            border: none;
+
+            color: #d4af37;
+
+            font-size: 17px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            padding: 0;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+
+        /* =====================================
+           CONTENT
+        ===================================== */
+
+        .filter-content {
+            padding: 0 16px;
+        }
+
+
+        /* SECTION */
+
+        .filter-section {
+            padding: 12px 0;
+
+            border-bottom: 1px solid #1b1b1b;
+        }
+
+        .section-title {
+            color: #c49f28;
+
+            font-size: 6px;
+
+            font-weight: 600;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 9px;
+        }
+
+
+        /* =====================================
+           SEARCH
+        ===================================== */
+
+        .search-box {
+            height: 26px;
+
+            border: 1px solid #302818;
+
+            border-radius: 5px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 8px;
+
+            background: #0a0a0a;
+        }
+
+        .search-box i {
+            color: #a78924;
+
+            font-size: 10px;
+
+            margin-right: 7px;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            background: transparent;
+
+            border: none;
+
+            outline: none;
+
+            color: #ddd;
+
+            font-size: 7px;
+        }
+
+        .search-box input::placeholder {
+            color: #555;
+        }
+
+
+        /* =====================================
+           PRICE RANGE
+        ===================================== */
+
+        .price-values {
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            gap: 5px;
+
+            margin-bottom: 12px;
+        }
+
+        .price-box {
+            min-width: 34px;
+
+            padding: 3px 5px;
+
+            text-align: center;
+
+            border: 1px solid #302818;
+
+            border-radius: 3px;
+
+            color: #ddd;
+
+            font-size: 6px;
+        }
+
+        .price-dash {
+            color: #777;
+
+            font-size: 7px;
+        }
+
+
+        /* SLIDER */
+
+        .range-wrapper {
+            position: relative;
+
+            height: 15px;
+
+            display: flex;
+
+            align-items: center;
+        }
+
+        .range-line {
+            position: absolute;
+
+            width: 100%;
+
+            height: 1px;
+
+            background: #28200e;
+        }
+
+        .range-line-active {
+            position: absolute;
+
+            left: 0;
+
+            width: 48%;
+
+            height: 1px;
+
+            background: #d4af37;
+        }
+
+        .range-dot {
+            position: absolute;
+
+            left: 48%;
+
+            transform: translateX(-50%);
+
+            width: 9px;
+
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #d4af37;
+
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+
+            cursor: pointer;
+        }
+
+
+        /* =====================================
+           CHECKBOXES
+        ===================================== */
+
+        .checkbox-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            row-gap: 7px;
+
+            column-gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #777;
+
+            font-size: 6px;
+
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            appearance: none;
+
+            width: 10px;
+            height: 10px;
+
+            border: 1px solid #5c4a16;
+
+            border-radius: 2px;
+
+            background: #0a0a0a;
+
+            cursor: pointer;
+
+            position: relative;
+        }
+
+        .checkbox-item input:checked {
+            background: #d4af37;
+
+            border-color: #d4af37;
+        }
+
+        .checkbox-item input:checked::after {
+            content: "✓";
+
+            position: absolute;
+
+            left: 1px;
+            top: -2px;
+
+            color: #111;
+
+            font-size: 8px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================
+           DIAL COLORS
+        ===================================== */
+
+        .color-options {
+            display: flex;
+
+            gap: 11px;
+
+            align-items: center;
+        }
+
+        .color {
+            width: 20px;
+            height: 20px;
+
+            border-radius: 50%;
+
+            border: 1px solid #333;
+
+            cursor: pointer;
+
+            position: relative;
+        }
+
+        .color.active {
+            border: 1px solid #d4af37;
+        }
+
+        .color.active::after {
+            content: "";
+
+            position: absolute;
+
+            width: 4px;
+            height: 4px;
+
+            background: #d4af37;
+
+            border-radius: 50%;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+        }
+
+        .black {
+            background: #050505;
+        }
+
+        .white {
+            background: #f2f2f2;
+        }
+
+        .blue {
+            background: #082044;
+        }
+
+        .green {
+            background: #183723;
+        }
+
+        .brown {
+            background: #60341f;
+        }
+
+        .gold {
+            background: #c6aa3e;
+        }
+
+
+        /* =====================================
+           BUTTONS
+        ===================================== */
+
+        .button-area {
+            padding: 14px 20px;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1.15fr;
+
+            gap: 9px;
+
+            border-top: 1px solid #222;
+        }
+
+        .reset-btn,
+        .apply-btn {
+            height: 32px;
+
+            border-radius: 6px;
+
+            font-size: 7px;
+
+            font-weight: 600;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+        }
+
+        .reset-btn {
+            background: transparent;
+
+            border: 1px solid #3a3019;
+
+            color: #d4af37;
+        }
+
+        .reset-btn:hover {
+            background: #17130a;
+        }
+
+        .apply-btn {
+            background: #d4af37;
+
+            border: 1px solid #d4af37;
+
+            color: #111;
+
+            box-shadow:
+                0 5px 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .apply-btn:hover {
+            background: #e4c04a;
+        }
+
+
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
+
+        @media (max-width: 400px) {
+
+            .filter-modal {
+                width: calc(100% - 30px);
+            }
+
+            .filter-content {
+                padding: 0 15px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     FILTER MODAL
+===================================== -->
+
+<div class="filter-modal">
+
+
+    <!-- HEADER -->
+
+    <div class="filter-header">
+
+        <div>
+
+            <div class="filter-title">
+                Filter Watches
+            </div>
+
+            <div class="filter-subtitle">
+                Refine your luxury collection
+            </div>
+
+        </div>
+
+        <button
+            class="close-btn"
+            onclick="closeFilter()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="filter-content">
+
+
+        <!-- SEARCH -->
+
+        <div class="filter-section">
+
+            <div class="section-title">
+                SEARCH
+            </div>
+
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search collection..."
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PRICE -->
+
+        <div class="filter-section">
+
+            <div class="section-title">
+                PRICE RANGE
+            </div>
+
+            <div class="price-values">
+
+                <span
+                    class="price-box"
+                    id="minPrice"
+                >
+                    $500
+                </span>
+
+                <span class="price-dash">
+                    —
+                </span>
+
+                <span
+                    class="price-box"
+                    id="maxPrice"
+                >
+                    $50,000
+                </span>
+
+            </div>
+
+            <div class="range-wrapper">
+
+                <div class="range-line"></div>
+
+                <div
+                    class="range-line-active"
+                    id="activeRange"
+                ></div>
+
+                <div
+                    class="range-dot"
+                    id="rangeDot"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CATEGORIES -->
+
+        <div class="filter-section">
+
+            <div class="section-title">
+                CATEGORIES
+            </div>
+
+            <div class="checkbox-grid">
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Classic">
+                    Classic
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Executive">
+                    Executive
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Heritage">
+                    Heritage
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Diver">
+                    Diver
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Dress">
+                    Dress
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Chronograph">
+                    Chronograph
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Skeleton">
+                    Skeleton
+                </label>
+
+                <label class="checkbox-item">
+                    <input type="checkbox" value="Limited Edition">
+                    Limited Edition
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="button-area">
+
+        <button
+            class="reset-btn"
+            onclick="resetFilters()"
+        >
+            RESET FILTERS
+        </button>
+
+        <button
+            class="apply-btn"
+            onclick="applyFilters()"
+        >
+            APPLY FILTERS
+        </button>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+    /* =====================================
+       CLOSE FILTER
+    ===================================== */
+
+    function closeFilter() {
+        window.location.href = "/product_list/";
+    }
+
+    /* =====================================
+       RESET FILTERS
+    ===================================== */
+
+    function resetFilters() {
+        document
+            .querySelectorAll('input[type="checkbox"]')
+            .forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+        document.getElementById("searchInput").value = "";
+        document.getElementById("minPrice").textContent = "$500";
+        document.getElementById("maxPrice").textContent = "$50,000";
+    }
+
+    /* =====================================
+       APPLY FILTERS
+    ===================================== */
+
+    function applyFilters() {
+        window.location.href = "/product_list/";
+    }
+
+
+</script>
+
+
+</body>
+</html>

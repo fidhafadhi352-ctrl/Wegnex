@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEGNEX | Edit Delivery Address</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #090909;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b;
+            min-height: 76px;
+            padding: 0 45px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .logo {
+            color: #ffffff !important;
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .navbar-nav {
+            gap: 28px;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px;
+            font-weight: 400;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-icons i {
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37;
+        }
+
+        /* ================= MAIN LAYOUT ================= */
+        .main-wrapper {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 265px;
+            padding: 40px 0 0 52px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0b0b0b;
+            flex-shrink: 0;
+        }
+
+        .account-title {
+            color: #D4AF37;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .account-subtitle {
+            color: #777777;
+            font-size: 11px;
+            margin-bottom: 24px;
+        }
+
+        .side-link {
+            width: 200px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 14px;
+            color: #bdb5a5;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            transition: all 0.25s;
+        }
+
+        .side-link i {
+            font-size: 17px;
+        }
+
+        .side-link:hover {
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .side-link.active {
+            background: rgba(212, 175, 55, 0.12);
+            color: #D4AF37;
+            border-right: 3px solid #D4AF37;
+            font-weight: 600;
+        }
+
+        .logout-side-link {
+            color: #ff7575 !important;
+            margin-top: 20px;
+        }
+
+        .logout-side-link:hover {
+            background: rgba(255, 117, 117, 0.1) !important;
+            color: #ff9e9e !important;
+        }
+
+        /* ================= CONTENT ================= */
+        .content {
+            flex: 1;
+            padding: 45px 55px 60px;
+            background: #090909;
+            max-width: 920px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #a0a0a0;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: #D4AF37;
+        }
+
+        .page-title {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .page-description {
+            color: #888888;
+            font-size: 13px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        /* ================= FORM ================= */
+        .address-form-box {
+            background: #111111;
+            border: 1px solid #222222;
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            color: #aaaaaa;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .form-label span.req {
+            color: #D4AF37;
+        }
+
+        .form-control-custom {
+            height: 48px;
+            background: #161616;
+            border: 1px solid #252525;
+            border-radius: 10px;
+            padding: 0 16px;
+            color: #ffffff;
+            font-size: 13.5px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        textarea.form-control-custom {
+            height: auto;
+            min-height: 80px;
+            padding: 12px 16px;
+            resize: vertical;
+        }
+
+        .form-control-custom:focus {
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+            background: #1a1a1a;
+        }
+
+        .form-control-custom::placeholder {
+            color: #4a4a4a;
+        }
+
+        .field-error {
+            font-size: 11px;
+            color: #ff7575;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .field-error.visible {
+            display: block;
+        }
+
+        /* Address Type Selector */
+        .type-selector-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 2px;
+        }
+
+        .type-btn {
+            flex: 1;
+            height: 44px;
+            background: #161616;
+            border: 1px solid #252525;
+            border-radius: 9px;
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .type-btn:hover {
+            border-color: #444;
+            color: #fff;
+        }
+
+        .type-btn.active {
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Checkbox */
+        .default-check-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+
+        .default-check-box input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #D4AF37;
+            cursor: pointer;
+        }
+
+        .default-check-box label {
+            font-size: 12.5px;
+            color: #ccc;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Buttons */
+        .buttons-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .save-btn {
+            height: 46px;
+            padding: 0 34px;
+            background: #D4AF37;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-btn:hover {
+            background: #F0CC5A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+        }
+
+        .cancel-btn {
+            height: 46px;
+            padding: 0 28px;
+            background: transparent;
+            color: #aaaaaa;
+            border: 1px solid #303030;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+        }
+
+        .cancel-btn:hover {
+            background: #181818;
+            color: #ffffff;
+            border-color: #555555;
+        }
+
+        /* ================= LOGOUT POPUP MODAL ================= */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-backdrop-custom.active {
+            display: flex;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+        }
+
+        .modal-backdrop-custom.active .modal-box-custom {
+            transform: scale(1);
+        }
+
+        .modal-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 117, 117, 0.1);
+            border: 1px solid rgba(255, 117, 117, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #ff7575;
+            font-size: 24px;
+        }
+
+        .modal-title-custom {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc-custom {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-modal-cancel {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #202020;
+            border: 1px solid #303030;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #282828;
+            color: #fff;
+        }
+
+        .btn-modal-confirm {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #b52a2a;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-modal-confirm:hover {
+            background: #d63636;
+            color: #fff;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 0 25px;
+            }
+            .sidebar {
+                width: 210px;
+                padding-left: 20px;
+            }
+            .content {
+                padding: 30px 25px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            .account-title, .account-subtitle {
+                display: none;
+            }
+            .side-link {
+                width: auto;
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 25px 20px 40px;
+            }
+            .address-form-box {
+                padding: 20px;
+            }
+            .buttons-row {
+                flex-direction: column;
+            }
+            .save-btn, .cancel-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#category">Category</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#about">About</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <i class="bi bi-search"></i>
+                <i class="bi bi-heart"></i>
+                <i class="bi bi-cart3"></i>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'address' %}" class="text-decoration-none" title="Sign In" style="color: #fff;">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages Notification -->
+    {% if messages %}
+        <div class="container mt-3" style="max-width: 920px;">
+            {% for message in messages %}
+                <div class="alert alert-dismissible fade show d-flex align-items-center justify-content-between py-2 px-3 mb-2" role="alert" style="background: {% if message.tags == 'success' %}rgba(13, 31, 18, 0.95){% else %}rgba(31, 13, 13, 0.95){% endif %}; border: 1px solid {% if message.tags == 'success' %}#205c2a{% else %}#5c2020{% endif %}; color: {% if message.tags == 'success' %}#7ee88a{% else %}#ff8585{% endif %}; border-radius: 10px; font-size: 13px;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-{% if message.tags == 'success' %}check-circle-fill text-success{% else %}exclamation-triangle-fill text-danger{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="padding: 10px;"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- ================= MAIN ================= -->
+    <div class="main-wrapper">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="sidebar">
+            <div class="account-title">ACCOUNT</div>
+            <div class="account-subtitle">Manage your account</div>
+
+            <a href="{% url 'profile' %}" class="side-link">
+                <i class="bi bi-person-fill"></i>
+                <span>PROFILE</span>
+            </a>
+
+            <a href="{% url 'address' %}" class="side-link active">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>ADDRESS</span>
+            </a>
+
+            <a href="#" class="side-link">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                <span>MY ORDERS</span>
+            </a>
+
+            <a href="#" class="side-link">
+                <i class="bi bi-heart"></i>
+                <span>WISHLIST</span>
+            </a>
+
+            <a href="#" class="side-link">
+                <i class="bi bi-wallet2"></i>
+                <span>WALLET</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openLogoutModal()" class="side-link logout-side-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>LOGOUT</span>
+            </a>
+        </aside>
+
+        <!-- ================= CONTENT ================= -->
+        <main class="content">
+
+            <a href="{% url 'address' %}" class="back-link">
+                <i class="bi bi-arrow-left"></i> Back to Addresses
+            </a>
+
+            <h1 class="page-title">EDIT DELIVERY ADDRESS</h1>
+            <p class="page-description">
+                Update your shipping information for future orders.
+            </p>
+
+            <div class="address-form-box">
+                <form method="POST" action="{% url 'edit_address' address.id %}" id="editAddressForm" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+
+                        <!-- FULL NAME -->
+                        <div class="form-group">
+                            <label class="form-label" for="fullName">
+                                Full Name <span class="req">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="full_name"
+                                id="fullName"
+                                class="form-control-custom"
+                                placeholder="e.g. Johnathan Doe"
+                                value="{% if form_data.full_name %}{{ form_data.full_name }}{% else %}{{ address.full_name }}{% endif %}"
+                                required
+                            >
+                            <div class="field-error" id="nameError">Full name must be at least 3 characters (letters only).</div>
+                        </div>
+
+                        <!-- PHONE NUMBER -->
+                        <div class="form-group">
+                            <label class="form-label" for="phoneNumber">
+                                Phone Number <span class="req">*</span>
+                            </label>
+                            <input
+                                type="tel"
+                                name="phone_number"
+                                id="phoneNumber"
+                                class="form-control-custom"
+                                placeholder="10-digit mobile number"
+                                value="{% if form_data.phone_number %}{{ form_data.phone_number }}{% else %}{{ address.phone_number }}{% endif %}"
+                                maxlength="10"
+                                required
+                            >
+                            <div class="field-error" id="phoneError">Enter a valid 10-digit mobile number starting with 6-9.</div>
+                        </div>
+
+                        <!-- STREET ADDRESS -->
+                        <div class="form-group full-width">
+                            <label class="form-label" for="streetAddress">
+                                Street Address / House No. / Flat <span class="req">*</span>
+                            </label>
+                            <textarea
+                                name="street_address"
+                                id="streetAddress"
+                                class="form-control-custom"
+                                placeholder="e.g. 1200 Tech Plaza, Suite 400, Floor 14"
+                                rows="2"
+                                required
+                            >{% if form_data.street_address %}{{ form_data.street_address }}{% else %}{{ address.street_address }}{% endif %}</textarea>
+                            <div class="field-error" id="streetError">Street address must be at least 5 characters.</div>
+                        </div>
+
+                        <!-- CITY -->
+                        <div class="form-group">
+                            <label class="form-label" for="city">
+                                City <span class="req">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="city"
+                                id="city"
+                                class="form-control-custom"
+                                placeholder="e.g. Mumbai"
+                                value="{% if form_data.city %}{{ form_data.city }}{% else %}{{ address.city }}{% endif %}"
+                                required
+                            >
+                            <div class="field-error" id="cityError">City can contain only letters and spaces.</div>
+                        </div>
+
+                        <!-- STATE -->
+                        <div class="form-group">
+                            <label class="form-label" for="state">
+                                State <span class="req">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="state"
+                                id="state"
+                                class="form-control-custom"
+                                placeholder="e.g. Maharashtra"
+                                value="{% if form_data.state %}{{ form_data.state }}{% else %}{{ address.state }}{% endif %}"
+                                required
+                            >
+                            <div class="field-error" id="stateError">State can contain only letters and spaces.</div>
+                        </div>
+
+                        <!-- PINCODE -->
+                        <div class="form-group">
+                            <label class="form-label" for="pincode">
+                                PIN Code <span class="req">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="pincode"
+                                id="pincode"
+                                class="form-control-custom"
+                                placeholder="6-digit pincode"
+                                value="{% if form_data.pincode %}{{ form_data.pincode }}{% else %}{{ address.pincode }}{% endif %}"
+                                maxlength="6"
+                                required
+                            >
+                            <div class="field-error" id="pincodeError">Pincode must contain exactly 6 digits.</div>
+                        </div>
+
+                        <!-- COUNTRY -->
+                        <div class="form-group">
+                            <label class="form-label" for="country">
+                                Country <span class="req">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="country"
+                                id="country"
+                                class="form-control-custom"
+                                placeholder="e.g. India"
+                                value="{% if form_data.country %}{{ form_data.country }}{% else %}{{ address.country }}{% endif %}"
+                                required
+                            >
+                            <div class="field-error" id="countryError">Country can contain only letters and spaces.</div>
+                        </div>
+
+                        <!-- ADDRESS TYPE -->
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                Address Type <span class="req">*</span>
+                            </label>
+                            {% with current_type=form_data.address_type|default:address.address_type %}
+                            <input type="hidden" name="address_type" id="addressTypeInput" value="{{ current_type|default:'Home' }}">
+                            <div class="type-selector-row">
+                                <button type="button" class="type-btn {% if current_type == 'Home' or not current_type %}active{% endif %}" onclick="selectAddressType('Home')">
+                                    <i class="bi bi-house-door-fill"></i> Home
+                                </button>
+                                <button type="button" class="type-btn {% if current_type == 'Work' %}active{% endif %}" onclick="selectAddressType('Work')">
+                                    <i class="bi bi-briefcase-fill"></i> Work
+                                </button>
+                                <button type="button" class="type-btn {% if current_type == 'Other' %}active{% endif %}" onclick="selectAddressType('Other')">
+                                    <i class="bi bi-geo-alt-fill"></i> Other
+                                </button>
+                            </div>
+                            {% endwith %}
+                        </div>
+
+                        <!-- SET AS DEFAULT -->
+                        <div class="form-group full-width">
+                            <div class="default-check-box">
+                                <input
+                                    type="checkbox"
+                                    name="is_default"
+                                    id="isDefault"
+                                    {% if form_data.is_default or address.is_default %}checked{% endif %}
+                                >
+                                <label for="isDefault">Set as my default shipping address</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="buttons-row">
+                        <button type="submit" class="save-btn" id="submitBtn">
+                            <i class="bi bi-check2"></i> UPDATE ADDRESS
+                        </button>
+                        <a href="{% url 'address' %}" class="cancel-btn">
+                            CANCEL
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ================= LOGOUT CONFIRMATION POPUP MODAL ================= -->
+    <div class="modal-backdrop-custom" id="logoutModal" onclick="handleBackdropClick(event)">
+        <div class="modal-box-custom">
+            <div class="modal-icon-badge">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 class="modal-title-custom">Confirm Sign Out</h3>
+            <p class="modal-desc-custom">
+                Are you sure you want to log out of your WEGNEX account?
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">
+                    No, Cancel
+                </button>
+                <a href="{% url 'logout' %}" class="btn-modal-confirm">
+                    Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Address Type selector
+        function selectAddressType(type) {
+            document.getElementById('addressTypeInput').value = type;
+            const buttons = document.querySelectorAll('.type-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim().toLowerCase().includes(type.toLowerCase())) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Form Validation
+        const form = document.getElementById('editAddressForm');
+        const nameInput = document.getElementById('fullName');
+        const phoneInput = document.getElementById('phoneNumber');
+        const streetInput = document.getElementById('streetAddress');
+        const cityInput = document.getElementById('city');
+        const stateInput = document.getElementById('state');
+        const pincodeInput = document.getElementById('pincode');
+        const countryInput = document.getElementById('country');
+
+        // Only allow numbers for phone & pincode
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            validatePhone();
+        });
+
+        pincodeInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+            validatePincode();
+        });
+
+        nameInput.addEventListener('input', validateName);
+        streetInput.addEventListener('input', validateStreet);
+        cityInput.addEventListener('input', validateCity);
+        stateInput.addEventListener('input', validateState);
+        countryInput.addEventListener('input', validateCountry);
+
+        function validateName() {
+            const val = nameInput.value.trim();
+            const valid = val.length >= 3 && /^[A-Za-z\s\.]+$/.test(val);
+            toggleError('nameError', nameInput, valid);
+            return valid;
+        }
+
+        function validatePhone() {
+            const val = phoneInput.value.trim();
+            const valid = /^[6-9]\d{9}$/.test(val);
+            toggleError('phoneError', phoneInput, valid);
+            return valid;
+        }
+
+        function validateStreet() {
+            const val = streetInput.value.trim();
+            const valid = val.length >= 5;
+            toggleError('streetError', streetInput, valid);
+            return valid;
+        }
+
+        function validateCity() {
+            const val = cityInput.value.trim();
+            const valid = val.length >= 2 && /^[A-Za-z\s]+$/.test(val);
+            toggleError('cityError', cityInput, valid);
+            return valid;
+        }
+
+        function validateState() {
+            const val = stateInput.value.trim();
+            const valid = val.length >= 2 && /^[A-Za-z\s]+$/.test(val);
+            toggleError('stateError', stateInput, valid);
+            return valid;
+        }
+
+        function validatePincode() {
+            const val = pincodeInput.value.trim();
+            const valid = /^\d{6}$/.test(val);
+            toggleError('pincodeError', pincodeInput, valid);
+            return valid;
+        }
+
+        function validateCountry() {
+            const val = countryInput.value.trim();
+            const valid = val.length >= 2 && /^[A-Za-z\s]+$/.test(val);
+            toggleError('countryError', countryInput, valid);
+            return valid;
+        }
+
+        function toggleError(errId, inputEl, isValid) {
+            const errEl = document.getElementById(errId);
+            if (!isValid) {
+                errEl.classList.add('visible');
+                inputEl.style.borderColor = '#ff7575';
+            } else {
+                errEl.classList.remove('visible');
+                inputEl.style.borderColor = '#252525';
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            const isNameValid = validateName();
+            const isPhoneValid = validatePhone();
+            const isStreetValid = validateStreet();
+            const isCityValid = validateCity();
+            const isStateValid = validateState();
+            const isPincodeValid = validatePincode();
+            const isCountryValid = validateCountry();
+
+            if (!isNameValid || !isPhoneValid || !isStreetValid || !isCityValid || !isStateValid || !isPincodeValid || !isCountryValid) {
+                e.preventDefault();
+                if (!isNameValid) nameInput.focus();
+                else if (!isPhoneValid) phoneInput.focus();
+                else if (!isStreetValid) streetInput.focus();
+                else if (!isCityValid) cityInput.focus();
+                else if (!isStateValid) stateInput.focus();
+                else if (!isPincodeValid) pincodeInput.focus();
+                else if (!isCountryValid) countryInput.focus();
+            }
+        });
+
+        // Logout modal
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleBackdropClick(event) {
+            if (event.target === document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLogoutModal();
+        });
+
+        // Auto-dismiss messages
+        (function () {
+            setTimeout(function () {
+                document.querySelectorAll('.alert.show').forEach(function (el) {
+                    el.style.transition = 'opacity 0.4s ease';
+                    el.style.opacity = '0';
+                    setTimeout(function () { el.remove(); }, 400);
+                });
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>

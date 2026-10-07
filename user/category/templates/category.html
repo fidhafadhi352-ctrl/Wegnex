@@ -1,0 +1,518 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEGNEX | Watch Categories</title>
+    <meta name="description" content="Explore luxury horology collections by Wegnex. Choose a category to browse signature timepieces.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons & CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: #070707;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { text-decoration: none; }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+        .navbar {
+            background: #070707;
+            min-height: 76px;
+            padding: 0 45px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .navbar .logo {
+            color: #ffffff !important;
+            font-size: 24px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .navbar-nav { gap: 28px; }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0 !important;
+            transition: color 0.2s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            border-bottom: 1px solid #D4AF37;
+            padding-bottom: 2px !important;
+        }
+
+        .navbar-icons { gap: 20px; }
+
+        .navbar-icons i {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .navbar-icons i:hover { color: #D4AF37; }
+
+        .navbar-toggler {
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 8px;
+        }
+
+        .navbar-toggler-icon { filter: invert(1); }
+
+        /* =====================================================
+           SIMPLE HEADER
+        ===================================================== */
+        .page-header {
+            text-align: center;
+            padding: 55px 20px 35px;
+            background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+        }
+
+        .header-eyebrow {
+            color: #D4AF37;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 14px;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           CATEGORIES GRID (SIMPLE & CLEAN)
+        ===================================================== */
+        .category-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px 80px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 240px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .card-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .card-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .category-card:hover .card-bg img {
+            transform: scale(1.06);
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(7, 7, 7, 0.2) 0%, rgba(7, 7, 7, 0.65) 50%, rgba(7, 7, 7, 0.95) 100%);
+            z-index: 2;
+            transition: background 0.3s;
+        }
+
+        .category-card:hover .card-overlay {
+            background: linear-gradient(180deg, rgba(7, 7, 7, 0.15) 0%, rgba(7, 7, 7, 0.6) 45%, rgba(7, 7, 7, 0.96) 100%);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .card-title {
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            transition: color 0.2s;
+        }
+
+        .category-card:hover .card-title {
+            color: #D4AF37;
+        }
+
+        .card-footer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .card-count {
+            color: #D4AF37;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .category-card:hover .card-action {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        /* Empty State */
+        .empty-categories {
+            text-align: center;
+            padding: 70px 20px;
+            color: #777;
+            grid-column: 1 / -1;
+        }
+
+        .empty-categories i {
+            font-size: 48px;
+            color: #D4AF37;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+        .footer {
+            background: #000000;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 60px 45px 30px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #D4AF37;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 280px;
+        }
+
+        .footer-col-title {
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-list li {
+            margin-bottom: 10px;
+        }
+
+        .footer-list a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-list a:hover {
+            color: #D4AF37;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .category-container { padding: 15px 15px 50px; }
+            .category-grid { grid-template-columns: 1fr; gap: 16px; }
+            .category-card { height: 210px; padding: 18px; }
+            .footer { padding: 40px 20px 20px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid">
+        <a href="{% url 'home' %}" class="logo navbar-brand">WEGNEX</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'product_list' %}" class="nav-link">PRODUCT</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'category' %}" class="nav-link active">CATEGORY</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'home' %}#about" class="nav-link">ABOUT</a>
+                </li>
+            </ul>
+
+            <div class="navbar-icons d-flex align-items-center">
+                <a href="{% url 'product_list' %}" style="color: inherit;"><i class="bi bi-search" title="Search"></i></a>
+                <i class="bi bi-heart" title="Wishlist"></i>
+                <i class="bi bi-bag" title="Cart"></i>
+
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-decoration-none d-flex align-items-center gap-2"
+                           href="{% url 'profile' %}" id="userDropdown" role="button"
+                           style="color:#fff; transition: color 0.2s;"
+                           onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Profile"
+                                     style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size:20px;"></i>
+                            {% endif %}
+                            <span style="font-size:13px;font-weight:600;color:#fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'category' %}" class="text-decoration-none"
+                       style="color:#fff; transition:color 0.2s;"
+                       onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size:20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- SIMPLE HEADER -->
+<section class="page-header">
+    <div class="header-eyebrow">HOROLOGY COLLECTIONS</div>
+    <h1 class="header-title">ALL CATEGORIES</h1>
+    <p class="header-subtitle">
+        Select a category to explore our Swiss-engineered luxury timepieces.
+    </p>
+</section>
+
+<!-- CATEGORIES GRID -->
+<main class="category-container">
+    <div class="category-grid">
+        {% if categories %}
+            {% for cat in categories %}
+                <a href="{% url 'category_products' cat.id %}" class="category-card">
+                    <div class="card-bg">
+                        {% if cat.image %}
+                            <img src="{{ cat.image.url }}" alt="{{ cat.name }}">
+                        {% elif "chrono" in cat.name.lower %}
+                            <img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80" alt="{{ cat.name }}">
+                        {% elif "sport" in cat.name.lower %}
+                            <img src="https://images.unsplash.com/photo-1533139502658-0198f920d8e8?auto=format&fit=crop&w=800&q=80" alt="{{ cat.name }}">
+                        {% elif "dress" in cat.name.lower %}
+                            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80" alt="{{ cat.name }}">
+                        {% elif "smart" in cat.name.lower %}
+                            <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=800&q=80" alt="{{ cat.name }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=80" alt="{{ cat.name }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="card-overlay"></div>
+
+                    <div class="card-content">
+                        <h2 class="card-title">{{ cat.name }}</h2>
+                        <div class="card-footer-row">
+                            <span class="card-count">
+                                {{ cat.products.count }} Timepiece{{ cat.products.count|pluralize:"s" }}
+                            </span>
+                            <span class="card-action">
+                                View Collection <i class="bi bi-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="empty-categories">
+                <i class="bi bi-watch"></i>
+                <h3 style="color:#fff;font-size:18px;">No Categories Found</h3>
+                <p>New collections will arrive soon.</p>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <div class="footer-logo">WEGNEX</div>
+            <p class="footer-desc">
+                Excellence in horology. Precision in engineering. Heritage in every tick.
+            </p>
+        </div>
+
+        <div>
+            <div class="footer-col-title">SHOP</div>
+            <ul class="footer-list">
+                <li><a href="{% url 'product_list' %}">All Collections</a></li>
+                <li><a href="{% url 'category' %}">Categories</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <div class="footer-col-title">CUSTOMER SUPPORT</div>
+            <ul class="footer-list">
+                <li><a href="#">Shipping &amp; Returns</a></li>
+                <li><a href="#">Authenticity Guarantee</a></li>
+                <li><a href="#">Service &amp; Repair</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <div class="footer-col-title">COMPANY</div>
+            <ul class="footer-list">
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Boutique Locator</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2026 Wegnex Horology. All rights reserved.</span>
+        <span>Swiss-Inspired Luxury</span>
+    </div>
+</footer>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

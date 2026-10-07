@@ -1,0 +1,726 @@
+{% load static socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your WEGNEX account and access our exclusive luxury watch collection.">
+    <title>WEGNEX | Create Account</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold:        #D4AF37;
+            --gold-light:  #F0CC5A;
+            --gold-glow:   rgba(212, 175, 55, 0.18);
+            --bg-deep:     #070707;
+            --bg-card:     #111111;
+            --bg-input:    #181818;
+            --border:      #242424;
+            --text-main:   #FFFFFF;
+            --text-muted:  #888888;
+            --error-bg:    #1f0d0d;
+            --error-brd:   #5c2020;
+            --error-clr:   #ff8585;
+            --success-bg:  #0d1f12;
+            --success-brd: #205c2a;
+            --success-clr: #7ee88a;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-deep);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* ── Page Layout: Exact 50% / 50% split ──────────── */
+        .page {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Left Hero: Spans up to screen center (50%) ───── */
+        .hero {
+            width: 50%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to left,  rgba(7,7,7,0.98) 0%, rgba(7,7,7,0.52) 48%, rgba(7,7,7,0.12) 100%),
+                linear-gradient(to top,   rgba(7,7,7,0.72) 0%, rgba(7,7,7,0.0)  55%);
+        }
+
+        .hero-brand {
+            position: relative;
+            z-index: 3;
+        }
+
+        .brand-wordmark {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .brand-watch-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            border: 1px solid rgba(212,175,55,0.25);
+            background: rgba(212,175,55,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-watch-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(700%) hue-rotate(5deg) brightness(95%);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 3;
+            max-width: 330px;
+        }
+
+        .hero-headline {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -1.2px;
+            margin-bottom: 12px;
+        }
+
+        .hero-headline .gold {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            font-size: 11.5px;
+            line-height: 1.8;
+            color: #9c9c9c;
+            margin-bottom: 16px;
+        }
+
+        .gold-rule {
+            width: 36px;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold), transparent);
+            border-radius: 2px;
+        }
+
+        /* ── Right Form Panel: Exact 50% ─────────────────── */
+        .form-panel {
+            width: 50%;
+            height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            overflow-y: auto;
+        }
+
+        /* Custom subtle scrollbar if ever needed */
+        .form-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        .form-panel::-webkit-scrollbar-thumb {
+            background: #252525;
+            border-radius: 4px;
+        }
+
+        /* ── Signup Card: Properly sized for seamless fit ── */
+        .signup-card {
+            width: 100%;
+            max-width: 410px;
+            background: var(--bg-card);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: 18px;
+            padding: 24px 26px 20px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .card-accent {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* ── Card Header ─────────────────────────────────── */
+        .card-header-area {
+            margin-bottom: 14px;
+        }
+
+        .card-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+
+        .card-logo-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--gold);
+        }
+
+        .card-logo-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Messages ────────────────────────────────────── */
+        .message-list {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .message-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: var(--error-bg);
+            border: 1px solid var(--error-brd);
+            color: var(--error-clr);
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .message-list li::before {
+            content: '\F33A';
+            font-family: 'bootstrap-icons';
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .message-list li.success {
+            background: var(--success-bg);
+            border-color: var(--success-brd);
+            color: var(--success-clr);
+        }
+
+        .message-list li.success::before {
+            content: '\F26A';
+        }
+
+        /* ── Form Fields ─────────────────────────────────── */
+        .field {
+            margin-bottom: 9px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #b0b0b0;
+            margin-bottom: 3px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            font-size: 13px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .field-input {
+            width: 100%;
+            height: 37px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            padding: 0 38px 0 33px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field-input::placeholder {
+            color: #404040;
+        }
+
+        .field-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold-glow);
+        }
+
+        .field-wrap:focus-within .field-icon {
+            color: var(--gold);
+        }
+
+        /* Password toggle */
+        .pw-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 37px;
+            height: 37px;
+            background: transparent;
+            border: none;
+            border-left: 1px solid var(--border);
+            border-radius: 0 8px 8px 0;
+            color: #555;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .pw-toggle:hover {
+            color: var(--gold);
+        }
+
+        /* ── Submit Button ───────────────────────────────── */
+        .btn-signup {
+            width: 100%;
+            height: 39px;
+            background: var(--gold);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .btn-signup:hover {
+            background: var(--gold-light);
+        }
+
+        /* ── Divider ─────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 11px 0;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #1e1e1e;
+        }
+
+        .divider-text {
+            font-size: 8.5px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #4a4a4a;
+            text-transform: uppercase;
+        }
+
+        /* ── Google Button ───────────────────────────────── */
+        .btn-google {
+            width: 100%;
+            height: 37px;
+            background: #141414;
+            border: 1px solid #232323;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-google:hover {
+            background: #1b1b1b;
+            border-color: #333;
+        }
+
+        .btn-google img {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* ── Footer ──────────────────────────────────────── */
+        .card-footer-text {
+            text-align: center;
+            margin-top: 11px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .card-footer-text a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .card-footer-text a:hover {
+            color: var(--gold-light);
+        }
+
+        .card-legal {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 11px;
+            font-size: 8px;
+            color: #383838;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 960px) {
+            html, body {
+                height: auto;
+                overflow: auto;
+            }
+            .page {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+            .hero {
+                display: none;
+            }
+            .form-panel {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 24px 16px;
+            }
+            .signup-card {
+                max-width: 440px;
+                margin: auto;
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- LEFT: HERO (Up to center 50%) -->
+    <div class="hero">
+
+        <img
+            class="hero-img"
+            src="{% static 'images/watch.jpg' %}"
+            alt="Luxury Wegnex Watch"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-brand">
+            <span class="brand-wordmark">WEGNEX</span>
+            <div class="brand-watch-icon">
+                <img src="{% static 'images/watch-logo.png' %}" alt="Wegnex Logo">
+            </div>
+        </div>
+
+        <div class="hero-copy">
+            <h1 class="hero-headline">
+                Redefining<br>
+                the Daily<br>
+                <span class="gold">Carry.</span>
+            </h1>
+
+            <p class="hero-desc">
+                Curated luxury watches for professionals and
+                enthusiasts — where timeless craftsmanship
+                meets modern design.
+            </p>
+
+            <div class="gold-rule"></div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT: FORM (Exact 50%) -->
+    <div class="form-panel">
+
+        <div class="signup-card">
+
+            <div class="card-accent"></div>
+
+            <!-- Header -->
+            <div class="card-header-area">
+                <div class="card-logo">
+                    <div class="card-logo-icon">
+                        <i class="bi bi-watch"></i>
+                    </div>
+                    <span class="card-logo-text">WEGNEX</span>
+                </div>
+                <h1 class="card-title">Create Account</h1>
+                <p class="card-subtitle">Join Wegnex and explore our exclusive luxury collection.</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                <ul class="message-list">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- Signup Form -->
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="field">
+                    <label class="field-label" for="su-fullname">Full Name</label>
+                    <div class="field-wrap">
+                        <input
+                            type="text"
+                            id="su-fullname"
+                            name="full_name"
+                            class="field-input"
+                            placeholder="John Doe"
+                            value="{{ request.POST.full_name|default:'' }}"
+                            autocomplete="name"
+                            required
+                        >
+                        <i class="bi bi-person field-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="field">
+                    <label class="field-label" for="su-email">Email Address</label>
+                    <div class="field-wrap">
+                        <input
+                            type="email"
+                            id="su-email"
+                            name="email"
+                            class="field-input"
+                            placeholder="you@example.com"
+                            value="{{ request.POST.email|default:'' }}"
+                            autocomplete="email"
+                            required
+                        >
+                        <i class="bi bi-envelope field-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="field">
+                    <label class="field-label" for="su-password">Password</label>
+                    <div class="field-wrap">
+                        <input
+                            type="password"
+                            id="su-password"
+                            name="password"
+                            class="field-input"
+                            placeholder="Min. 8 characters"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <i class="bi bi-lock field-icon"></i>
+                        <button
+                            type="button"
+                            class="pw-toggle"
+                            id="pw-toggle-1"
+                            aria-label="Toggle password visibility"
+                        >
+                            <i class="bi bi-eye" id="pw-icon-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="field">
+                    <label class="field-label" for="su-confirm">Confirm Password</label>
+                    <div class="field-wrap">
+                        <input
+                            type="password"
+                            id="su-confirm"
+                            name="confirm_password"
+                            class="field-input"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <i class="bi bi-lock-fill field-icon"></i>
+                        <button
+                            type="button"
+                            class="pw-toggle"
+                            id="pw-toggle-2"
+                            aria-label="Toggle confirm password visibility"
+                        >
+                            <i class="bi bi-eye" id="pw-icon-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-signup">
+                    <i class="bi bi-person-plus" style="margin-right:6px;"></i>
+                    Create Account
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span class="divider-text">or</span>
+            </div>
+
+            <!-- Google Signup -->
+            <form method="POST" action="{% provider_login_url 'google' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-google">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                    Sign up with Google
+                </button>
+            </form>
+
+            <!-- Login link -->
+            <p class="card-footer-text">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign In</a>
+            </p>
+
+            <!-- Legal -->
+            <div class="card-legal">
+                <span>© 2026 WEGNEX</span>
+                <span>Privacy Policy · Terms of Service</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function setupToggle(btnId, iconId, inputId) {
+        document.getElementById(btnId).addEventListener('click', function () {
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            }
+        });
+    }
+
+    setupToggle('pw-toggle-1', 'pw-icon-1', 'su-password');
+    setupToggle('pw-toggle-2', 'pw-icon-2', 'su-confirm');
+</script>
+
+<script>
+    // Auto-dismiss messages after 5 seconds
+    (function () {
+        setTimeout(function () {
+            var msgList = document.querySelector('.message-list');
+            if (msgList) {
+                msgList.style.transition = 'opacity 0.4s ease';
+                msgList.style.opacity = '0';
+                setTimeout(function () { msgList.remove(); }, 400);
+            }
+        }, 5000);
+    })();
+</script>
+
+</body>
+</html>

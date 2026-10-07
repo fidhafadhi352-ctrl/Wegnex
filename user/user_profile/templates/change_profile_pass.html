@@ -1,0 +1,664 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Change and secure your WEGNEX account password.">
+    <title>WEGNEX | Change Password</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold:        #D4AF37;
+            --gold-light:  #F0CC5A;
+            --gold-glow:   rgba(212, 175, 55, 0.18);
+            --bg-deep:     #070707;
+            --bg-card:     #111111;
+            --bg-input:    #181818;
+            --border:      #242424;
+            --text-main:   #FFFFFF;
+            --text-muted:  #888888;
+            --error-bg:    #1f0d0d;
+            --error-brd:   #5c2020;
+            --error-clr:   #ff8585;
+            --success-bg:  #0d1f12;
+            --success-brd: #205c2a;
+            --success-clr: #7ee88a;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-deep);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* ── Page Layout: Exact 50% / 50% split ──────────── */
+        .page {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Left Hero: Spans up to screen center (50%) ───── */
+        .hero {
+            width: 50%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to left,  rgba(7,7,7,0.98) 0%, rgba(7,7,7,0.52) 48%, rgba(7,7,7,0.12) 100%),
+                linear-gradient(to top,   rgba(7,7,7,0.72) 0%, rgba(7,7,7,0.0)  55%);
+        }
+
+        .hero-brand {
+            position: relative;
+            z-index: 3;
+        }
+
+        .brand-wordmark {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .brand-watch-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            border: 1px solid rgba(212,175,55,0.25);
+            background: rgba(212,175,55,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-watch-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(700%) hue-rotate(5deg) brightness(95%);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 3;
+            max-width: 330px;
+        }
+
+        .hero-headline {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -1.2px;
+            margin-bottom: 12px;
+        }
+
+        .hero-headline .gold {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            font-size: 11.5px;
+            line-height: 1.8;
+            color: #9c9c9c;
+            margin-bottom: 16px;
+        }
+
+        .gold-rule {
+            width: 36px;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold), transparent);
+            border-radius: 2px;
+        }
+
+        /* ── Right Form Panel: Exact 50% ─────────────────── */
+        .form-panel {
+            width: 50%;
+            height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            overflow-y: auto;
+        }
+
+        .form-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        .form-panel::-webkit-scrollbar-thumb {
+            background: #252525;
+            border-radius: 4px;
+        }
+
+        /* ── Form Card: Exact Signup Card Proportions ───── */
+        .changepass-card {
+            width: 100%;
+            max-width: 410px;
+            background: var(--bg-card);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: 18px;
+            padding: 24px 26px 20px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .card-accent {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* ── Card Header ─────────────────────────────────── */
+        .card-header-area {
+            margin-bottom: 14px;
+        }
+
+        .card-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+
+        .card-logo-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--gold);
+        }
+
+        .card-logo-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Messages ────────────────────────────────────── */
+        .message-list {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .message-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: var(--error-bg);
+            border: 1px solid var(--error-brd);
+            color: var(--error-clr);
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .message-list li::before {
+            content: '\F33A';
+            font-family: 'bootstrap-icons';
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .message-list li.success {
+            background: var(--success-bg);
+            border-color: var(--success-brd);
+            color: var(--success-clr);
+        }
+
+        .message-list li.success::before {
+            content: '\F26A';
+        }
+
+        /* ── Form Fields ─────────────────────────────────── */
+        .field {
+            margin-bottom: 11px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #b0b0b0;
+            margin-bottom: 4px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            font-size: 13px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .field-input {
+            width: 100%;
+            height: 38px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            padding: 0 38px 0 33px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field-input::placeholder {
+            color: #404040;
+        }
+
+        .field-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold-glow);
+        }
+
+        .field-wrap:focus-within .field-icon {
+            color: var(--gold);
+        }
+
+        /* Password toggle */
+        .pw-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 38px;
+            height: 38px;
+            background: transparent;
+            border: none;
+            border-left: 1px solid var(--border);
+            border-radius: 0 8px 8px 0;
+            color: #555;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .pw-toggle:hover {
+            color: var(--gold);
+        }
+
+        /* ── Submit Button ───────────────────────────────── */
+        .btn-submit {
+            width: 100%;
+            height: 40px;
+            background: var(--gold);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-submit:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        /* ── Footer Links ────────────────────────────────── */
+        .card-footer-links {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .card-footer-links a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .card-footer-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .card-legal {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+            font-size: 8px;
+            color: #383838;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 960px) {
+            html, body {
+                height: auto;
+                overflow: auto;
+            }
+            .page {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+            .hero {
+                display: none;
+            }
+            .form-panel {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 24px 16px;
+            }
+            .changepass-card {
+                max-width: 440px;
+                margin: auto;
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- LEFT: HERO (Exact 50% split like Signup) -->
+    <div class="hero">
+
+        <img
+            class="hero-img"
+            src="{% static 'images/watch.jpg' %}"
+            alt="Luxury Wegnex Watch"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-brand">
+            <span class="brand-wordmark">WEGNEX</span>
+            <div class="brand-watch-icon">
+                <img src="{% static 'images/watch-logo.png' %}" alt="Wegnex Logo">
+            </div>
+        </div>
+
+        <div class="hero-copy">
+            <h1 class="hero-headline">
+                Security &<br>
+                Peace of Mind<br>
+                <span class="gold">Every Second.</span>
+            </h1>
+
+            <p class="hero-desc">
+                Your horological collection is a testament to precision.
+                We ensure your digital experience reflects that same
+                standard of uncompromising security.
+            </p>
+
+            <div class="gold-rule"></div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT: FORM (Exact 50%) -->
+    <div class="form-panel">
+
+        <div class="changepass-card">
+
+            <div class="card-accent"></div>
+
+            <!-- Header -->
+            <div class="card-header-area">
+                <div class="card-logo">
+                    <div class="card-logo-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <span class="card-logo-text">WEGNEX</span>
+                </div>
+                <h1 class="card-title">Change Password</h1>
+                <p class="card-subtitle">Update your password to keep your Wegnex account secure.</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                <ul class="message-list">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- Form -->
+            <form method="POST" action="{% url 'changepass' %}">
+                {% csrf_token %}
+
+                <!-- Current Password -->
+                <div class="field">
+                    <label class="field-label" for="cp-current">Current Password</label>
+                    <div class="field-wrap">
+                        <input
+                            type="password"
+                            id="cp-current"
+                            name="current_password"
+                            class="field-input"
+                            placeholder="Enter current password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <i class="bi bi-key field-icon"></i>
+                        <button
+                            type="button"
+                            class="pw-toggle"
+                            id="pw-toggle-current"
+                            aria-label="Toggle password visibility"
+                        >
+                            <i class="bi bi-eye" id="pw-icon-current"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- New Password -->
+                <div class="field">
+                    <label class="field-label" for="cp-new">New Password</label>
+                    <div class="field-wrap">
+                        <input
+                            type="password"
+                            id="cp-new"
+                            name="new_password"
+                            class="field-input"
+                            placeholder="Min. 8 characters (uppercase, lowercase, number)"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <i class="bi bi-lock field-icon"></i>
+                        <button
+                            type="button"
+                            class="pw-toggle"
+                            id="pw-toggle-new"
+                            aria-label="Toggle password visibility"
+                        >
+                            <i class="bi bi-eye" id="pw-icon-new"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm New Password -->
+                <div class="field">
+                    <label class="field-label" for="cp-confirm">Confirm New Password</label>
+                    <div class="field-wrap">
+                        <input
+                            type="password"
+                            id="cp-confirm"
+                            name="confirm_password"
+                            class="field-input"
+                            placeholder="Re-enter new password"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <i class="bi bi-lock-fill field-icon"></i>
+                        <button
+                            type="button"
+                            class="pw-toggle"
+                            id="pw-toggle-confirm"
+                            aria-label="Toggle password visibility"
+                        >
+                            <i class="bi bi-eye" id="pw-icon-confirm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle"></i>
+                    Update Password
+                </button>
+
+            </form>
+
+            <!-- Links -->
+            <div class="card-footer-links">
+                <div>
+                    Forgot your current password?
+                    <a href="{% url 'forgotpass' %}">Reset Password</a>
+                </div>
+                <div>
+                    <a href="{% url 'profile' %}">
+                        <i class="bi bi-arrow-left" style="margin-right: 4px;"></i>Back to Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Legal -->
+            <div class="card-legal">
+                <span>© 2026 WEGNEX</span>
+                <span>Privacy Policy · Terms of Service</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function setupToggle(btnId, iconId, inputId) {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', function () {
+                const input = document.getElementById(inputId);
+                const icon  = document.getElementById(iconId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        }
+    }
+
+    setupToggle('pw-toggle-current', 'pw-icon-current', 'cp-current');
+    setupToggle('pw-toggle-new', 'pw-icon-new', 'cp-new');
+    setupToggle('pw-toggle-confirm', 'pw-icon-confirm', 'cp-confirm');
+</script>
+
+<script>
+    // Auto-dismiss messages after 5 seconds
+    (function () {
+        setTimeout(function () {
+            var msgList = document.querySelector('.message-list');
+            if (msgList) {
+                msgList.style.transition = 'opacity 0.4s ease';
+                msgList.style.opacity = '0';
+                setTimeout(function () { msgList.remove(); }, 400);
+            }
+        }, 5000);
+    })();
+</script>
+
+</body>
+</html>

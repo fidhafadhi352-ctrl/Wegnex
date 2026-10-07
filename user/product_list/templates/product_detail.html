@@ -1,0 +1,1950 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEGNEX | {{ product.name }}</title>
+    <meta name="description" content="{{ product.description|truncatewords:25 }}">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #070707;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =====================================================
+           NAVBAR (Matching Screenshot)
+        ===================================================== */
+        .navbar {
+            background: #090909;
+            min-height: 74px;
+            padding: 0 45px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            color: #D4AF37 !important;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .navbar-nav {
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.75) !important;
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.25s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-icons i {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 17px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37;
+        }
+
+        /* =====================================================
+           MAIN PRODUCT SHOWCASE
+        ===================================================== */
+        .product-showcase {
+            max-width: 1240px;
+            margin: 45px auto 80px;
+            padding: 0 30px;
+        }
+
+        .product-grid-main {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: 55px;
+            align-items: start;
+        }
+
+        /* Gallery */
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .main-image-frame {
+            width: 100%;
+            height: 520px;
+            background: #111111;
+            border: 1px solid #1f1f1f;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            cursor: crosshair;
+            user-select: none;
+        }
+
+        .main-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform-origin: center center;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: none;
+            will-change: transform, transform-origin;
+        }
+
+        .main-image-frame.is-zooming img {
+            transition: none !important;
+        }
+
+        .zoom-hint-pill {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            color: #dcdcdc;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 5;
+        }
+
+        .zoom-hint-pill i {
+            color: #D4AF37;
+            font-size: 11px;
+        }
+
+        .main-image-frame:hover .zoom-hint-pill {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        .btn-fullscreen-zoom {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            z-index: 10;
+        }
+
+        .btn-fullscreen-zoom:hover {
+            background: #D4AF37;
+            border-color: #D4AF37;
+            color: #000000;
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+        }
+
+        .thumbnail-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .thumb-box {
+            height: 105px;
+            background: #121212;
+            border: 1px solid #222222;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        .thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .thumb-box:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .thumb-box.active {
+            border: 2px solid #D4AF37;
+            box-shadow: 0 0 16px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Product Details Info */
+        .product-info-panel {
+            padding-top: 10px;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #D4AF37;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            background: rgba(212, 175, 55, 0.08);
+            padding: 4px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .product-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1.25;
+            margin-bottom: 14px;
+        }
+
+        .price-stock-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .price-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #D4AF37;
+            letter-spacing: 0.5px;
+        }
+
+        .old-price {
+            font-size: 16px;
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        .stock-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.25);
+        }
+
+        .stock-badge.out-of-stock {
+            background: rgba(255, 117, 117, 0.1);
+            color: #ff7575;
+            border-color: rgba(255, 117, 117, 0.25);
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stars-gold {
+            color: #D4AF37;
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        .rating-count {
+            color: #888888;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .product-description {
+            font-size: 13px;
+            color: #9c9c9c;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        /* Specifications Grid (2x2 matching screenshot) */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 24px;
+            padding: 20px 0;
+            border-top: 1px solid #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 26px;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .spec-icon-diamond {
+            width: 7px;
+            height: 7px;
+            background: #D4AF37;
+            transform: rotate(45deg);
+            margin-top: 6px;
+            flex-shrink: 0;
+            box-shadow: 0 0 6px rgba(212, 175, 55, 0.6);
+        }
+
+        .spec-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            color: #707070;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .spec-value {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #eeeeee;
+        }
+
+        /* Color variants */
+        .color-selector-section {
+            margin-bottom: 24px;
+        }
+
+        .swatches-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #333333;
+            transition: all 0.25s;
+            position: relative;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .color-dot.active {
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35);
+            transform: scale(1.15);
+        }
+
+        /* Quantity & Actions Row */
+        .action-controls-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            height: 44px;
+            background: #111111;
+            border: 1px solid #222222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: #888888;
+            width: 36px;
+            height: 100%;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            color: #D4AF37;
+            background: #181818;
+        }
+
+        .qty-value {
+            width: 36px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .btn-icon-action {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #111111;
+            border: 1px solid #222222;
+            color: #a0a0a0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-icon-action:hover {
+            border-color: #D4AF37;
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .btn-icon-action.liked {
+            color: #ff7575;
+            border-color: rgba(255, 117, 117, 0.5);
+        }
+
+        /* CTA Buttons Row */
+        .cta-buttons-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .btn-buy-now {
+            height: 48px;
+            background: #D4AF37;
+            color: #000000;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-radius: 6px;
+            border: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-buy-now:hover {
+            background: #F0CC5A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+            color: #000;
+        }
+
+        .btn-add-cart {
+            height: 48px;
+            background: #0f0f0f;
+            color: #D4AF37;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-add-cart:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #D4AF37;
+            color: #F0CC5A;
+            transform: translateY(-2px);
+        }
+
+        .btn-buy-now:disabled, .btn-buy-now.disabled {
+            background: #222222 !important;
+            color: #666666 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            box-shadow: none !important;
+            border: 1px solid #333333 !important;
+        }
+
+        .btn-add-cart:disabled, .btn-add-cart.disabled {
+            background: #141414 !important;
+            color: #555555 !important;
+            border-color: #242424 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .stock-warning-banner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #f87171;
+            font-size: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Fullscreen Lightbox Modal */
+        .lightbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 5, 5, 0.96);
+            backdrop-filter: blur(16px);
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-topbar {
+            height: 64px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(10, 10, 10, 0.8);
+            z-index: 10;
+        }
+
+        .lightbox-brand {
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #888888;
+            text-transform: uppercase;
+        }
+
+        .lightbox-sep {
+            color: #444;
+            margin: 0 6px;
+        }
+
+        .lightbox-watch-name {
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #D4AF37;
+            text-transform: uppercase;
+        }
+
+        .lightbox-zoom-badge {
+            background: #181818;
+            border: 1px solid #333333;
+            color: #e0e0e0;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .lightbox-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lb-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            background: #161616;
+            border: 1px solid #2b2b2b;
+            color: #cccccc;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lb-btn:hover {
+            border-color: #D4AF37;
+            color: #D4AF37;
+            background: #202020;
+        }
+
+        .lb-btn.lb-close {
+            border-color: rgba(255, 100, 100, 0.3);
+            color: #ff7575;
+        }
+
+        .lb-btn.lb-close:hover {
+            background: rgba(255, 100, 100, 0.15);
+            border-color: #ff7575;
+            color: #fff;
+        }
+
+        .lightbox-body {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+        }
+
+        .lightbox-body:active {
+            cursor: grabbing;
+        }
+
+        .lightbox-image-wrap {
+            position: relative;
+            max-width: 90%;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.12s ease-out;
+            transform-origin: center center;
+            user-select: none;
+        }
+
+        .lightbox-image-wrap img {
+            max-width: 100%;
+            max-height: 76vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+        }
+
+        .lightbox-bottombar {
+            height: 80px;
+            background: rgba(10, 10, 10, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 10;
+        }
+
+        .lightbox-thumbnails {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lb-thumb {
+            width: 52px;
+            height: 52px;
+            border-radius: 6px;
+            background: #141414;
+            border: 1px solid #282828;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        .lb-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .lb-thumb:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+
+        .lb-thumb.active {
+            border: 2px solid #D4AF37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .lightbox-hint {
+            color: #666666;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Horology Toast */
+        .horology-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #121212;
+            border: 1px solid #D4AF37;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            z-index: 100000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .horology-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .horology-toast i {
+            color: #D4AF37;
+            font-size: 17px;
+        }
+
+        .warranty-banner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #a0a0a0;
+        }
+
+        .warranty-banner i {
+            color: #D4AF37;
+            font-size: 15px;
+        }
+
+        /* =====================================================
+           COMPLETE YOUR COLLECTION (RELATED PRODUCTS)
+        ===================================================== */
+        .collection-section {
+            max-width: 1240px;
+            margin: 0 auto 100px;
+            padding: 0 30px;
+        }
+
+        .collection-header-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .collection-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #D4AF37;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .collection-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .view-catalog-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: #a0a0a0;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .view-catalog-link:hover {
+            color: #D4AF37;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .watch-card {
+            background: #111111;
+            border: 1px solid #1f1f1f;
+            border-radius: 10px;
+            overflow: hidden;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .watch-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .watch-card-image {
+            width: 100%;
+            height: 250px;
+            background: #141414;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .watch-card:hover .watch-card-image img {
+            transform: scale(1.06);
+        }
+
+        .watch-card-body {
+            padding: 18px 16px 20px;
+        }
+
+        .watch-card-tag {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #888888;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .watch-card-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .watch-card-price {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #D4AF37;
+        }
+
+        /* =====================================================
+           FOOTER (Matching Screenshot)
+        ===================================================== */
+        .footer {
+            background: #050505;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 60px 45px 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.2fr 1fr;
+            gap: 40px;
+            padding-bottom: 45px;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #D4AF37;
+            margin-bottom: 14px;
+        }
+
+        .footer-desc {
+            color: #777777;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            max-width: 300px;
+        }
+
+        .social-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #111111;
+            border: 1px solid #222222;
+            color: #888888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            color: #D4AF37;
+            border-color: #D4AF37;
+        }
+
+        .footer-col-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-list li {
+            margin-bottom: 10px;
+        }
+
+        .footer-list a {
+            color: #777777;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .footer-list a:hover {
+            color: #D4AF37;
+        }
+
+        .footer-bottom-row {
+            max-width: 1240px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #666666;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .legal-links a {
+            color: #666666;
+            transition: color 0.2s;
+        }
+
+        .legal-links a:hover {
+            color: #D4AF37;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 0 20px;
+            }
+            .product-grid-main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .main-image-frame {
+                height: 420px;
+            }
+            .voices-grid {
+                grid-template-columns: 1fr;
+            }
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-image-frame {
+                height: 320px;
+            }
+            .thumb-box {
+                height: 75px;
+            }
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-buttons-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="logo" href="{% url 'home' %}">
+                Wegnex
+            </a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'product_list' %}">PRODUCT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">CATEGORY</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#about">ABOUT</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons -->
+            <div class="nav-icons">
+                <i class="bi bi-search" title="Search"></i>
+                <i class="bi bi-heart" title="Wishlist"></i>
+                <i class="bi bi-bag" title="Cart"></i>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                        {% else %}
+                            <i class="bi bi-person" style="font-size: 18px;"></i>
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'product_detail' product.id %}" title="Sign In">
+                        <i class="bi bi-person"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= PRODUCT SHOWCASE ================= -->
+    <section class="product-showcase">
+        <div class="product-grid-main">
+
+            <!-- LEFT GALLERY -->
+            <div class="gallery-container">
+                <div class="main-image-frame" id="mainImageFrame">
+                    <div class="zoom-hint-pill" id="zoomHintPill">
+                        <i class="bi bi-zoom-in"></i> ROLL OVER TO ZOOM
+                    </div>
+                    <button type="button" class="btn-fullscreen-zoom" id="btnFullscreenZoom" onclick="openLightboxModal()" title="Fullscreen Inspection">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                    {% if main_image %}
+                        <img id="mainDisplayImg" src="{{ main_image.image.url }}" alt="{{ product.name }}">
+                    {% elif product.thumbnail %}
+                        <img id="mainDisplayImg" src="{{ product.thumbnail.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img id="mainDisplayImg" src="{% static 'images/hero_watch.jpg' %}" alt="{{ product.name }}">
+                    {% endif %}
+                </div>
+
+                <!-- Thumbnails (Only Real Images of Selected Variant - Up to 3) -->
+                {% if variant_images and variant_images|length > 1 %}
+                    <div class="thumbnail-row" id="galleryThumbnailRow">
+                        {% for img in variant_images|slice:":3" %}
+                            <div class="thumb-box {% if forloop.first %}active{% endif %}" onclick="switchGalleryImage(this, '{{ img.image.url }}')">
+                                <img src="{{ img.image.url }}" alt="Angle {{ forloop.counter }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="thumbnail-row" id="galleryThumbnailRow" style="display: none;"></div>
+                {% endif %}
+            </div>
+
+            <!-- RIGHT DETAILS PANEL -->
+            <div class="product-info-panel">
+                <span class="tag-pill">NEW ARRIVAL</span>
+
+                <h1 class="product-title">{{ product.name }}</h1>
+
+                <div class="price-stock-row">
+                    <span class="price-value" id="productPrice">
+                        ₹{% if default_variant %}{{ default_variant.price|floatformat:0 }}{% else %}48,999{% endif %}
+                    </span>
+
+                    <span class="old-price" id="comparePrice" style="{% if not default_variant.compare_at_price %}display:none;{% endif %}">
+                        {% if default_variant.compare_at_price %}₹{{ default_variant.compare_at_price|floatformat:0 }}{% endif %}
+                    </span>
+
+                    <span class="stock-badge {% if default_variant and default_variant.stock <= 0 %}out-of-stock{% endif %}" id="stockBadge">
+                        {% if default_variant and default_variant.stock <= 0 %}OUT OF STOCK{% elif default_variant and default_variant.stock <= 5 %}ONLY {{ default_variant.stock }} LEFT IN STOCK{% elif default_variant %}IN STOCK ({{ default_variant.stock }} AVAILABLE){% else %}IN STOCK{% endif %}
+                    </span>
+                </div>
+
+                <!-- Alert banner for out-of-stock -->
+                <div id="stockAlertBox" class="stock-warning-banner" style="{% if default_variant and default_variant.stock <= 0 %}display:flex;{% else %}display:none;{% endif %}">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <span>This edition is currently sold out. Please select another variant or join the waitlist.</span>
+                </div>
+
+                <div class="rating-row">
+                    <span class="stars-gold">★★★★☆</span>
+                    <span class="rating-count">(4.9/5 stars)</span>
+                </div>
+
+                {% if product.description %}
+                    <p class="product-description">{{ product.description }}</p>
+                {% endif %}
+
+                <!-- SPECIFICATIONS (REAL ADMIN DETAILS) -->
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="spec-icon-diamond"></div>
+                        <div>
+                            <span class="spec-label">BRAND</span>
+                            <span class="spec-value">{{ product.brand|default:"WEGNEX" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon-diamond"></div>
+                        <div>
+                            <span class="spec-label">CATEGORY</span>
+                            <span class="spec-value">{{ product.category.name|default:"—" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon-diamond"></div>
+                        <div>
+                            <span class="spec-label">CASE SIZE</span>
+                            <span class="spec-value" id="specCaseSize">
+                                {{ default_variant.case_size|default:"—" }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon-diamond"></div>
+                        <div>
+                            <span class="spec-label">STRAP MATERIAL</span>
+                            <span class="spec-value" id="specStrapMaterial">
+                                {{ default_variant.strap_material|default:"—" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLOR VARIANTS SWATCHES (ONLY REAL ADMIN COLORS) -->
+                {% if variants %}
+                    <div class="color-selector-section">
+                        <div class="color-label-bar" style="margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 11px; letter-spacing: 2px; color: #888; font-weight: 600;">COLOR:</span>
+                            <span id="selectedColorName" style="font-size: 12px; color: #D4AF37; font-weight: 600; text-transform: uppercase;">
+                                {{ default_variant.color|default:"STANDARD" }}
+                            </span>
+                        </div>
+
+                        <div class="swatches-row">
+                            {% for var in variants %}
+                                <div
+                                    class="color-dot {% if var == default_variant %}active{% endif %}"
+                                    title="{{ var.color|default:'Default' }}"
+                                    data-variant-id="{{ var.id }}"
+                                    data-color-name="{{ var.color|default:'Default' }}"
+                                    data-price="₹{{ var.price|floatformat:0 }}"
+                                    data-compare="{% if var.compare_at_price %}₹{{ var.compare_at_price|floatformat:0 }}{% endif %}"
+                                    data-stock="{{ var.stock }}"
+                                    data-size="{{ var.case_size|default:'—' }}"
+                                    data-strap="{{ var.strap_material|default:'—' }}"
+                                    data-sku="{{ var.sku|default:'—' }}"
+                                    data-image="{% if var.images.first %}{{ var.images.first.image.url }}{% endif %}"
+                                    style="background: {% if 'gold' in var.color|lower %}#D4AF37{% elif 'rose' in var.color|lower %}#b76e79{% elif 'blue' in var.color|lower %}#1f456e{% elif 'green' in var.color|lower %}#1b4d3e{% elif 'black' in var.color|lower or 'dark' in var.color|lower %}#151515{% elif 'white' in var.color|lower or 'silver' in var.color|lower or 'grey' in var.color|lower or 'gray' in var.color|lower %}#e0e0e0{% elif 'brown' in var.color|lower %}#6e4a2e{% elif 'red' in var.color|lower %}#8b1e1e{% else %}#D4AF37{% endif %};"
+                                    onclick="selectVariant(this)"
+                                ></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- QUANTITY & ACTION CONTROLS -->
+                <div class="action-controls-row">
+                    <div class="qty-box">
+                        <button type="button" class="qty-btn" id="qtyMinusBtn" onclick="adjustQty(-1)" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>-</button>
+                        <span class="qty-value" id="qtyDisplay">{% if default_variant and default_variant.stock <= 0 %}0{% else %}1{% endif %}</span>
+                        <button type="button" class="qty-btn" id="qtyPlusBtn" onclick="adjustQty(1)" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>+</button>
+                    </div>
+
+                    <button type="button" class="btn-icon-action" id="wishlistBtn" onclick="toggleWishlist(this)" title="Save to Wishlist">
+                        <i class="bi bi-heart"></i>
+                    </button>
+
+                    <button type="button" class="btn-icon-action" onclick="shareProduct()" title="Share Timepiece">
+                        <i class="bi bi-share"></i>
+                    </button>
+                </div>
+
+                <!-- CTA BUTTONS -->
+                <div class="cta-buttons-row">
+                    <button type="button" class="btn-buy-now {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}" id="btnBuyNow" onclick="buyNow()" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>
+                        {% if default_variant and default_variant.stock <= 0 %}OUT OF STOCK{% else %}BUY NOW{% endif %}
+                    </button>
+                    <button type="button" class="btn-add-cart {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}" id="btnAddToCart" onclick="addToCart()" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>
+                        {% if default_variant and default_variant.stock <= 0 %}UNAVAILABLE{% else %}ADD TO CART{% endif %}
+                    </button>
+                </div>
+
+                <!-- WARRANTY BADGE -->
+                <div class="warranty-banner">
+                    <i class="bi bi-shield-check"></i>
+                    <span>5 Years International Warranty</span>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= COMPLETE YOUR COLLECTION ================= -->
+    <section class="collection-section">
+        <div class="collection-header-row">
+            <div>
+                <div class="collection-eyebrow">DISCOVER MORE</div>
+                <h2 class="collection-title">COMPLETE YOUR COLLECTION</h2>
+            </div>
+            <a href="{% url 'product_list' %}" class="view-catalog-link">
+                View Catalog →
+            </a>
+        </div>
+
+        <div class="collection-grid">
+            {% if related_products %}
+                {% for item in related_products %}
+                    <a href="{% url 'product_detail' item.id %}" class="watch-card">
+                        <div class="watch-card-image">
+                            {% if item.thumbnail %}
+                                <img src="{{ item.thumbnail.url }}" alt="{{ item.name }}">
+                            {% else %}
+                                <img src="{% static 'images/watch.jpg' %}" alt="{{ item.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="watch-card-body">
+                            <span class="watch-card-tag">{{ item.category.name|default:"HERITAGE LINE" }}</span>
+                            <div class="watch-card-name">{{ item.name }}</div>
+                            <div class="watch-card-price">
+                                ₹{% if item.variants.first %}{{ item.variants.first.price|floatformat:0 }}{% else %}44,999{% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #777;">
+                    <p style="font-size: 14px;">No other timepieces in this collection yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <!-- Brand -->
+            <div>
+                <div class="footer-logo">Wegnex</div>
+                <p class="footer-desc">
+                    Excellence in horology. Precision in engineering. Heritage in every tick.
+                </p>
+                <div class="social-row">
+                    <a href="#" class="social-link"><i class="bi bi-globe"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-twitter-x"></i></a>
+                </div>
+            </div>
+
+            <!-- Shop -->
+            <div>
+                <div class="footer-col-title">SHOP</div>
+                <ul class="footer-list">
+                    <li><a href="{% url 'product_list' %}">All Collections</a></li>
+                    <li><a href="{% url 'category' %}">Heritage Line</a></li>
+                    <li><a href="{% url 'category' %}">Sport Diver</a></li>
+                    <li><a href="{% url 'category' %}">Elite Executive</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Support -->
+            <div>
+                <div class="footer-col-title">CUSTOMER SUPPORT</div>
+                <ul class="footer-list">
+                    <li><a href="#">Shipping & Returns</a></li>
+                    <li><a href="#">Authenticity Guarantee</a></li>
+                    <li><a href="#">Service & Repair</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <div class="footer-col-title">COMPANY</div>
+                <ul class="footer-list">
+                    <li><a href="{% url 'home' %}#about">Our Story</a></li>
+                    <li><a href="#">Boutique Locator</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom-row">
+            <div>© 2026 Wegnex Horology. All rights reserved.</div>
+            <div class="legal-links">
+                <a href="#">Privacy</a>
+                <a href="#">Legal</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= FULLSCREEN HD LIGHTBOX INSPECTION MODAL ================= -->
+    <div class="lightbox-modal" id="timepieceLightboxModal">
+        <!-- Topbar -->
+        <div class="lightbox-topbar">
+            <div class="lightbox-title-area">
+                <span class="lightbox-brand">{{ product.brand|default:"WEGNEX" }}</span>
+                <span class="lightbox-sep">/</span>
+                <span class="lightbox-watch-name">{{ product.name }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="lightbox-zoom-badge" id="lightboxZoomLevel">100%</span>
+                <div class="lightbox-controls">
+                    <button type="button" class="lb-btn" onclick="lightboxZoomIn()" title="Zoom In (+)">
+                        <i class="bi bi-zoom-in"></i>
+                    </button>
+                    <button type="button" class="lb-btn" onclick="lightboxZoomOut()" title="Zoom Out (-)">
+                        <i class="bi bi-zoom-out"></i>
+                    </button>
+                    <button type="button" class="lb-btn" onclick="lightboxResetZoom()" title="Reset Zoom (100%)">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                    <button type="button" class="lb-btn lb-close" onclick="closeLightboxModal()" title="Close Inspection (Esc)">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox Body -->
+        <div class="lightbox-body" id="lightboxBody">
+            <div class="lightbox-image-wrap" id="lightboxImageWrap">
+                <img id="lightboxDisplayImg" src="{% if main_image %}{{ main_image.image.url }}{% elif product.thumbnail %}{{ product.thumbnail.url }}{% else %}{% static 'images/hero_watch.jpg' %}{% endif %}" alt="{{ product.name }}">
+            </div>
+        </div>
+
+        <!-- Lightbox Bottombar -->
+        <div class="lightbox-bottombar">
+            <div class="lightbox-thumbnails" id="lightboxThumbnails">
+                {% if variant_images and variant_images|length > 1 %}
+                    {% for img in variant_images|slice:":3" %}
+                        <div class="lb-thumb {% if forloop.first %}active{% endif %}" onclick="switchLightboxImage(this, '{{ img.image.url }}')">
+                            <img src="{{ img.image.url }}" alt="Angle {{ forloop.counter }}">
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="lightbox-hint">
+                <i class="bi bi-info-circle me-1" style="color: #D4AF37;"></i> [Scroll] Zoom • [Drag] Pan • [Esc] Close
+            </div>
+        </div>
+    </div>
+
+    <!-- Horology Toast Notification -->
+    <div id="wegnexToast" class="horology-toast">
+        <i class="bi bi-check2-circle" id="toastIcon"></i>
+        <span id="toastMsg">Action completed</span>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // =====================================================
+        // STATE & INITIALIZATION
+        // =====================================================
+        const variantsData = {{ variants_json|safe }};
+        let currentStock = {% if default_variant %}{{ default_variant.stock }}{% else %}0{% endif %};
+        let currentQty = currentStock > 0 ? 1 : 0;
+
+        // Toast Helper
+        let toastTimeout = null;
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('wegnexToast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            if (!toast || !toastMsg) return;
+
+            toastMsg.textContent = message;
+            if (isError) {
+                toast.style.borderColor = 'rgba(239, 68, 68, 0.7)';
+                toastIcon.className = 'bi bi-exclamation-triangle-fill text-danger';
+            } else {
+                toast.style.borderColor = '#D4AF37';
+                toastIcon.className = 'bi bi-check2-circle text-gold';
+            }
+
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3200);
+        }
+
+        // =====================================================
+        // HOVER ZOOM LENS (MAGNIFIER EFFECT)
+        // =====================================================
+        const mainImageFrame = document.getElementById('mainImageFrame');
+        const mainDisplayImg = document.getElementById('mainDisplayImg');
+
+        if (mainImageFrame && mainDisplayImg) {
+            mainImageFrame.addEventListener('mouseenter', () => {
+                mainImageFrame.classList.add('is-zooming');
+            });
+
+            mainImageFrame.addEventListener('mousemove', (e) => {
+                const rect = mainImageFrame.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                mainDisplayImg.style.transformOrigin = `${x}% ${y}%`;
+                mainDisplayImg.style.transform = 'scale(2.5)';
+            });
+
+            mainImageFrame.addEventListener('mouseleave', () => {
+                mainImageFrame.classList.remove('is-zooming');
+                mainDisplayImg.style.transformOrigin = 'center center';
+                mainDisplayImg.style.transform = 'scale(1)';
+            });
+
+            // Click to open fullscreen inspection modal
+            mainImageFrame.addEventListener('click', (e) => {
+                if (!e.target.closest('#btnFullscreenZoom')) {
+                    openLightboxModal();
+                }
+            });
+        }
+
+        // =====================================================
+        // FULLSCREEN LIGHTBOX HD INSPECTION MODAL
+        // =====================================================
+        let lbScale = 1;
+        let lbPosX = 0;
+        let lbPosY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        function updateLightboxTransform() {
+            const wrap = document.getElementById('lightboxImageWrap');
+            const badge = document.getElementById('lightboxZoomLevel');
+            if (wrap) {
+                wrap.style.transform = `translate(${lbPosX}px, ${lbPosY}px) scale(${lbScale})`;
+            }
+            if (badge) {
+                badge.textContent = `${Math.round(lbScale * 100)}%`;
+            }
+        }
+
+        function openLightboxModal() {
+            const modal = document.getElementById('timepieceLightboxModal');
+            const mainImg = document.getElementById('mainDisplayImg');
+            const lbImg = document.getElementById('lightboxDisplayImg');
+            if (mainImg && lbImg) {
+                lbImg.src = mainImg.src;
+            }
+            lightboxResetZoom();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightboxModal() {
+            const modal = document.getElementById('timepieceLightboxModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function lightboxZoomIn() {
+            lbScale = Math.min(4.5, lbScale + 0.4);
+            updateLightboxTransform();
+        }
+
+        function lightboxZoomOut() {
+            lbScale = Math.max(0.6, lbScale - 0.4);
+            if (lbScale <= 1) {
+                lbPosX = 0;
+                lbPosY = 0;
+            }
+            updateLightboxTransform();
+        }
+
+        function lightboxResetZoom() {
+            lbScale = 1;
+            lbPosX = 0;
+            lbPosY = 0;
+            updateLightboxTransform();
+        }
+
+        function switchLightboxImage(thumbEl, imgSrc) {
+            const lbImg = document.getElementById('lightboxDisplayImg');
+            const mainImg = document.getElementById('mainDisplayImg');
+            if (lbImg && imgSrc) lbImg.src = imgSrc;
+            if (mainImg && imgSrc) mainImg.src = imgSrc;
+
+            document.querySelectorAll('.lb-thumb').forEach(t => t.classList.remove('active'));
+            if (thumbEl) thumbEl.classList.add('active');
+
+            document.querySelectorAll('.thumb-box').forEach(t => {
+                const img = t.querySelector('img');
+                if (img && img.src.includes(imgSrc.split('/').pop())) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+            lightboxResetZoom();
+        }
+
+        const lbBody = document.getElementById('lightboxBody');
+        if (lbBody) {
+            // Mouse wheel zoom
+            lbBody.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY < 0) {
+                    lightboxZoomIn();
+                } else {
+                    lightboxZoomOut();
+                }
+            }, { passive: false });
+
+            // Mouse drag pan when zoomed
+            lbBody.addEventListener('mousedown', (e) => {
+                if (lbScale > 1) {
+                    isDragging = true;
+                    startX = e.clientX - lbPosX;
+                    startY = e.clientY - lbPosY;
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    lbPosX = e.clientX - startX;
+                    lbPosY = e.clientY - startY;
+                    updateLightboxTransform();
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Double click toggle zoom
+            lbBody.addEventListener('dblclick', () => {
+                if (lbScale > 1.2) {
+                    lightboxResetZoom();
+                } else {
+                    lbScale = 2.5;
+                    updateLightboxTransform();
+                }
+            });
+        }
+
+        // Keyboard shortcuts
+        window.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('timepieceLightboxModal');
+            if (modal && modal.classList.contains('active')) {
+                if (e.key === 'Escape') closeLightboxModal();
+                if (e.key === '+' || e.key === '=') lightboxZoomIn();
+                if (e.key === '-') lightboxZoomOut();
+                if (e.key === '0') lightboxResetZoom();
+            }
+        });
+
+        // Switch gallery main image
+        function switchGalleryImage(thumbEl, imgSrc) {
+            const mainImg = document.getElementById('mainDisplayImg');
+            const lbImg = document.getElementById('lightboxDisplayImg');
+            if (mainImg && imgSrc) {
+                mainImg.style.opacity = '0.3';
+                setTimeout(() => {
+                    mainImg.src = imgSrc;
+                    mainImg.style.opacity = '1';
+                }, 120);
+            }
+            if (lbImg && imgSrc) {
+                lbImg.src = imgSrc;
+            }
+
+            document.querySelectorAll('.thumb-box').forEach(el => el.classList.remove('active'));
+            if (thumbEl) thumbEl.classList.add('active');
+
+            document.querySelectorAll('.lb-thumb').forEach(t => {
+                const img = t.querySelector('img');
+                if (img && img.src.includes(imgSrc.split('/').pop())) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+        }
+
+        // =====================================================
+        // STOCK & VALIDATION MANAGEMENT
+        // =====================================================
+        function updateStockUI() {
+            const badge = document.getElementById('stockBadge');
+            const alertBox = document.getElementById('stockAlertBox');
+            const buyBtn = document.getElementById('btnBuyNow');
+            const cartBtn = document.getElementById('btnAddToCart');
+            const qtyDisplay = document.getElementById('qtyDisplay');
+            const qtyMinus = document.getElementById('qtyMinusBtn');
+            const qtyPlus = document.getElementById('qtyPlusBtn');
+
+            if (currentStock <= 0) {
+                if (badge) {
+                    badge.textContent = 'OUT OF STOCK';
+                    badge.className = 'stock-badge out-of-stock';
+                    badge.style.borderColor = '';
+                    badge.style.color = '';
+                    badge.style.background = '';
+                }
+                if (alertBox) alertBox.style.display = 'flex';
+                if (buyBtn) {
+                    buyBtn.disabled = true;
+                    buyBtn.classList.add('disabled');
+                    buyBtn.textContent = 'OUT OF STOCK';
+                }
+                if (cartBtn) {
+                    cartBtn.disabled = true;
+                    cartBtn.classList.add('disabled');
+                    cartBtn.textContent = 'UNAVAILABLE';
+                }
+                if (qtyMinus) qtyMinus.disabled = true;
+                if (qtyPlus) qtyPlus.disabled = true;
+                currentQty = 0;
+                if (qtyDisplay) qtyDisplay.textContent = '0';
+            } else {
+                if (badge) {
+                    if (currentStock <= 5) {
+                        badge.textContent = `ONLY ${currentStock} LEFT IN STOCK`;
+                        badge.className = 'stock-badge';
+                        badge.style.borderColor = 'rgba(234, 179, 8, 0.4)';
+                        badge.style.color = '#eab308';
+                        badge.style.background = 'rgba(234, 179, 8, 0.1)';
+                    } else {
+                        badge.textContent = `IN STOCK (${currentStock} AVAILABLE)`;
+                        badge.className = 'stock-badge';
+                        badge.style.borderColor = '';
+                        badge.style.color = '';
+                        badge.style.background = '';
+                    }
+                }
+                if (alertBox) alertBox.style.display = 'none';
+                if (buyBtn) {
+                    buyBtn.disabled = false;
+                    buyBtn.classList.remove('disabled');
+                    buyBtn.textContent = 'BUY NOW';
+                }
+                if (cartBtn) {
+                    cartBtn.disabled = false;
+                    cartBtn.classList.remove('disabled');
+                    cartBtn.textContent = 'ADD TO CART';
+                }
+                if (qtyMinus) qtyMinus.disabled = false;
+                if (qtyPlus) qtyPlus.disabled = false;
+                if (currentQty < 1) currentQty = 1;
+                if (currentQty > currentStock) currentQty = currentStock;
+                if (qtyDisplay) qtyDisplay.textContent = currentQty;
+            }
+        }
+
+        // Color Variant Selection — Displays ONLY the selected variant's 3 images
+        function selectVariant(dotEl) {
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            dotEl.classList.add('active');
+
+            const variantId = dotEl.dataset.variantId;
+            const variant = variantsData.find(v => v.id == variantId);
+
+            const colorName = dotEl.dataset.colorName;
+            const price = dotEl.dataset.price;
+            const comparePrice = dotEl.dataset.compare;
+            const stock = parseInt(dotEl.dataset.stock || "0", 10);
+            const size = dotEl.dataset.size;
+            const strap = dotEl.dataset.strap;
+
+            currentStock = stock;
+            updateStockUI();
+
+            if (colorName) {
+                const colorEl = document.getElementById('selectedColorName');
+                if (colorEl) colorEl.textContent = colorName;
+            }
+
+            if (price) {
+                document.getElementById('productPrice').textContent = price;
+            }
+
+            const compareEl = document.getElementById('comparePrice');
+            if (comparePrice) {
+                compareEl.textContent = comparePrice;
+                compareEl.style.display = 'inline-block';
+            } else {
+                compareEl.style.display = 'none';
+            }
+
+            if (size) {
+                const sizeEl = document.getElementById('specCaseSize');
+                if (sizeEl) sizeEl.textContent = size;
+            }
+
+            if (strap) {
+                const strapEl = document.getElementById('specStrapMaterial');
+                if (strapEl) strapEl.textContent = strap;
+            }
+
+            // ONLY show the 3 images of this selected variant
+            const images = (variant && variant.images && variant.images.length > 0)
+                ? variant.images.slice(0, 3)
+                : (dotEl.dataset.image ? [dotEl.dataset.image] : []);
+
+            if (images.length > 0) {
+                const mainImg = document.getElementById('mainDisplayImg');
+                if (mainImg) {
+                    mainImg.style.opacity = '0.3';
+                    setTimeout(() => {
+                        mainImg.src = images[0];
+                        mainImg.style.opacity = '1';
+                    }, 120);
+                }
+
+                const lbImg = document.getElementById('lightboxDisplayImg');
+                if (lbImg) lbImg.src = images[0];
+
+                // Dynamically render exactly the 3 thumbnails of this selected variant
+                const thumbRow = document.getElementById('galleryThumbnailRow');
+                if (thumbRow) {
+                    if (images.length > 1) {
+                        thumbRow.style.display = 'grid';
+                        thumbRow.innerHTML = images.map((url, idx) => `
+                            <div class="thumb-box ${idx === 0 ? 'active' : ''}" onclick="switchGalleryImage(this, '${url}')">
+                                <img src="${url}" alt="Angle ${idx + 1}">
+                            </div>
+                        `).join('');
+                    } else {
+                        thumbRow.style.display = 'none';
+                    }
+                }
+
+                // Dynamically update lightbox thumbnails
+                const lbThumbRow = document.getElementById('lightboxThumbnails');
+                if (lbThumbRow) {
+                    if (images.length > 1) {
+                        lbThumbRow.innerHTML = images.map((url, idx) => `
+                            <div class="lb-thumb ${idx === 0 ? 'active' : ''}" onclick="switchLightboxImage(this, '${url}')">
+                                <img src="${url}" alt="Angle ${idx + 1}">
+                            </div>
+                        `).join('');
+                    } else {
+                        lbThumbRow.innerHTML = '';
+                    }
+                }
+            }
+        }
+
+        // Quantity control with strict stock validation
+        function adjustQty(amount) {
+            if (currentStock <= 0) return;
+            const newQty = currentQty + amount;
+            if (newQty < 1) return;
+            if (newQty > currentStock) {
+                showToast(`Maximum available stock reached (${currentStock} units).`, true);
+                return;
+            }
+            currentQty = newQty;
+            document.getElementById('qtyDisplay').textContent = currentQty;
+        }
+
+        // Wishlist Toggle
+        function toggleWishlist(btn) {
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('liked')) {
+                btn.classList.remove('liked');
+                icon.className = 'bi bi-heart';
+                showToast("Removed from wishlist.");
+            } else {
+                btn.classList.add('liked');
+                icon.className = 'bi bi-heart-fill';
+                showToast("Saved to your wishlist.");
+            }
+        }
+
+        // Share product
+        function shareProduct() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast("Product link copied to clipboard!");
+            }
+        }
+
+        // Add to Cart with stock validation
+        function addToCart() {
+            if (currentStock <= 0) {
+                showToast("This edition is currently out of stock.", true);
+                return;
+            }
+            showToast(`Added ${currentQty} piece(s) of {{ product.name|escapejs }} to your cart.`);
+        }
+
+        // Buy Now with stock validation
+        function buyNow() {
+            if (currentStock <= 0) {
+                showToast("This edition is currently out of stock.", true);
+                return;
+            }
+            showToast(`Proceeding to checkout with ${currentQty} piece(s) of {{ product.name|escapejs }}.`);
+        }
+
+        // Initialize UI state
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStockUI();
+        });
+    </script>
+</body>
+</html>

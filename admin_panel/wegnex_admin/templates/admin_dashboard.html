@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wegnex Admin Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d0d0d;
+            color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+        }
+
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 180px;
+            height: 100vh;
+            background: #111111;
+            border-right: 1px solid #292929;
+            padding: 30px 10px;
+        }
+
+        .logo {
+            padding-left: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo h2 {
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 3px;
+            color: #858585;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: .2s;
+        }
+
+        .menu li span:first-child {
+            width: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .menu li:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .menu li.active {
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+            background: #191919;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 35px;
+            left: 22px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .logout:hover {
+            color: #fff;
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 180px;
+            min-height: 100vh;
+        }
+
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 55px;
+            border-bottom: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: #101010;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .admin-title {
+            margin-left: 18px;
+            padding-left: 22px;
+            border-left: 1px solid #333;
+            color: #777;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        .profile-circle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #444, #1c1c1c);
+            border: 1px solid #555;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 20px;
+        }
+
+        .sales-btn {
+            background: #f5f5f5;
+            border: none;
+            color: #111;
+            padding: 10px 17px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-bottom: 18px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .sales-btn:hover {
+            background: #ddd;
+        }
+
+
+        /* ================= STAT CARDS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            height: 98px;
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            padding: 18px;
+            border-radius: 3px;
+            transition: .2s;
+        }
+
+        .stat-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        .stat-title {
+            color: #888;
+            font-size: 8px;
+            letter-spacing: 1.3px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-bottom {
+            font-size: 8px;
+            color: #aaa;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #fff;
+            margin-right: 5px;
+        }
+
+
+        /* ================= PANELS ================= */
+
+        .middle {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            background: #181818;
+            border: 1px solid #2b2b2b;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            height: 48px;
+            padding: 0 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #252525;
+        }
+
+        .panel-title {
+            font-size: 9px;
+            letter-spacing: 1.2px;
+            font-weight: 500;
+        }
+
+        .periods {
+            display: flex;
+            gap: 17px;
+            color: #666;
+            font-size: 8px;
+        }
+
+        .periods .active {
+            color: #fff;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+
+        /* ==================================================
+           REVENUE CHART
+        ================================================== */
+
+        .chart {
+            height: 175px;
+
+            padding: 15px 20px 17px;
+
+            display: flex;
+            align-items: flex-end;
+
+            /* bars between spacing */
+            gap: 8px;
+
+            /* subtle chart background */
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.015),
+                    rgba(255,255,255,0)
+                );
+        }
+
+
+        /* each month */
+
+        .bar-wrapper {
+            height: 125px;
+
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            position: relative;
+        }
+
+
+        /* ================= BEAUTIFUL BAR ================= */
+
+        .bar {
+
+            /* thin width */
+            width: 42%;
+
+            /* keeps bars small */
+            min-width: 7px;
+            max-width: 17px;
+
+            /* color */
+            background: #333;
+
+            /* smooth top */
+            border-radius: 3px 3px 0 0;
+
+            /* subtle highlight */
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.04);
+
+            /* animation */
+            transition:
+                height .3s ease,
+                width .2s ease,
+                background .2s ease,
+                transform .2s ease;
+
+            position: relative;
+        }
+
+
+        /* tiny shine on bar */
+
+        .bar::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 2px;
+            right: 2px;
+
+            height: 1px;
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 5px;
+        }
+
+
+        /* hover */
+
+        .bar:hover {
+
+            background: #555;
+
+            transform: scaleX(1.12);
+
+            cursor: pointer;
+
+            box-shadow:
+                0 0 10px rgba(255,255,255,0.08);
+        }
+
+
+        /* selected / highest bar */
+
+        .bar.highlight {
+
+            width: 42%;
+
+            min-width: 7px;
+            max-width: 17px;
+
+            background: #f1f1f1;
+
+            box-shadow:
+                0 0 12px rgba(255,255,255,0.08);
+        }
+
+
+        .bar.highlight:hover {
+
+            background: #ffffff;
+
+            transform: scaleX(1.12);
+        }
+
+
+        /* month */
+
+        .month {
+
+            margin-top: 10px;
+
+            color: #777;
+
+            font-size: 7px;
+
+            letter-spacing: .5px;
+
+            transition: .2s;
+        }
+
+
+        .bar-wrapper:hover .month {
+
+            color: #fff;
+        }
+
+
+        /* ================= CATEGORIES ================= */
+
+        .categories {
+            padding: 18px;
+        }
+
+        .category {
+            margin-bottom: 19px;
+        }
+
+        .category:last-child {
+            margin-bottom: 0;
+        }
+
+        .category-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8px;
+            color: #b5b5b5;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            height: 3px;
+            background: #303030;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: #eee;
+            border-radius: 10px;
+        }
+
+
+        /* ================= BOTTOM ================= */
+
+        .bottom {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+        }
+
+
+        /* ================= TABLE ================= */
+
+        .table-header {
+
+            display: grid;
+
+            grid-template-columns:
+                2fr
+                1.2fr
+                .7fr
+                .7fr;
+
+            height: 36px;
+
+            align-items: center;
+
+            padding: 0 17px;
+
+            background: #202020;
+
+            color: #777;
+
+            font-size: 8px;
+
+            letter-spacing: 1px;
+        }
+
+        .product-row {
+
+            display: grid;
+
+            grid-template-columns:
+                2fr
+                1.2fr
+                .7fr
+                .7fr;
+
+            min-height: 60px;
+
+            align-items: center;
+
+            padding: 0 17px;
+
+            border-top: 1px solid #292929;
+
+            font-size: 10px;
+
+            color: #ddd;
+        }
+
+        .product {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .watch {
+
+            width: 30px;
+            height: 30px;
+
+            background: #292929;
+
+            border: 1px solid #444;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+
+            border-radius: 2px;
+        }
+
+        .status {
+
+            font-size: 7px;
+
+            padding: 3px 7px;
+
+            border: 1px solid #555;
+
+            border-radius: 3px;
+
+            color: #ccc;
+        }
+
+        .status.stock {
+
+            background: #f5f5f5;
+
+            color: #111;
+
+            border: none;
+
+            font-weight: 600;
+        }
+
+
+        /* ================= ACTIVITY ================= */
+
+        .activity {
+            padding: 18px;
+        }
+
+        .activity-item {
+
+            position: relative;
+
+            padding-left: 17px;
+
+            margin-bottom: 18px;
+        }
+
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .activity-item::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 1px;
+            top: 4px;
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #444;
+        }
+
+        .activity-item:first-child::before {
+            background: #fff;
+        }
+
+        .activity-item:nth-child(3)::before {
+            background: #ffaaaa;
+        }
+
+        .activity-title {
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+
+            color: #666;
+
+            font-size: 7px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .middle,
+            .bottom {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 65px;
+            }
+
+            .logo h2,
+            .logo p,
+            .menu li span:last-child,
+            .logout {
+                display: none;
+            }
+
+            .main {
+                margin-left: 65px;
+            }
+
+            .menu li {
+                justify-content: center;
+            }
+
+            .content {
+                padding: 12px;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-title {
+                display: none;
+            }
+
+            .chart {
+                gap: 5px;
+
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .bar {
+                width: 35%;
+            }
+
+            .bar.highlight {
+                width: 35%;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>HOROLOGY</h2>
+
+            <p>
+                Management Suite
+            </p>
+
+        </div>
+
+
+        <ul class="menu">
+
+            <li class="active">
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <span>♧</span>
+                <span>ORDERS</span>
+            </li>
+
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <span>♙</span>
+                <span>CUSTOMERS</span>
+            </li>
+
+            <li>
+                <span>♜</span>
+                <span>COUPONS</span>
+            </li>
+
+            <li>
+                <span>▣</span>
+                <span>REVIEWS</span>
+            </li>
+
+        </ul>
+
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- ================= TOP BAR ================= -->
+
+        <header class="topbar">
+
+            <div class="brand-section">
+
+                <div class="brand">
+                    WEGNEX
+                </div>
+
+                <div class="admin-title">
+                    ADMIN DASHBOARD
+                </div>
+
+            </div>
+
+
+            <div class="top-right">
+
+                <span>♧</span>
+
+                <span>✉</span>
+
+
+                <div class="admin-profile">
+
+                    <div class="profile-circle"></div>
+
+                    ADMIN PROFILE
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+
+            <!-- SALES REPORT -->
+
+            <button class="sales-btn">
+                ⇩ &nbsp; Sales Report
+            </button>
+
+
+
+            <!-- ================= STATS ================= -->
+
+            <div class="stats">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-title">
+                        TOTAL REVENUE
+                    </div>
+
+                    <div class="stat-value">
+                        $1,284,920
+                    </div>
+
+                    <div class="stat-bottom">
+                        ⌁ 18.6% VS LAST MONTH
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-title">
+                        TOTAL ORDERS
+                    </div>
+
+                    <div class="stat-value">
+                        4,862
+                    </div>
+
+                    <div class="stat-bottom">
+                        🛒 156 NEW ORDERS TODAY
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-title">
+                        PENDING ORDERS
+                    </div>
+
+                    <div class="stat-value">
+                        42
+                    </div>
+
+                    <div class="stat-bottom">
+
+                        <span class="dot"></span>
+
+                        NEEDS ATTENTION
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-title">
+                        REGISTERED CUSTOMERS
+                    </div>
+
+                    <div class="stat-value">
+                        21,480
+                    </div>
+
+                    <div class="stat-bottom">
+                        ♙ +12% GROWTH
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================= MIDDLE ================= -->
+
+            <div class="middle">
+
+
+                <!-- ================= REVENUE ================= -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+                            REVENUE OVERVIEW
+                        </div>
+
+
+                        <div class="periods">
+
+                            <span>
+                                WEEKLY
+                            </span>
+
+                            <span class="active">
+                                MONTHLY
+                            </span>
+
+                            <span>
+                                YEARLY
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CHART -->
+
+                    <div class="chart">
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:45px;">
+                            </div>
+
+                            <div class="month">
+                                JAN
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:67px;">
+                            </div>
+
+                            <div class="month">
+                                FEB
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:60px;">
+                            </div>
+
+                            <div class="month">
+                                MAR
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:90px;">
+                            </div>
+
+                            <div class="month">
+                                APR
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar highlight"
+                                style="height:107px;">
+                            </div>
+
+                            <div class="month">
+                                MAY
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:76px;">
+                            </div>
+
+                            <div class="month">
+                                JUN
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:70px;">
+                            </div>
+
+                            <div class="month">
+                                JUL
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:96px;">
+                            </div>
+
+                            <div class="month">
+                                AUG
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:58px;">
+                            </div>
+
+                            <div class="month">
+                                SEP
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:65px;">
+                            </div>
+
+                            <div class="month">
+                                OCT
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:48px;">
+                            </div>
+
+                            <div class="month">
+                                NOV
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="bar-wrapper">
+
+                            <div
+                                class="bar"
+                                style="height:85px;">
+                            </div>
+
+                            <div class="month">
+                                DEC
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================= TOP CATEGORIES ================= -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+                            TOP CATEGORIES
+                        </div>
+
+                    </div>
+
+
+                    <div class="categories">
+
+
+                        <div class="category">
+
+                            <div class="category-info">
+
+                                <span>
+                                    SWISS LUXURY
+                                </span>
+
+                                <span>
+                                    46%
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <span
+                                    style="width:46%;">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="category">
+
+                            <div class="category-info">
+
+                                <span>
+                                    AUTOMATIC
+                                </span>
+
+                                <span>
+                                    29%
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <span
+                                    style="width:29%;">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="category">
+
+                            <div class="category-info">
+
+                                <span>
+                                    CHRONOGRAPHS
+                                </span>
+
+                                <span>
+                                    16%
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <span
+                                    style="width:16%;">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="category">
+
+                            <div class="category-info">
+
+                                <span>
+                                    LIMITED EDITIONS
+                                </span>
+
+                                <span>
+                                    9%
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <span
+                                    style="width:9%;">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================= BOTTOM ================= -->
+
+            <div class="bottom">
+
+
+                <!-- TOP SELLING -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+                            TOP SELLING WATCHES
+                        </div>
+
+                        <div style="
+                            font-size:8px;
+                            color:#aaa;
+                        ">
+                            VIEW ALL
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="table-header">
+
+                        <div>
+                            PRODUCT
+                        </div>
+
+                        <div>
+                            Category
+                        </div>
+
+                        <div>
+                            PRICE
+                        </div>
+
+                        <div>
+                            STATUS
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PRODUCT 1 -->
+
+                    <div class="product-row">
+
+
+                        <div class="product">
+
+                            <div class="watch">
+                                ⌚
+                            </div>
+
+                            <span>
+                                Nautilus
+                            </span>
+
+                        </div>
+
+
+                        <div>
+                            Patek Philippe
+                        </div>
+
+
+                        <div>
+                            $105,000
+                        </div>
+
+
+                        <div>
+
+                            <span class="status">
+                                PRE-ORDER
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- PRODUCT 2 -->
+
+                    <div class="product-row">
+
+
+                        <div class="product">
+
+                            <div class="watch">
+                                ⌚
+                            </div>
+
+                            <span>
+                                Submariner
+                            </span>
+
+                        </div>
+
+
+                        <div>
+                            Rolex
+                        </div>
+
+
+                        <div>
+                            $12,400
+                        </div>
+
+
+                        <div>
+
+                            <span class="status stock">
+                                IN STOCK
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- PRODUCT 3 -->
+
+                    <div class="product-row">
+
+
+                        <div class="product">
+
+                            <div class="watch">
+                                ⌚
+                            </div>
+
+                            <span>
+                                Speedmaster
+                            </span>
+
+                        </div>
+
+
+                        <div>
+                            Omega
+                        </div>
+
+
+                        <div>
+                            $6,300
+                        </div>
+
+
+                        <div>
+
+                            <span class="status stock">
+                                IN STOCK
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= RECENT ACTIVITY ================= -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+                            RECENT ACTIVITY
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity">
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-title">
+                                New Rolex Submariner Order
+                            </div>
+
+                            <div class="activity-desc">
+                                2 mins ago • Order #8492
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-title">
+                                Omega Inventory Updated
+                            </div>
+
+                            <div class="activity-desc">
+                                15 mins ago • Stock +5 Units
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-title">
+                                Refund Issued
+                            </div>
+
+                            <div class="activity-desc">
+                                1 hour ago • Order #8210 • -$6,500
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-title">
+                                Customer Review Received
+                            </div>
+
+                            <div class="activity-desc">
+                                2 hours ago • ★ Review by J. Doe
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+</html>
