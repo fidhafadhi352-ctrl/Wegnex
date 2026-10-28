@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wegnex | Payment Failed</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0b0b0b;
+            --gold: #e0bb35;
+            --text: #f5f5f5;
+            --muted: #a19f9f;
+            --border: #292929;
+            --card: #101010;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+        /* MAIN CONTENT */
+
+        .failed-container {
+            width: 100%;
+            max-width: 650px;
+            margin: 68px auto 60px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* WARNING ICON */
+
+        .warning-icon {
+            width: 46px;
+            height: 46px;
+            margin: 0 auto 26px;
+            border: 1px solid #44391a;
+            background: #171611;
+            box-shadow: 0 0 18px rgba(224, 187, 53, .08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold);
+        }
+
+        .warning-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* HEADING */
+
+        .failed-title {
+            font-size: 43px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .failed-description {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.8;
+            margin-bottom: 45px;
+        }
+
+        /* ERROR CARD */
+
+        .error-card {
+            width: 100%;
+            max-width: 370px;
+            margin: 0 auto;
+            padding: 28px 29px;
+            background: var(--card);
+            border: 1px solid #1d1d1d;
+            border-radius: 2px;
+            text-align: left;
+        }
+
+        .error-heading {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--gold);
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            margin-bottom: 23px;
+        }
+
+        .error-heading svg {
+            width: 11px;
+            height: 11px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .error-list {
+            list-style: none;
+        }
+
+        .error-list li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 17px;
+            color: #b5b3b3;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .error-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .error-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        /* BUTTONS */
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 34px;
+        }
+
+        .btn {
+            height: 37px;
+            min-width: 179px;
+            padding: 0 20px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--border);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all .25s ease;
+        }
+
+        .btn-retry {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #111;
+        }
+
+        .btn-retry:hover {
+            background: #f4d35a;
+            border-color: #f4d35a;
+        }
+
+        .btn-cart {
+            background: transparent;
+            color: #f0eeee;
+        }
+
+        .btn-cart:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+            .failed-container {
+                margin-top: 55px;
+            }
+
+            .failed-title {
+                font-size: 34px;
+            }
+
+            .failed-description {
+                margin-bottom: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .failed-container {
+                margin-top: 45px;
+                padding: 0 18px;
+            }
+
+            .warning-icon {
+                margin-bottom: 24px;
+            }
+
+            .failed-title {
+                font-size: 29px;
+                letter-spacing: -.7px;
+            }
+
+            .failed-description {
+                font-size: 10px;
+                margin-bottom: 30px;
+            }
+
+            .error-card {
+                padding: 24px 20px;
+            }
+
+            .error-list li {
+                font-size: 10px;
+                margin-bottom: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 25px;
+            }
+
+            .btn {
+                width: 100%;
+                min-height: 43px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
+    ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- PAYMENT FAILED CONTENT -->
+
+    <main class="failed-container">
+
+        <!-- WARNING ICON -->
+
+        <div class="warning-icon">
+
+            <svg viewBox="0 0 24 24">
+                <path d="M10.3 3.9 2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path>
+                <path d="M12 9v4"></path>
+                <path d="M12 16.5h.01"></path>
+            </svg>
+
+        </div>
+
+
+        <h1 class="failed-title">PAYMENT FAILED</h1>
+
+        <p class="failed-description">
+            We couldn't complete your online payment for your Wegnex luxury watch order{% if order %} (<strong>#{{ order.order_number }}</strong>){% endif %}.
+            <br>
+            Please try again or choose another payment method.
+            {% if order and order.notes %}
+            <br><span style="color:#ef4444; font-size:11px; margin-top:10px; display:inline-block;">{{ order.notes }}</span>
+            {% endif %}
+        </p>
+
+
+        <!-- PAYMENT ERROR CARD -->
+
+        <section class="error-card">
+
+            <h2 class="error-heading">
+
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 15.5h.01"></path>
+                </svg>
+
+                PAYMENT ERROR
+
+            </h2>
+
+            <ul class="error-list">
+
+                <li>
+                    Insufficient balance or limit in the selected payment account.
+                </li>
+
+                <li>
+                    Bank declined or timed out the transaction for security reasons.
+                </li>
+
+                <li>
+                    Payment was cancelled or window was dismissed by user.
+                </li>
+
+                <li>
+                    Payment session expired after inactivity or verification failure.
+                </li>
+
+            </ul>
+
+        </section>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="action-buttons">
+
+            <button
+                type="button"
+                class="btn btn-retry"
+                onclick="retryPayment()"
+            >
+                RETRY PAYMENT
+            </button>
+
+            <a href="{% url 'cart' %}" class="btn btn-cart">
+                RETURN TO CART
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function retryPayment() {
+            window.location.href = "{% url 'checkout' %}";
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,17 +8,15 @@
 
     <title>WEGNEX | Filter Watches</title>
 
-    <!-- Poppins -->
+    <!-- Google Font - Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -27,716 +26,619 @@
 
         body {
             min-height: 100vh;
-            background: #050505;
-            color: white;
-
+            background: radial-gradient(circle at 50% 20%, #151515 0%, #070707 100%);
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 30px 15px;
         }
-
 
         /* =====================================
-           FILTER MODAL
+           FILTER MODAL CARD
         ===================================== */
-
         .filter-modal {
-            width: 325px;
-
-            background: #0b0b0b;
-
-            border: 1px solid #222;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 20px 70px rgba(0, 0, 0, 0.8);
-
+            width: 100%;
+            max-width: 440px;
+            background: #0d0d0d;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.1);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
 
         /* =====================================
            HEADER
         ===================================== */
-
         .filter-header {
-            padding: 17px 20px 14px;
-
-            border-bottom: 1px solid #222;
-
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: #111111;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+        }
+
+        .filter-title-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-pill {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #d4af37;
+            text-transform: uppercase;
+            margin-bottom: 2px;
         }
 
         .filter-title {
-            color: #d4af37;
-
-            font-size: 14px;
+            color: #ffffff;
+            font-size: 18px;
             font-weight: 600;
-        }
-
-        .filter-subtitle {
-            color: #777;
-
-            font-size: 6px;
-
-            margin-top: 2px;
-
             letter-spacing: 0.5px;
         }
 
+        .filter-subtitle {
+            color: #777777;
+            font-size: 11px;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
         .close-btn {
-            background: transparent;
-
-            border: none;
-
-            color: #d4af37;
-
-            font-size: 17px;
-
-            line-height: 1;
-
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #a5a5a5;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
             cursor: pointer;
-
-            padding: 0;
+            text-decoration: none;
+            transition: all 0.25s ease;
         }
 
         .close-btn:hover {
-            color: #fff;
+            color: #d4af37;
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            transform: rotate(90deg);
         }
-
 
         /* =====================================
            CONTENT
         ===================================== */
-
         .filter-content {
-            padding: 0 16px;
+            padding: 10px 24px 20px;
+            max-height: 68vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #2b2314 #0d0d0d;
         }
 
+        .filter-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .filter-content::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+
+        .filter-content::-webkit-scrollbar-thumb {
+            background: #2b2314;
+            border-radius: 4px;
+        }
+
+        .filter-content::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
 
         /* SECTION */
-
         .filter-section {
-            padding: 12px 0;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
 
-            border-bottom: 1px solid #1b1b1b;
+        .filter-section:last-child {
+            border-bottom: none;
         }
 
         .section-title {
-            color: #c49f28;
-
-            font-size: 6px;
-
+            color: #d4af37;
+            font-size: 11px;
             font-weight: 600;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 9px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-
         /* =====================================
-           SEARCH
+           SEARCH BOX
         ===================================== */
-
         .search-box {
-            height: 26px;
-
-            border: 1px solid #302818;
-
-            border-radius: 5px;
-
+            height: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 8px;
             display: flex;
-
             align-items: center;
+            padding: 0 12px;
+            background: #080808;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
 
-            padding: 0 8px;
-
-            background: #0a0a0a;
+        .search-box:focus-within {
+            border-color: #d4af37;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
         }
 
         .search-box i {
-            color: #a78924;
-
-            font-size: 10px;
-
-            margin-right: 7px;
+            color: #d4af37;
+            font-size: 14px;
+            margin-right: 10px;
         }
 
         .search-box input {
             width: 100%;
-
             background: transparent;
-
             border: none;
-
             outline: none;
-
-            color: #ddd;
-
-            font-size: 7px;
+            color: #ffffff;
+            font-size: 13px;
         }
 
         .search-box input::placeholder {
-            color: #555;
+            color: #666666;
         }
 
-
         /* =====================================
-           PRICE RANGE
+           PRICE RANGE & DUAL SLIDER
         ===================================== */
-
         .price-values {
             display: flex;
-
-            justify-content: flex-end;
-
+            justify-content: space-between;
             align-items: center;
-
-            gap: 5px;
-
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .price-box {
-            min-width: 34px;
-
-            padding: 3px 5px;
-
+            min-width: 85px;
+            padding: 6px 12px;
             text-align: center;
-
-            border: 1px solid #302818;
-
-            border-radius: 3px;
-
-            color: #ddd;
-
-            font-size: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            background: #141414;
         }
 
         .price-dash {
-            color: #777;
-
-            font-size: 7px;
+            color: #777777;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-
-        /* SLIDER */
-
-        .range-wrapper {
+        .dual-range-container {
             position: relative;
-
-            height: 15px;
-
+            height: 28px;
             display: flex;
-
             align-items: center;
+            padding: 0 2px;
         }
 
-        .range-line {
+        .dual-range-track {
             position: absolute;
-
             width: 100%;
-
-            height: 1px;
-
-            background: #28200e;
+            height: 4px;
+            background: #252015;
+            border-radius: 2px;
         }
 
-        .range-line-active {
+        .dual-range-highlight {
             position: absolute;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
 
+        .range-input {
+            position: absolute;
             left: 0;
-
-            width: 48%;
-
-            height: 1px;
-
-            background: #d4af37;
+            width: 100%;
+            pointer-events: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            height: 4px;
+            margin: 0;
+            outline: none;
         }
 
-        .range-dot {
-            position: absolute;
-
-            left: 48%;
-
-            transform: translateX(-50%);
-
-            width: 9px;
-
-            height: 9px;
-
+        .range-input::-webkit-slider-thumb {
+            pointer-events: auto;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-
             background: #d4af37;
-
-            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
-
+            border: 2px solid #111111;
             cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+            transition: transform 0.15s ease;
         }
 
+        .range-input::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-input::-moz-range-thumb {
+            pointer-events: auto;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #d4af37;
+            border: 2px solid #111111;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+        }
 
         /* =====================================
-           CHECKBOXES
+           CHECKBOXES GRID
         ===================================== */
-
         .checkbox-grid {
             display: grid;
-
             grid-template-columns: 1fr 1fr;
-
-            row-gap: 7px;
-
-            column-gap: 15px;
+            row-gap: 10px;
+            column-gap: 16px;
         }
 
         .checkbox-item {
             display: flex;
-
             align-items: center;
-
-            gap: 7px;
-
-            color: #777;
-
-            font-size: 6px;
-
+            gap: 10px;
+            color: #b5b5b5;
+            font-size: 12px;
             cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        .checkbox-item:hover {
+            color: #ffffff;
         }
 
         .checkbox-item input {
             appearance: none;
-
-            width: 10px;
-            height: 10px;
-
-            border: 1px solid #5c4a16;
-
-            border-radius: 2px;
-
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid rgba(212, 175, 55, 0.4);
+            border-radius: 4px;
             background: #0a0a0a;
-
             cursor: pointer;
-
             position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
         }
 
         .checkbox-item input:checked {
             background: #d4af37;
-
             border-color: #d4af37;
         }
 
         .checkbox-item input:checked::after {
             content: "✓";
-
             position: absolute;
-
-            left: 1px;
-            top: -2px;
-
-            color: #111;
-
-            font-size: 8px;
-
-            font-weight: bold;
+            left: 3px;
+            top: -1px;
+            color: #0b0b0b;
+            font-size: 11px;
+            font-weight: 900;
         }
-
 
         /* =====================================
-           DIAL COLORS
+           SORT SELECT
         ===================================== */
-
-        .color-options {
-            display: flex;
-
-            gap: 11px;
-
-            align-items: center;
-        }
-
-        .color {
-            width: 20px;
-            height: 20px;
-
-            border-radius: 50%;
-
-            border: 1px solid #333;
-
+        .sort-select-box {
+            width: 100%;
+            background: #080808;
+            color: #d4af37;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 8px;
+            padding: 8px 12px;
+            outline: none;
+            font-size: 12px;
             cursor: pointer;
-
-            position: relative;
+            transition: border-color 0.2s;
         }
 
-        .color.active {
-            border: 1px solid #d4af37;
+        .sort-select-box:focus {
+            border-color: #d4af37;
         }
 
-        .color.active::after {
-            content: "";
-
-            position: absolute;
-
-            width: 4px;
-            height: 4px;
-
-            background: #d4af37;
-
-            border-radius: 50%;
-
-            left: 50%;
-            top: 50%;
-
-            transform: translate(-50%, -50%);
+        .sort-select-box option {
+            background: #141414;
+            color: #ffffff;
         }
-
-        .black {
-            background: #050505;
-        }
-
-        .white {
-            background: #f2f2f2;
-        }
-
-        .blue {
-            background: #082044;
-        }
-
-        .green {
-            background: #183723;
-        }
-
-        .brown {
-            background: #60341f;
-        }
-
-        .gold {
-            background: #c6aa3e;
-        }
-
 
         /* =====================================
-           BUTTONS
+           BUTTONS AREA
         ===================================== */
-
         .button-area {
-            padding: 14px 20px;
-
+            padding: 16px 24px;
             display: grid;
-
-            grid-template-columns: 1fr 1.15fr;
-
-            gap: 9px;
-
-            border-top: 1px solid #222;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: #111111;
         }
 
         .reset-btn,
         .apply-btn {
-            height: 32px;
-
-            border-radius: 6px;
-
-            font-size: 7px;
-
-            font-weight: 600;
-
-            letter-spacing: 1px;
-
+            height: 42px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
             cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
         .reset-btn {
             background: transparent;
-
-            border: 1px solid #3a3019;
-
+            border: 1px solid rgba(212, 175, 55, 0.35);
             color: #d4af37;
         }
 
         .reset-btn:hover {
-            background: #17130a;
+            background: rgba(212, 175, 55, 0.1);
+            color: #ffffff;
+            border-color: #d4af37;
         }
 
         .apply-btn {
             background: #d4af37;
-
             border: 1px solid #d4af37;
-
-            color: #111;
-
-            box-shadow:
-                0 5px 15px rgba(212, 175, 55, 0.15);
+            color: #0b0b0b;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
         .apply-btn:hover {
             background: #e4c04a;
+            box-shadow: 0 6px 22px rgba(212, 175, 55, 0.4);
+            transform: translateY(-1px);
         }
 
-
-        /* =====================================
-           RESPONSIVE
-        ===================================== */
-
-        @media (max-width: 400px) {
-
+        @media (max-width: 480px) {
             .filter-modal {
-                width: calc(100% - 30px);
+                border-radius: 14px;
             }
-
             .filter-content {
-                padding: 0 15px;
+                padding: 10px 18px 18px;
             }
-
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
         }
-
     </style>
 </head>
 
-
 <body>
 
+    <div class="filter-modal">
 
-<!-- =====================================
-     FILTER MODAL
-===================================== -->
-
-<div class="filter-modal">
-
-
-    <!-- HEADER -->
-
-    <div class="filter-header">
-
-        <div>
-
-            <div class="filter-title">
-                Filter Watches
+        <!-- HEADER -->
+        <div class="filter-header">
+            <div class="filter-title-wrap">
+                <span class="brand-pill">WEGNEX HOROLOGY</span>
+                <h1 class="filter-title">Filter Watches</h1>
+                <div class="filter-subtitle">Refine your luxury timepiece selection</div>
             </div>
 
-            <div class="filter-subtitle">
-                Refine your luxury collection
-            </div>
-
+            <a href="{% url 'product_list' %}" class="close-btn" title="Back to Products" aria-label="Close">
+                <i class="bi bi-x-lg"></i>
+            </a>
         </div>
 
-        <button
-            class="close-btn"
-            onclick="closeFilter()"
-        >
-            ×
-        </button>
+        <form method="GET" action="{% url 'product_list' %}" id="filterPageForm">
+
+            <!-- CONTENT -->
+            <div class="filter-content">
+
+                <!-- SEARCH -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        <i class="bi bi-search"></i> SEARCH
+                    </div>
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="search" id="searchInput" placeholder="Search collection or brand..." value="{{ search_query }}">
+                    </div>
+                </div>
+
+                <!-- PRICE RANGE -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        <i class="bi bi-cash-stack"></i> PRICE RANGE
+                    </div>
+                    <div class="price-values">
+                        <span class="price-box" id="minPriceDisplay">₹{{ current_min_price }}</span>
+                        <span class="price-dash">—</span>
+                        <span class="price-box" id="maxPriceDisplay">₹{{ current_max_price }}</span>
+                    </div>
+
+                    <div class="dual-range-container">
+                        <div class="dual-range-track"></div>
+                        <div class="dual-range-highlight" id="rangeHighlight"></div>
+                        <input type="range" class="range-input" id="minPriceInput" name="min_price"
+                               min="{{ db_min_price }}" max="{{ db_max_price }}" step="500" value="{{ current_min_price }}"
+                               oninput="handleRangeChange()">
+                        <input type="range" class="range-input" id="maxPriceInput" name="max_price"
+                               min="{{ db_min_price }}" max="{{ db_max_price }}" step="500" value="{{ current_max_price }}"
+                               oninput="handleRangeChange()">
+                    </div>
+                </div>
+
+                <!-- CATEGORIES -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        <i class="bi bi-grid"></i> CATEGORIES
+                    </div>
+                    <div class="checkbox-grid">
+                        {% for cat in categories %}
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="{{ cat.name }}"
+                                   {% if cat.name in selected_categories %}checked{% endif %}>
+                            <span>{{ cat.name }}</span>
+                        </label>
+                        {% empty %}
+                        <span style="color: #666; font-size: 11px;">No categories available</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- BRANDS -->
+                {% if brands %}
+                <div class="filter-section">
+                    <div class="section-title">
+                        <i class="bi bi-award"></i> BRANDS
+                    </div>
+                    <div class="checkbox-grid">
+                        {% for b in brands %}
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="brand" value="{{ b }}"
+                                   {% if b in selected_brands %}checked{% endif %}>
+                            <span>{{ b }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- SORT BY -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        <i class="bi bi-arrow-down-up"></i> SORT BY
+                    </div>
+                    <select name="sort" class="sort-select-box" id="sortSelect">
+                        <option value="featured" {% if current_sort == 'featured' %}selected{% endif %}>FEATURED (NEWEST)</option>
+                        <option value="price-low" {% if current_sort == 'price-low' %}selected{% endif %}>PRICE: LOW TO HIGH</option>
+                        <option value="price-high" {% if current_sort == 'price-high' %}selected{% endif %}>PRICE: HIGH TO LOW</option>
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>NAME: A TO Z</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="button-area">
+                <button type="button" class="reset-btn" onclick="resetAllFilters()">
+                    RESET FILTERS
+                </button>
+                <button type="submit" class="apply-btn">
+                    APPLY FILTERS
+                </button>
+            </div>
+
+        </form>
 
     </div>
 
-
-    <!-- CONTENT -->
-
-    <div class="filter-content">
-
-
-        <!-- SEARCH -->
-
-        <div class="filter-section">
-
-            <div class="section-title">
-                SEARCH
-            </div>
-
-            <div class="search-box">
-
-                <span>⌕</span>
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search collection..."
-                >
-
-            </div>
-
-        </div>
-
-
-
-        <!-- PRICE -->
-
-        <div class="filter-section">
-
-            <div class="section-title">
-                PRICE RANGE
-            </div>
-
-            <div class="price-values">
-
-                <span
-                    class="price-box"
-                    id="minPrice"
-                >
-                    $500
-                </span>
-
-                <span class="price-dash">
-                    —
-                </span>
-
-                <span
-                    class="price-box"
-                    id="maxPrice"
-                >
-                    $50,000
-                </span>
-
-            </div>
-
-            <div class="range-wrapper">
-
-                <div class="range-line"></div>
-
-                <div
-                    class="range-line-active"
-                    id="activeRange"
-                ></div>
-
-                <div
-                    class="range-dot"
-                    id="rangeDot"
-                ></div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- CATEGORIES -->
-
-        <div class="filter-section">
-
-            <div class="section-title">
-                CATEGORIES
-            </div>
-
-            <div class="checkbox-grid">
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Classic">
-                    Classic
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Executive">
-                    Executive
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Heritage">
-                    Heritage
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Diver">
-                    Diver
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Dress">
-                    Dress
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Chronograph">
-                    Chronograph
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Skeleton">
-                    Skeleton
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" value="Limited Edition">
-                    Limited Edition
-                </label>
-
-            </div>
-
-        </div>
-
-
-
-
-
-
-    </div>
-
-
-    <!-- BUTTONS -->
-
-    <div class="button-area">
-
-        <button
-            class="reset-btn"
-            onclick="resetFilters()"
-        >
-            RESET FILTERS
-        </button>
-
-        <button
-            class="apply-btn"
-            onclick="applyFilters()"
-        >
-            APPLY FILTERS
-        </button>
-
-    </div>
-
-
-</div>
-
-
-
-<script>
-
-
-    /* =====================================
-       CLOSE FILTER
-    ===================================== */
-
-    function closeFilter() {
-        window.location.href = "/product_list/";
-    }
-
-    /* =====================================
-       RESET FILTERS
-    ===================================== */
-
-    function resetFilters() {
-        document
-            .querySelectorAll('input[type="checkbox"]')
-            .forEach(function(checkbox) {
-                checkbox.checked = false;
-            });
-
-        document.getElementById("searchInput").value = "";
-        document.getElementById("minPrice").textContent = "$500";
-        document.getElementById("maxPrice").textContent = "$50,000";
-    }
-
-    /* =====================================
-       APPLY FILTERS
-    ===================================== */
-
-    function applyFilters() {
-        window.location.href = "/product_list/";
-    }
-
-
-</script>
-
+    <script>
+        function handleRangeChange() {
+            const minInput = document.getElementById('minPriceInput');
+            const maxInput = document.getElementById('maxPriceInput');
+            const highlight = document.getElementById('rangeHighlight');
+            const minDisplay = document.getElementById('minPriceDisplay');
+            const maxDisplay = document.getElementById('maxPriceDisplay');
+
+            if (!minInput || !maxInput) return;
+
+            let minVal = parseInt(minInput.value);
+            let maxVal = parseInt(maxInput.value);
+
+            if (minVal > maxVal) {
+                const temp = minVal;
+                minVal = maxVal;
+                maxVal = temp;
+                minInput.value = minVal;
+                maxInput.value = maxVal;
+            }
+
+            const minBound = parseInt(minInput.min);
+            const maxBound = parseInt(minInput.max);
+            const span = (maxBound - minBound) || 1;
+
+            const leftPct = ((minVal - minBound) / span) * 100;
+            const rightPct = ((maxVal - minBound) / span) * 100;
+
+            if (highlight) {
+                highlight.style.left = leftPct + '%';
+                highlight.style.width = (rightPct - leftPct) + '%';
+            }
+
+            if (minDisplay) minDisplay.textContent = '₹' + minVal.toLocaleString('en-IN');
+            if (maxDisplay) maxDisplay.textContent = '₹' + maxVal.toLocaleString('en-IN');
+        }
+
+        function resetAllFilters() {
+            window.location.href = "{% url 'product_list' %}";
+        }
+
+        // Clean up empty params on submit to keep clean URL
+        document.getElementById('filterPageForm').addEventListener('submit', function(e) {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput && !searchInput.value.trim()) {
+                searchInput.disabled = true;
+            }
+
+            const minInput = document.getElementById('minPriceInput');
+            const maxInput = document.getElementById('maxPriceInput');
+            const minBound = parseInt(minInput.min);
+            const maxBound = parseInt(minInput.max);
+
+            if (parseInt(minInput.value) <= minBound && parseInt(maxInput.value) >= maxBound) {
+                // If the user didn't restrict price range, don't clutter the URL
+                minInput.disabled = true;
+                maxInput.disabled = true;
+            }
+        });
+
+        // Initialize range slider positioning
+        document.addEventListener('DOMContentLoaded', function() {
+            handleRangeChange();
+        });
+    </script>
 
 </body>
+
 </html>

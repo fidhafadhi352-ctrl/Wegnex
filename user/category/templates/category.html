@@ -40,62 +40,71 @@
 
         /* =====================================================
            NAVBAR
+        /* =====================================================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
         ===================================================== */
         .navbar {
-            background: #070707;
-            min-height: 76px;
-            padding: 0 45px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
 
-        .navbar .logo {
+        .navbar .logo, .navbar-brand.logo {
             color: #ffffff !important;
-            font-size: 24px;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-decoration: none;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
-        .navbar-nav { gap: 28px; }
-
-        .navbar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.7) !important;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 0 !important;
-            transition: color 0.2s ease;
+        .navbar-nav {
+            gap: 28px !important;
         }
 
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
             color: #D4AF37 !important;
         }
 
-        .navbar-nav .nav-link.active {
-            border-bottom: 1px solid #D4AF37;
-            padding-bottom: 2px !important;
+        .nav-link.active {
+            color: #D4AF37 !important;
         }
 
-        .navbar-icons { gap: 20px; }
-
-        .navbar-icons i {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            transition: color 0.2s;
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
         }
 
-        .navbar-icons i:hover { color: #D4AF37; }
-
-        .navbar-toggler {
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 4px 8px;
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
         }
 
-        .navbar-toggler-icon { filter: invert(1); }
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
 
         /* =====================================================
            SIMPLE HEADER
@@ -354,59 +363,79 @@
 
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg sticky-top">
+<!-- NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL) -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
-        <a href="{% url 'home' %}" class="logo navbar-brand">WEGNEX</a>
+        <!-- Logo -->
+        <a class="navbar-brand logo" href="{% url 'home' %}">
+            WEGNEX
+        </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <!-- Mobile Menu Button -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav mx-auto">
+        <!-- Menu -->
+        <div class="collapse navbar-collapse justify-content-center"
+             id="navbarMenu">
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="{% url 'home' %}" class="nav-link">HOME</a>
+                    <a class="nav-link" href="{% url 'home' %}">
+                        Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'product_list' %}" class="nav-link">PRODUCT</a>
+                    <a class="nav-link" href="{% url 'product_list' %}">
+                        Products
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'category' %}" class="nav-link active">CATEGORY</a>
+                    <a class="nav-link active" href="{% url 'category' %}">
+                        Category
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'home' %}#about" class="nav-link">ABOUT</a>
+                    <a class="nav-link" href="{% url 'about' %}">
+                        About
+                    </a>
                 </li>
             </ul>
+        </div>
 
-            <div class="navbar-icons d-flex align-items-center">
-                <a href="{% url 'product_list' %}" style="color: inherit;"><i class="bi bi-search" title="Search"></i></a>
-                <i class="bi bi-heart" title="Wishlist"></i>
-                <i class="bi bi-bag" title="Cart"></i>
+        <!-- Icons & User Menu -->
+        <div class="nav-icons">
+            <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                <i class="bi bi-search"></i>
+            </a>
+            <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                <i class="bi bi-heart"></i>
+            </a>
+            <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                <i class="bi bi-cart3"></i>
+            </a>
 
-                {% if user.is_authenticated %}
-                    <div class="dropdown">
-                        <a class="dropdown-toggle text-decoration-none d-flex align-items-center gap-2"
-                           href="{% url 'profile' %}" id="userDropdown" role="button"
-                           style="color:#fff; transition: color 0.2s;"
-                           onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
-                            {% if profile and profile.profile_picture %}
-                                <img src="{{ profile.profile_picture.url }}" alt="Profile"
-                                     style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
-                            {% else %}
-                                <i class="bi bi-person-circle" style="font-size:20px;"></i>
-                            {% endif %}
-                            <span style="font-size:13px;font-weight:600;color:#fff;">{{ user.first_name|default:user.username }}</span>
-                        </a>
-                    </div>
-                {% else %}
-                    <a href="{% url 'login' %}?next={% url 'category' %}" class="text-decoration-none"
-                       style="color:#fff; transition:color 0.2s;"
-                       onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
-                        <i class="bi bi-person" style="font-size:20px;"></i>
+            {% if user.is_authenticated %}
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                        {% if profile and profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                        {% elif user.profile and user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                        {% else %}
+                            <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                        {% endif %}
+                        <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
                     </a>
-                {% endif %}
-            </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                    <i class="bi bi-person" style="font-size: 20px;"></i>
+                </a>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -498,7 +527,7 @@
         <div>
             <div class="footer-col-title">COMPANY</div>
             <ul class="footer-list">
-                <li><a href="#">Our Story</a></li>
+                <li><a href="{% url 'about' %}">Our Story</a></li>
                 <li><a href="#">Boutique Locator</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Terms of Service</a></li>

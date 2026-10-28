@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wegnex Admin | Order Details #{{ order.order_number }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+           BLACK-DOMINANT BLACK & WHITE THEME (LUXURY DARK)
+        ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-page: #0d0d0d;
+            --bg-sidebar: #111111;
+            --bg-topbar: #111111;
+            --bg-card: #161616;
+            --bg-subtle: #1a1a1a;
+            --bg-table-head: #1c1c1c;
+            --border-primary: #292929;
+            --border-subtle: #222222;
+            --border-light: #ffffff;
+            --text-pure-white: #ffffff;
+            --text-light: #f5f5f5;
+            --text-muted: #888888;
+            --text-dark-muted: #555555;
+            --dot-inactive: #2e2e33;
+            --line-inactive: #242428;
+            --radius-card: 20px;
+            --radius-elem: 10px;
+            --radius-pill: 20px;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-light);
+            font-size: 13px;
+            min-height: 100vh;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, input, select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 180px;
+            height: 100vh;
+            background: #111111;
+            border-right: 1px solid #292929;
+            padding: 30px 10px;
+            z-index: 100;
+        }
+
+        .logo {
+            padding-left: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo h2 {
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #f5f5f5;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu li {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 3px;
+            color: #858585;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .menu li span:first-child {
+            width: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .menu li:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .menu li.active {
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+            background: #191919;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 35px;
+            left: 22px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .logout:hover {
+            color: #fff;
+        }
+
+        /* =========================================================
+           MAIN CONTAINER
+        ========================================================= */
+        .main-wrapper {
+            margin-left: 180px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .topbar {
+            height: 60px;
+            background: var(--bg-topbar);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: #1c1c1c;
+            color: var(--text-pure-white);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-elem);
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--text-pure-white);
+            color: #000000;
+            border-color: var(--text-pure-white);
+        }
+
+        .topbar-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-pure-white);
+            letter-spacing: -0.2px;
+        }
+
+        .header-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--text-pure-white);
+            color: #000000;
+            border-radius: var(--radius-pill);
+            padding: 5px 14px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+        }
+
+        .search-box-wrapper input {
+            width: 220px;
+            height: 36px;
+            background: #161616;
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-elem);
+            padding: 0 12px 0 32px;
+            font-size: 12px;
+            color: var(--text-pure-white);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box-wrapper input:focus {
+            border-color: var(--text-pure-white);
+        }
+
+        .search-box-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        /* Page Content */
+        .content-container {
+            padding: 32px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Order Header Row */
+        .order-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .order-title-group h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-pure-white);
+        }
+
+        .order-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .order-subtitle strong {
+            color: var(--text-pure-white);
+        }
+
+        .print-invoice-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-pure-white);
+            border: 1.5px solid var(--text-pure-white);
+            border-radius: var(--radius-elem);
+            padding: 9px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .print-invoice-btn:hover {
+            background: var(--text-pure-white);
+            color: #000000;
+        }
+
+        /* Layout Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(360px, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .column-left,
+        .column-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            min-width: 0;
+        }
+
+        /* Universal Card Design (Deep Black Surface) */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--text-pure-white);
+        }
+
+        /* =========================================================
+           ORDER STATUS CARD (EXACT STRUCTURE IN BLACK THEME)
+        ========================================================= */
+        .status-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .status-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .status-card-title {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-pure-white);
+            margin: 0;
+        }
+
+        /* Vertical Stepper */
+        .vertical-stepper {
+            padding: 24px 24px 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stepper-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            position: relative;
+            min-height: 44px;
+        }
+
+        .stepper-step:last-child {
+            min-height: auto;
+        }
+
+        .step-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Dot */
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--dot-inactive);
+            transition: all 0.25s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Connector Line */
+        .step-line {
+            width: 2px;
+            min-height: 32px;
+            background: var(--line-inactive);
+            margin: 2px 0;
+            transition: background 0.25s ease;
+        }
+
+        .stepper-step:last-child .step-line {
+            display: none;
+        }
+
+        /* Label */
+        .step-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark-muted);
+            line-height: 12px;
+            padding-top: 1px;
+            transition: color 0.25s ease, font-weight 0.25s ease;
+        }
+
+        /* Active / Completed States: Pure White Dot & Pure White Text */
+        .stepper-step.completed .step-dot,
+        .stepper-step.active .step-dot {
+            background: var(--text-pure-white);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        .stepper-step.completed .step-line {
+            background: var(--text-pure-white);
+        }
+
+        .stepper-step.active .step-label,
+        .stepper-step.completed .step-label {
+            color: var(--text-pure-white);
+            font-weight: 700;
+        }
+
+        /* Actions Row (Select + White Save Button) */
+        .status-actions-row {
+            padding: 8px 24px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-select-control {
+            flex: 1;
+            height: 44px;
+            border: 1.5px solid var(--border-light);
+            border-radius: var(--radius-elem);
+            padding: 0 36px 0 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-pure-white);
+            background: #0d0d0d url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 14px center;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-select-control option {
+            background: #161616;
+            color: #ffffff;
+        }
+
+        .status-select-control:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background-image: none;
+        }
+
+        .btn-save-status {
+            height: 44px;
+            padding: 0 24px;
+            background: var(--text-pure-white);
+            color: #000000;
+            border: none;
+            border-radius: var(--radius-elem);
+            font-size: 14px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-save-status:hover {
+            background: #e5e5e5;
+            transform: translateY(-1px);
+        }
+
+        .btn-save-status:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status-feedback {
+            margin: 0 24px 20px;
+            padding: 10px 14px;
+            border-radius: var(--radius-elem);
+            font-size: 12px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-feedback.show {
+            display: block;
+        }
+
+        .status-feedback.success {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .status-feedback.error {
+            background: #000000;
+            color: #ffffff;
+            border: 1.5px solid #ffffff;
+        }
+
+        /* =========================================================
+           ORDER ITEMS TABLE (BLACK & WHITE THEME)
+        ========================================================= */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .items-table th {
+            background: var(--bg-table-head);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .items-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            vertical-align: middle;
+            color: var(--text-pure-white);
+        }
+
+        .items-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-item-return-req {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(228, 189, 53, 0.15);
+            color: #e4bd35;
+            border: 1px solid rgba(228, 189, 53, 0.4);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .badge-item-returned {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(37, 217, 130, 0.15);
+            color: #25d982;
+            border: 1px solid rgba(37, 217, 130, 0.4);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .badge-item-cancelled {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 77, 77, 0.15);
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.4);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        /* RETURN BUTTONS (YELLOW & WHITE THEME) */
+        .btn-approve-return {
+            background: #E4BD35;
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 14px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(228, 189, 53, 0.25);
+        }
+
+        .btn-approve-return:hover {
+            background: #f0cb46;
+            transform: translateY(-1px);
+        }
+
+        .btn-reject-return {
+            background: #ffffff;
+            color: #000000;
+            border: 1.5px solid #ffffff;
+            border-radius: 6px;
+            padding: 7px 14px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-reject-return:hover {
+            background: #e8e8e8;
+            border-color: #e8e8e8;
+            transform: translateY(-1px);
+        }
+
+        /* Order Status Card Return Actions (Yellow & White Screenshot Theme) */
+        .return-card-actions {
+            padding: 14px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-approve-return-card {
+            width: 100%;
+            height: 48px;
+            background: #E4BD35;
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(228, 189, 53, 0.25);
+        }
+
+        .btn-approve-return-card:hover {
+            background: #f0cb46;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(228, 189, 53, 0.35);
+        }
+
+        .btn-reject-return-card {
+            width: 100%;
+            height: 48px;
+            background: #ffffff;
+            color: #000000;
+            border: 1.5px solid #ffffff;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-reject-return-card:hover {
+            background: #e8e8e8;
+            border-color: #e8e8e8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-circle-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .btn-circle-icon.check {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-circle-icon.cross {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .return-completed-banner {
+            background: rgba(228, 189, 53, 0.1);
+            border: 1.5px solid #E4BD35;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .return-request-alert {
+            background: rgba(228, 189, 53, 0.08);
+            border: 1px solid rgba(228, 189, 53, 0.35);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .product-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-elem);
+            object-fit: cover;
+            border: 1px solid var(--border-primary);
+            background: #0d0d0d;
+            flex-shrink: 0;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-pure-white);
+            margin-bottom: 2px;
+        }
+
+        .product-variant {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .badge-item-cancelled {
+            display: inline-block;
+            margin-top: 3px;
+            padding: 2px 6px;
+            font-size: 9px;
+            border-radius: 4px;
+            background: #ffffff;
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .sku-cell {
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .price-cell {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .qty-cell {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .total-cell {
+            text-align: right;
+            font-weight: 800;
+            white-space: nowrap;
+            color: var(--text-pure-white);
+        }
+
+        /* Totals Summary */
+        .totals-summary {
+            padding: 20px 24px;
+            background: var(--bg-subtle);
+            border-top: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .shipping-badge-info {
+            max-width: 280px;
+        }
+
+        .shipping-badge-info h4 {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-pure-white);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shipping-badge-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .totals-breakdown {
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .summary-row .amount {
+            color: var(--text-pure-white);
+            font-weight: 700;
+        }
+
+        .summary-row .free-tag {
+            color: var(--text-pure-white);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-row.grand-total-row {
+            border-top: 1.5px solid var(--border-primary);
+            padding-top: 12px;
+            margin-top: 4px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-pure-white);
+        }
+
+        .summary-row.grand-total-row .amount {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-pure-white);
+        }
+
+        /* =========================================================
+           CUSTOMER & PAYMENT CARDS
+        ========================================================= */
+        .customer-content,
+        .payment-content {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .customer-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .customer-avatar-initials {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--text-pure-white);
+            color: #000000;
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .customer-main-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-pure-white);
+        }
+
+        .customer-handle {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .info-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: var(--text-pure-white);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .payment-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            background: var(--text-pure-white);
+            color: #000000;
+        }
+
+        .payment-row-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .payment-row-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        /* =========================================================
+           ORDER HISTORY TIMELINE
+        ========================================================= */
+        .history-list-timeline {
+            list-style: none;
+            padding: 22px 24px;
+            position: relative;
+        }
+
+        .history-entry {
+            position: relative;
+            padding-left: 24px;
+            padding-bottom: 18px;
+        }
+
+        .history-entry:last-child {
+            padding-bottom: 0;
+        }
+
+        .history-entry::before {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 6px;
+            bottom: -6px;
+            width: 2px;
+            background: var(--border-primary);
+        }
+
+        .history-entry:last-child::before {
+            display: none;
+        }
+
+        .history-bullet {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-pure-white);
+            border: 2px solid #161616;
+            box-shadow: 0 0 0 1px var(--text-pure-white);
+        }
+
+        .history-title-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-pure-white);
+        }
+
+        .history-time-text {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin: 2px 0 4px;
+        }
+
+        .history-desc-text {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+        @media (max-width: 1080px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 65px;
+            }
+
+            .logo h2, .logo p, .menu li span:last-child, .logout {
+                display: none;
+            }
+
+            .menu li {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .menu li a {
+                justify-content: center;
+            }
+
+            .main-wrapper {
+                margin-left: 65px !important;
+            }
+
+            .content-container {
+                padding: 16px;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .totals-summary {
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+            .sidebar, .topbar, .status-actions-row, .print-invoice-btn, .search-box-wrapper, .back-btn {
+                display: none !important;
+            }
+
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            .card {
+                border: 1px solid #000000 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
+        <ul class="menu">
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
+        </ul>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="{% url 'order_management' %}" class="back-btn" title="Back to orders list">
+                    ← Back to Orders
+                </a>
+                <h2 class="topbar-title">Order Details</h2>
+                <span class="header-status-badge" id="headerStatusBadge">
+                    ● {{ order.get_order_status_display|upper }}
+                </span>
+            </div>
+
+            <div class="topbar-right">
+                <div class="search-box-wrapper">
+                    <span class="search-box-icon">⌕</span>
+                    <input type="search" id="itemSearchInput" placeholder="Filter order items..." aria-label="Filter order items">
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <main class="content-container">
+
+            <!-- ORDER HEADER ROW -->
+            <section class="order-header-row">
+                <div class="order-title-group">
+                    <h1>#{{ order.order_number }}</h1>
+                    <p class="order-subtitle">
+                        <span>Placed on {{ order.created_at|date:"M d, Y • h:i A" }}</span>
+                        <span>•</span>
+                        <span>Payment: <strong>{{ order.payment_method }}</strong></span>
+                    </p>
+                </div>
+
+                <button type="button" class="print-invoice-btn" onclick="window.print()">
+                    <span>▣</span>
+                    <span>Print Invoice</span>
+                </button>
+            </section>
+
+            <!-- DETAILS GRID -->
+            <div class="details-grid">
+
+                <!-- LEFT COLUMN: ITEMS & TOTALS -->
+                <div class="column-left">
+
+                    <!-- ORDER ITEMS CARD -->
+                    <section class="card" id="itemsSection">
+                        <div class="card-header">
+                            <h3 class="card-title">Order Items ({{ items|length }})</h3>
+                        </div>
+
+                        {% if has_return_requests %}
+                        <div class="return-request-alert" style="margin: 16px 20px 0;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <span style="font-size:22px;">⚠️</span>
+                                <div>
+                                    <div style="font-weight:700; color:#e4bd35; font-size:13px;">Return Request Pending Administrator Confirmation</div>
+                                    <div style="font-size:11px; color:#bbb; margin-top:2px;">The customer has submitted a return request. Click <strong>"Approve Return & Refund to Wallet"</strong> to confirm the return and credit the refund directly to the customer's Wegnex Wallet.</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div style="overflow-x:auto;">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 36%;">Product</th>
+                                        <th style="width: 14%;">SKU</th>
+                                        <th style="width: 12%;">Price</th>
+                                        <th style="width: 8%; text-align:center;">Qty</th>
+                                        <th style="width: 12%; text-align:right;">Total</th>
+                                        <th style="width: 18%; text-align:center;">Status & Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderItemsTableBody">
+                                    {% for itm in items %}
+                                    <tr data-name="{{ itm.product_name|lower }}" data-sku="{{ itm.sku|lower }}" id="item-row-{{ itm.id }}">
+                                        <td>
+                                            <div class="product-meta">
+                                                <img src="{{ itm.image_url }}" alt="{{ itm.product_name }}" class="product-thumb">
+                                                <div>
+                                                    <div class="product-name">{{ itm.product_name }}</div>
+                                                    <div class="product-variant">{{ itm.variant_info }}</div>
+                                                    {% if itm.is_return_requested %}
+                                                        <div class="badge-item-return-req">⏳ Return Requested</div>
+                                                        {% if itm.cancellation_reason %}
+                                                            <div style="font-size:10px; color:#e4bd35; margin-top:3px; max-width:260px;">{{ itm.cancellation_reason }}</div>
+                                                        {% endif %}
+                                                    {% elif itm.is_returned %}
+                                                        <div class="badge-item-returned">✓ Returned &amp; Refunded</div>
+                                                        {% if itm.cancellation_reason %}
+                                                            <div style="font-size:10px; color:#888; margin-top:3px; max-width:260px;">{{ itm.cancellation_reason }}</div>
+                                                        {% endif %}
+                                                    {% elif itm.is_cancelled %}
+                                                        <div class="badge-item-cancelled">✕ Cancelled</div>
+                                                        {% if itm.cancellation_reason %}
+                                                            <div style="font-size:10px; color:#888; margin-top:3px; max-width:260px;">{{ itm.cancellation_reason }}</div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="sku-cell">{{ itm.sku }}</td>
+                                        <td class="price-cell">₹{{ itm.price|floatformat:2 }}</td>
+                                        <td class="qty-cell">{{ itm.quantity|stringformat:"02d" }}</td>
+                                        <td class="total-cell">₹{{ itm.item_total|floatformat:2 }}</td>
+                                        <td style="text-align:center;" id="action-cell-{{ itm.id }}">
+                                            {% if itm.is_return_requested %}
+                                                <div style="display:flex; flex-direction:column; gap:6px; align-items:center;">
+                                                    <button type="button" class="btn-approve-return" onclick="adminApproveReturn({{ itm.id }}, '{{ itm.product_name|escapejs }}', '{{ itm.item_total|floatformat:2 }}')">
+                                                        <i class="bi bi-wallet2"></i> Approve &amp; Refund ₹{{ itm.item_total|floatformat:2 }}
+                                                    </button>
+                                                    <button type="button" class="btn-reject-return" onclick="adminRejectReturn({{ itm.id }}, '{{ itm.product_name|escapejs }}')">
+                                                        Reject
+                                                    </button>
+                                                </div>
+                                            {% elif itm.is_returned %}
+                                                <span style="color:#25d982; font-size:11px; font-weight:700;">● Refunded to Wallet</span>
+                                            {% elif itm.is_cancelled %}
+                                                <span style="color:#ff4d4d; font-size:11px; font-weight:700;">● Cancelled</span>
+                                            {% else %}
+                                                <span style="color:#aaa; font-size:11px;">{{ itm.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" style="text-align:center; padding:30px; color:#666666;">
+                                            No items recorded for this order.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- TOTALS BREAKDOWN -->
+                        <div class="totals-summary">
+                            <div class="shipping-badge-info">
+                                <h4>◉ Fully Insured Priority Shipping</h4>
+                                <p>All luxury timepieces are authenticated and professionally serviced prior to dispatch.</p>
+                            </div>
+
+                            <div class="totals-breakdown">
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span class="amount">₹{{ order.subtotal|floatformat:2 }}</span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Shipping</span>
+                                    {% if order.shipping_fee > 0 %}
+                                        <span class="amount">₹{{ order.shipping_fee|floatformat:2 }}</span>
+                                    {% else %}
+                                        <span class="free-tag">FREE</span>
+                                    {% endif %}
+                                </div>
+
+                                {% if order.discount > 0 %}
+                                <div class="summary-row">
+                                    <span>Discount Applied</span>
+                                    <span class="amount">-₹{{ order.discount|floatformat:2 }}</span>
+                                </div>
+                                {% endif %}
+
+                                <div class="summary-row grand-total-row">
+                                    <span>Total Amount</span>
+                                    <span class="amount">₹{{ order.total_amount|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CUSTOMER DETAILS CARD -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Customer Details</h3>
+                        </div>
+
+                        <div class="customer-content">
+                            <div class="customer-profile-header">
+                                <div class="customer-avatar-initials">
+                                    {{ order.shipping_full_name|slice:":2"|upper|default:order.user.username|slice:":2"|upper }}
+                                </div>
+                                <div>
+                                    <div class="customer-main-name">
+                                        {{ order.shipping_full_name|default:order.user.get_full_name|default:order.user.username }}
+                                    </div>
+                                    <div class="customer-handle">
+                                        Username: @{{ order.user.username }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <span class="info-label">Email Address</span>
+                                <span class="info-value">{{ order.user.email|default:"Not specified" }}</span>
+                            </div>
+
+                            <div class="info-pair">
+                                <span class="info-label">Phone Number</span>
+                                <span class="info-value">{{ order.shipping_phone|default:"Not specified" }}</span>
+                            </div>
+
+                            <div class="info-pair">
+                                <span class="info-label">Shipping Address ({{ order.shipping_address_type|upper }})</span>
+                                <span class="info-value">
+                                    {{ order.shipping_street_address }}<br>
+                                    {{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}<br>
+                                    {{ order.shipping_country }}
+                                </span>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- RIGHT COLUMN: ORDER STATUS (MATCHING SCREENSHOT) + PAYMENT + HISTORY -->
+                <div class="column-right">
+
+                    <!-- ==============================================
+                         ORDER STATUS CARD (EXACT AS SCREENSHOT)
+                    =============================================== -->
+                    <section class="card status-card">
+                        <div class="status-card-header">
+                            <h3 class="status-card-title">ORDER STATUS</h3>
+                        </div>
+
+                        <!-- VERTICAL STEPPER -->
+                        <div class="vertical-stepper" id="orderStepper">
+                            <!-- Step 1: Pending -->
+                            <div class="stepper-step" data-step="PENDING" id="step-PENDING">
+                                <div class="step-marker">
+                                    <span class="step-dot"></span>
+                                    <span class="step-line"></span>
+                                </div>
+                                <span class="step-label">Pending</span>
+                            </div>
+
+                            <!-- Step 2: Shipped -->
+                            <div class="stepper-step" data-step="SHIPPED" id="step-SHIPPED">
+                                <div class="step-marker">
+                                    <span class="step-dot"></span>
+                                    <span class="step-line"></span>
+                                </div>
+                                <span class="step-label">Shipped</span>
+                            </div>
+
+                            <!-- Step 3: Out for Delivery -->
+                            <div class="stepper-step" data-step="OUT_FOR_DELIVERY" id="step-OUT_FOR_DELIVERY">
+                                <div class="step-marker">
+                                    <span class="step-dot"></span>
+                                    <span class="step-line"></span>
+                                </div>
+                                <span class="step-label">Out for Delivery</span>
+                            </div>
+
+                            <!-- Step 4: Delivered -->
+                            <div class="stepper-step" data-step="DELIVERED" id="step-DELIVERED">
+                                <div class="step-marker">
+                                    <span class="step-dot"></span>
+                                </div>
+                                <span class="step-label">Delivered</span>
+                            </div>
+                        </div>
+
+                        <!-- RETURN APPROVAL ACTIONS (EXACT STRUCTURE AS USER SCREENSHOT IN YELLOW & WHITE) -->
+                        {% if has_return_requests or order.order_status == 'RETURN_REQUESTED' %}
+                        <div class="return-card-actions" id="returnCardActions">
+                            <button type="button" class="btn-approve-return-card" id="btnCardApproveReturn" onclick="adminApproveCardReturn('{{ order.order_number }}')">
+                                <span class="btn-circle-icon check">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                Approve Return
+                            </button>
+                            <button type="button" class="btn-reject-return-card" id="btnCardRejectReturn" onclick="adminRejectCardReturn('{{ order.order_number }}')">
+                                <span class="btn-circle-icon cross">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                Reject Return
+                            </button>
+                        </div>
+                        {% elif order.order_status == 'RETURNED' %}
+                        <div style="padding: 0 24px 24px;">
+                            <div class="return-completed-banner">
+                                <span class="btn-circle-icon check" style="background:#E4BD35; color:#000;">✓</span>
+                                <div>
+                                    <div style="font-weight:800; font-size:13px; color:#E4BD35;">Return Approved</div>
+                                    <div style="font-size:11px; color:#aaa; margin-top:2px;">Refund has been credited to customer's wallet.</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- ACTIONS ROW: SELECT + WHITE SAVE BUTTON -->
+                        <div class="status-actions-row">
+                            <select class="status-select-control" id="statusSelect" aria-label="Change order status"
+                                {% if order.order_status == 'DELIVERED' or order.order_status == 'CANCELLED' or order.order_status == 'RETURNED' %}disabled{% endif %}>
+                                {% if order.order_status == 'PENDING' or order.order_status == 'CONFIRMED' %}
+                                    <option value="PENDING" selected>Pending</option>
+                                    <option value="SHIPPED">Shipped</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                {% elif order.order_status == 'SHIPPED' or order.order_status == 'PROCESSING' %}
+                                    <option value="SHIPPED" selected>Shipped</option>
+                                    <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                {% elif order.order_status == 'OUT_FOR_DELIVERY' %}
+                                    <option value="OUT_FOR_DELIVERY" selected>Out for Delivery</option>
+                                    <option value="DELIVERED">Delivered</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                {% elif order.order_status == 'DELIVERED' %}
+                                    <option value="DELIVERED" selected>Delivered</option>
+                                {% elif order.order_status == 'CANCELLED' %}
+                                    <option value="CANCELLED" selected>Cancelled</option>
+                                {% elif order.order_status == 'RETURN_REQUESTED' %}
+                                    <option value="RETURN_REQUESTED" selected>Return Requested</option>
+                                    <option value="RETURNED">Returned</option>
+                                {% elif order.order_status == 'RETURNED' %}
+                                    <option value="RETURNED" selected>Returned</option>
+                                {% else %}
+                                    <option value="{{ order.order_status }}" selected>{{ order.get_order_status_display }}</option>
+                                {% endif %}
+                            </select>
+
+                            <button type="button" class="btn-save-status" id="btnSaveStatus" onclick="saveOrderStatus()"
+                                {% if order.order_status == 'DELIVERED' or order.order_status == 'CANCELLED' or order.order_status == 'RETURNED' %}disabled style="opacity:0.5; cursor:not-allowed;"{% endif %}>
+                                {% if order.order_status == 'DELIVERED' %}
+                                    Delivered
+                                {% elif order.order_status == 'CANCELLED' %}
+                                    Cancelled
+                                {% elif order.order_status == 'RETURNED' %}
+                                    Returned
+                                {% else %}
+                                    Save
+                                {% endif %}
+                            </button>
+                        </div>
+                        {% endif %}
+
+                        <!-- FEEDBACK MESSAGE -->
+                        <div class="status-feedback" id="statusFeedback"></div>
+                    </section>
+
+                    <!-- PAYMENT DETAILS CARD -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Payment Details</h3>
+                            <span class="payment-status-pill" id="paymentStatusPill">
+                                ● {{ order.payment_status }}
+                            </span>
+                        </div>
+
+                        <div class="payment-content">
+                            <div class="payment-row-item">
+                                <span class="info-label">Payment Method</span>
+                                <span class="info-value" style="font-weight:700;">{{ order.payment_method }}</span>
+                            </div>
+
+                            <div class="payment-row-item">
+                                <span class="info-label">Order Reference</span>
+                                <span class="info-value" style="font-family:monospace;">#{{ order.order_number }}</span>
+                            </div>
+
+                            <div class="payment-row-item">
+                                <span class="info-label">Total Amount</span>
+                                <span class="info-value" style="font-weight:800; font-size:16px;">₹{{ order.total_amount|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ORDER HISTORY CARD -->
+                    <section class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Order History</h3>
+                        </div>
+
+                        <ul class="history-list-timeline" id="historyTimeline">
+                            {% if order.order_status == 'DELIVERED' %}
+                            <li class="history-entry">
+                                <span class="history-bullet"></span>
+                                <div class="history-title-text">Order Delivered</div>
+                                <div class="history-time-text">{{ order.updated_at|date:"M d, Y • h:i A" }}</div>
+                                <div class="history-desc-text">Package delivered safely to customer.</div>
+                            </li>
+                            {% endif %}
+
+                            {% if order.order_status == 'OUT_FOR_DELIVERY' or order.order_status == 'DELIVERED' %}
+                            <li class="history-entry">
+                                <span class="history-bullet"></span>
+                                <div class="history-title-text">Out for Delivery</div>
+                                <div class="history-time-text">{{ order.updated_at|date:"M d, Y" }}</div>
+                                <div class="history-desc-text">Package dispatched with courier delivery partner.</div>
+                            </li>
+                            {% endif %}
+
+                            {% if order.order_status == 'SHIPPED' or order.order_status == 'OUT_FOR_DELIVERY' or order.order_status == 'DELIVERED' %}
+                            <li class="history-entry">
+                                <span class="history-bullet"></span>
+                                <div class="history-title-text">Dispatched &amp; Shipped</div>
+                                <div class="history-time-text">{{ order.updated_at|date:"M d, Y" }}</div>
+                                <div class="history-desc-text">Item authenticated and shipped via priority courier.</div>
+                            </li>
+                            {% endif %}
+
+                            {% if order.order_status == 'CANCELLED' %}
+                            <li class="history-entry">
+                                <span class="history-bullet"></span>
+                                <div class="history-title-text">Order Cancelled</div>
+                                <div class="history-time-text">{{ order.updated_at|date:"M d, Y • h:i A" }}</div>
+                                <div class="history-desc-text">{{ order.notes|default:"Cancelled by Administrator." }}</div>
+                            </li>
+                            {% endif %}
+
+                            <li class="history-entry">
+                                <span class="history-bullet"></span>
+                                <div class="history-title-text">Order Placed &amp; Confirmed</div>
+                                <div class="history-time-text">{{ order.created_at|date:"M d, Y • h:i A" }}</div>
+                                <div class="history-desc-text">Order confirmed through {{ order.payment_method }} checkout.</div>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // STEPPER PROGRESSION LOGIC
+        function updateStepperUI(status) {
+            const normalized = (status || '').toUpperCase();
+            const stepPending = document.getElementById('step-PENDING');
+            const stepShipped = document.getElementById('step-SHIPPED');
+            const stepOut = document.getElementById('step-OUT_FOR_DELIVERY');
+            const stepDelivered = document.getElementById('step-DELIVERED');
+
+            const allSteps = [stepPending, stepShipped, stepOut, stepDelivered];
+
+            // Reset classes
+            allSteps.forEach(el => {
+                if (el) el.classList.remove('active', 'completed');
+            });
+
+            if (normalized === 'CANCELLED') {
+                return;
+            }
+
+            // Determine active index in progression: 0: Pending, 1: Shipped, 2: Out for Delivery, 3: Delivered
+            let activeIdx = 0;
+            if (normalized === 'CONFIRMED' || normalized === 'PENDING') {
+                activeIdx = 0;
+            } else if (normalized === 'PROCESSING' || normalized === 'SHIPPED') {
+                activeIdx = 1;
+            } else if (normalized === 'OUT_FOR_DELIVERY') {
+                activeIdx = 2;
+            } else if (normalized === 'DELIVERED' || normalized === 'RETURN_REQUESTED' || normalized === 'RETURNED') {
+                activeIdx = 3;
+            }
+
+            // Apply completed and active
+            allSteps.forEach((el, index) => {
+                if (!el) return;
+                if (index < activeIdx || normalized === 'RETURNED') {
+                    el.classList.add('completed');
+                } else if (index === activeIdx) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // DYNAMIC STATUS SELECT (ONLY NEXT SEQUENTIAL STATUS ALLOWED)
+        function updateStatusSelectUI(status) {
+            const selectEl = document.getElementById('statusSelect');
+            const btnSave = document.getElementById('btnSaveStatus');
+            if (!selectEl || !btnSave) return;
+
+            const norm = (status || '').toUpperCase();
+            selectEl.innerHTML = '';
+
+            if (norm === 'PENDING' || norm === 'CONFIRMED') {
+                selectEl.disabled = false;
+                selectEl.innerHTML = `
+                    <option value="PENDING" selected>Pending</option>
+                    <option value="SHIPPED">Shipped</option>
+                    <option value="CANCELLED">Cancelled</option>
+                `;
+                btnSave.disabled = false;
+                btnSave.style.opacity = '1';
+                btnSave.style.cursor = 'pointer';
+                btnSave.innerHTML = 'Save';
+            } else if (norm === 'SHIPPED' || norm === 'PROCESSING') {
+                selectEl.disabled = false;
+                selectEl.innerHTML = `
+                    <option value="SHIPPED" selected>Shipped</option>
+                    <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
+                    <option value="CANCELLED">Cancelled</option>
+                `;
+                btnSave.disabled = false;
+                btnSave.style.opacity = '1';
+                btnSave.style.cursor = 'pointer';
+                btnSave.innerHTML = 'Save';
+            } else if (norm === 'OUT_FOR_DELIVERY') {
+                selectEl.disabled = false;
+                selectEl.innerHTML = `
+                    <option value="OUT_FOR_DELIVERY" selected>Out for Delivery</option>
+                    <option value="DELIVERED">Delivered</option>
+                    <option value="CANCELLED">Cancelled</option>
+                `;
+                btnSave.disabled = false;
+                btnSave.style.opacity = '1';
+                btnSave.style.cursor = 'pointer';
+                btnSave.innerHTML = 'Save';
+            } else if (norm === 'DELIVERED') {
+                selectEl.innerHTML = `<option value="DELIVERED" selected>Delivered</option>`;
+                selectEl.disabled = true;
+                btnSave.disabled = true;
+                btnSave.style.opacity = '0.5';
+                btnSave.style.cursor = 'not-allowed';
+                btnSave.innerHTML = 'Delivered';
+            } else if (norm === 'CANCELLED') {
+                selectEl.innerHTML = `<option value="CANCELLED" selected>Cancelled</option>`;
+                selectEl.disabled = true;
+                btnSave.disabled = true;
+                btnSave.style.opacity = '0.5';
+                btnSave.style.cursor = 'not-allowed';
+                btnSave.innerHTML = 'Cancelled';
+            } else if (norm === 'RETURNED') {
+                selectEl.innerHTML = `<option value="RETURNED" selected>Returned</option>`;
+                selectEl.disabled = true;
+                btnSave.disabled = true;
+                btnSave.style.opacity = '0.5';
+                btnSave.style.cursor = 'not-allowed';
+                btnSave.innerHTML = 'Returned';
+            } else if (norm === 'RETURN_REQUESTED') {
+                selectEl.disabled = false;
+                selectEl.innerHTML = `
+                    <option value="RETURN_REQUESTED" selected>Return Requested</option>
+                    <option value="RETURNED">Returned</option>
+                `;
+                btnSave.disabled = false;
+                btnSave.style.opacity = '1';
+                btnSave.style.cursor = 'pointer';
+                btnSave.innerHTML = 'Save';
+            } else {
+                selectEl.innerHTML = `<option value="${norm}" selected>${norm}</option>`;
+            }
+        }
+
+        // SAVE ORDER STATUS VIA AJAX
+        async function saveOrderStatus() {
+            const selectEl = document.getElementById('statusSelect');
+            const btnSave = document.getElementById('btnSaveStatus');
+            const feedbackEl = document.getElementById('statusFeedback');
+            const headerBadge = document.getElementById('headerStatusBadge');
+            const newStatus = selectEl.value;
+
+            // Show loading state
+            btnSave.disabled = true;
+            btnSave.innerHTML = 'Saving...';
+
+            feedbackEl.className = 'status-feedback show';
+            feedbackEl.style.background = '#ffffff';
+            feedbackEl.style.color = '#000000';
+            feedbackEl.textContent = 'Updating status...';
+
+            try {
+                const formData = new FormData();
+                formData.append('order_number', '{{ order.order_number }}');
+                formData.append('status', newStatus);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch("{% url 'update_order_status' order.order_number %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update Stepper
+                    updateStepperUI(data.new_status);
+
+                    // Update Topbar badge
+                    headerBadge.textContent = '● ' + (data.new_status_display || data.new_status).toUpperCase();
+
+                    // Update Status Dropdown options to only the next sequential step
+                    updateStatusSelectUI(data.new_status);
+
+                    // Update Payment Pill if changed
+                    if (data.payment_status) {
+                        const payPill = document.getElementById('paymentStatusPill');
+                        if (payPill) {
+                            payPill.textContent = '● ' + data.payment_status;
+                        }
+                    }
+
+                    // Show success feedback
+                    feedbackEl.className = 'status-feedback show success';
+                    feedbackEl.textContent = '✓ ' + (data.message || 'Status successfully updated.');
+
+                    // Add entry to history timeline
+                    const historyTimeline = document.getElementById('historyTimeline');
+                    if (historyTimeline) {
+                        const li = document.createElement('li');
+                        li.className = 'history-entry';
+                        li.innerHTML = `
+                            <span class="history-bullet"></span>
+                            <div class="history-title-text">${data.new_status_display || data.new_status}</div>
+                            <div class="history-time-text">Just now</div>
+                            <div class="history-desc-text">Status updated by Administrator.</div>
+                        `;
+                        historyTimeline.insertBefore(li, historyTimeline.firstChild);
+                    }
+
+                    const isTerminal = ['DELIVERED', 'CANCELLED', 'RETURNED'].includes(data.new_status);
+                    if (isTerminal) {
+                        btnSave.disabled = true;
+                        btnSave.style.opacity = '0.5';
+                        btnSave.style.cursor = 'not-allowed';
+                        btnSave.innerHTML = (data.new_status_display || data.new_status);
+                    } else {
+                        btnSave.innerHTML = 'Saved ✓';
+                        setTimeout(() => {
+                            btnSave.disabled = false;
+                            btnSave.innerHTML = 'Save';
+                        }, 1400);
+                    }
+
+                    // Hide feedback after 4 seconds
+                    setTimeout(() => {
+                        feedbackEl.className = 'status-feedback';
+                    }, 4000);
+                } else {
+                    feedbackEl.className = 'status-feedback show error';
+                    feedbackEl.textContent = '✕ ' + (data.message || 'Failed to update order status.');
+                    btnSave.disabled = false;
+                    btnSave.innerHTML = 'Save';
+                }
+            } catch (err) {
+                console.error('Error updating status:', err);
+                feedbackEl.className = 'status-feedback show error';
+                feedbackEl.textContent = '✕ Server connection error. Please try again.';
+                btnSave.disabled = false;
+                btnSave.innerHTML = 'Save';
+            }
+        }
+
+        // APPROVE RETURN (FROM ORDER STATUS CARD)
+        async function adminApproveCardReturn(orderNumber) {
+            if (!confirm(`Are you sure you want to approve the return for Order #${orderNumber}?\n\nThe refund amount will be credited directly to the customer's Wegnex Wallet and product stock will be restored.`)) {
+                return;
+            }
+
+            const btnApprove = document.getElementById('btnCardApproveReturn');
+            const btnReject = document.getElementById('btnCardRejectReturn');
+            if (btnApprove) {
+                btnApprove.disabled = true;
+                btnApprove.innerHTML = '<span class="btn-circle-icon check">⏳</span> Approving & Refunding...';
+            }
+            if (btnReject) btnReject.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch(`/admin_panel/order_return_refund_all/${orderNumber}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message || 'Return approved and refund credited to customer wallet!');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to approve return.'));
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error('Error approving return:', err);
+                alert('Server error while approving return. Please try again.');
+                window.location.reload();
+            }
+        }
+
+        // REJECT RETURN (FROM ORDER STATUS CARD)
+        async function adminRejectCardReturn(orderNumber) {
+            const reason = prompt(`Please specify a reason for rejecting the return for Order #${orderNumber}:`, "Return request rejected by Administrator");
+            if (reason === null) return;
+
+            const btnApprove = document.getElementById('btnCardApproveReturn');
+            const btnReject = document.getElementById('btnCardRejectReturn');
+            if (btnReject) {
+                btnReject.disabled = true;
+                btnReject.innerHTML = '<span class="btn-circle-icon cross">⏳</span> Rejecting...';
+            }
+            if (btnApprove) btnApprove.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('reason', reason);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch(`/admin_panel/order_return_reject_all/${orderNumber}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message || 'Return request rejected.');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to reject return.'));
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error('Error rejecting return:', err);
+                alert('Server error while rejecting return. Please try again.');
+                window.location.reload();
+            }
+        }
+
+        // APPROVE RETURN AND REFUND TO WALLET (INDIVIDUAL ITEM)
+        async function adminApproveReturn(itemId, productName, amountStr) {
+            if (!confirm(`Are you sure you want to approve the return of "${productName}"?\n\n₹${amountStr} will be immediately credited directly to the customer's Wegnex Wallet.`)) {
+                return;
+            }
+
+            const cell = document.getElementById(`action-cell-${itemId}`);
+            if (cell) {
+                cell.innerHTML = '<span style="color:#e4bd35; font-size:11px;"><i class="bi bi-hourglass-split"></i> Processing refund...</span>';
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch(`/admin_panel/order_return_refund/${itemId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message || 'Return approved and refund credited to wallet!');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to approve return.'));
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error('Error approving return:', err);
+                alert('Server error while approving return. Please try again.');
+                window.location.reload();
+            }
+        }
+
+        // REJECT RETURN (INDIVIDUAL ITEM)
+        async function adminRejectReturn(itemId, productName) {
+            const reason = prompt(`Please specify a reason for rejecting the return of "${productName}":`, "Return request rejected by Administrator");
+            if (reason === null) return;
+
+            const cell = document.getElementById(`action-cell-${itemId}`);
+            if (cell) {
+                cell.innerHTML = '<span style="color:#ff6b6b; font-size:11px;">Rejecting...</span>';
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('reason', reason);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch(`/admin_panel/order_return_reject/${itemId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message || 'Return request rejected.');
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to reject return.'));
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error('Error rejecting return:', err);
+                alert('Server error while rejecting return. Please try again.');
+                window.location.reload();
+            }
+        }
+
+        // FILTER ITEMS IN ORDER TABLE
+        const itemSearch = document.getElementById('itemSearchInput');
+        if (itemSearch) {
+            itemSearch.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                const rows = document.querySelectorAll('#orderItemsTableBody tr');
+                rows.forEach(row => {
+                    const name = row.dataset.name || '';
+                    const sku = row.dataset.sku || '';
+                    if (name.includes(query) || sku.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Initialize stepper on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentStatus = '{{ order.order_status|default:"PENDING" }}';
+            updateStepperUI(currentStatus);
+        });
+    </script>
+</body>
+</html>

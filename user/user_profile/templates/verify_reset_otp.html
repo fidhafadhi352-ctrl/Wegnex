@@ -1,0 +1,1026 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enter the reset code sent to your email to verify your identity.">
+
+    <title>WEGNEX | Verify Reset Code</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F0CC5A;
+            --gold-glow: rgba(212, 175, 55, 0.18);
+
+            --bg-deep: #070707;
+            --bg-card: #111111;
+            --bg-input: #181818;
+
+            --border: #242424;
+
+            --text-main: #FFFFFF;
+            --text-muted: #888888;
+
+            --error-bg: #1f0d0d;
+            --error-brd: #5c2020;
+            --error-clr: #ff8585;
+
+            --success-bg: #0d1f12;
+            --success-brd: #205c2a;
+            --success-clr: #7ee88a;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           MAIN PAGE
+        ========================= */
+
+        .page {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* =========================
+           LEFT HERO SECTION
+        ========================= */
+
+        .hero {
+            width: 50%;
+            min-width: 0;
+            min-height: 100vh;
+
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            padding: 40px 48px;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to left,
+                    rgba(7, 7, 7, 0.98) 0%,
+                    rgba(7, 7, 7, 0.52) 48%,
+                    rgba(7, 7, 7, 0.12) 100%
+                ),
+                linear-gradient(
+                    to top,
+                    rgba(7, 7, 7, 0.85) 0%,
+                    rgba(7, 7, 7, 0) 65%
+                );
+        }
+
+        .hero-brand {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-wordmark {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .brand-watch-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 9px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+
+            background: rgba(212, 175, 55, 0.07);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-watch-icon img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            filter: brightness(0) saturate(100%)
+                invert(78%) sepia(40%) saturate(700%)
+                hue-rotate(5deg) brightness(95%);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 2;
+
+            max-width: 350px;
+        }
+
+        .hero-headline {
+            font-size: clamp(28px, 3vw, 38px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+
+            margin-bottom: 12px;
+        }
+
+        .hero-headline .gold {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            font-size: 11.5px;
+            line-height: 1.9;
+            color: #9c9c9c;
+
+            margin-bottom: 16px;
+        }
+
+        .gold-rule {
+            width: 36px;
+            height: 2px;
+
+            background: linear-gradient(
+                to right,
+                var(--gold),
+                transparent
+            );
+
+            border-radius: 2px;
+        }
+
+        /* =========================
+           RIGHT FORM PANEL
+        ========================= */
+
+        .form-panel {
+            width: 50%;
+            min-width: 0;
+
+            min-height: 100vh;
+
+            background: var(--bg-deep);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+
+            overflow: visible;
+        }
+
+        /* =========================
+           OTP CARD
+        ========================= */
+
+        .otp-card {
+            width: 100%;
+            max-width: 420px;
+            min-width: 0;
+
+            background: var(--bg-card);
+
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            border-radius: 18px;
+
+            padding: 28px 26px 22px;
+
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+                0 20px 50px rgba(0, 0, 0, 0.6);
+
+            position: relative;
+        }
+
+        .card-accent {
+            position: absolute;
+            top: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 50px;
+            height: 2px;
+
+            background: linear-gradient(
+                to right,
+                transparent,
+                var(--gold),
+                transparent
+            );
+
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* =========================
+           CARD HEADER
+        ========================= */
+
+        .card-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-bottom: 12px;
+        }
+
+        .card-logo-icon {
+            width: 26px;
+            height: 26px;
+
+            border-radius: 6px;
+
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 12px;
+            color: var(--gold);
+        }
+
+        .card-logo-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.7;
+
+            margin-bottom: 5px;
+        }
+
+        .email-hint {
+            font-size: 11px;
+            color: var(--gold);
+            font-weight: 600;
+
+            margin-bottom: 18px;
+
+            overflow-wrap: anywhere;
+        }
+
+        /* =========================
+           DJANGO MESSAGES
+        ========================= */
+
+        .message-list {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .message-list li {
+            padding: 9px 11px;
+
+            border-radius: 7px;
+
+            background: var(--error-bg);
+            border: 1px solid var(--error-brd);
+
+            color: var(--error-clr);
+            font-size: 11px;
+            line-height: 1.5;
+
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .message-list li.success {
+            background: var(--success-bg);
+            border-color: var(--success-brd);
+            color: var(--success-clr);
+        }
+
+        /* =========================
+           OTP INPUTS
+        ========================= */
+
+        .otp-label {
+            display: block;
+
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+
+            color: #b0b0b0;
+
+            margin-bottom: 10px;
+        }
+
+        /*
+           Fixed six-column grid.
+           OTP boxes stay aligned and do not resize
+           when the input receives focus.
+        */
+
+        .otp-boxes {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+
+            gap: 8px;
+            width: 100%;
+
+            margin-bottom: 18px;
+        }
+
+        .otp-box {
+            display: block;
+
+            width: 100%;
+            min-width: 0;
+            height: 48px;
+
+            padding: 0;
+
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+
+            text-align: center;
+
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+
+            color: var(--text-main);
+
+            outline: none;
+            box-shadow: none;
+
+            caret-color: var(--gold);
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .otp-box:focus {
+            border-color: var(--gold);
+
+            box-shadow:
+                0 0 0 2px var(--gold-glow);
+        }
+
+        /* =========================
+           VERIFY BUTTON
+        ========================= */
+
+        .btn-submit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            width: 100%;
+            min-height: 42px;
+
+            padding: 10px 14px;
+
+            background: var(--gold);
+
+            border: none;
+            border-radius: 8px;
+
+            color: #0a0a0a;
+
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+
+            cursor: pointer;
+
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--gold-light);
+        }
+
+        .btn-submit:focus-visible {
+            outline: 2px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        /* =========================
+           FOOTER LINKS
+        ========================= */
+
+        .card-footer-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 9px;
+
+            text-align: center;
+
+            margin-top: 17px;
+
+            font-size: 11px;
+            color: #777;
+        }
+
+        .card-footer-links a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+
+            transition: color 0.2s ease;
+        }
+
+        .card-footer-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .card-legal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            margin-top: 18px;
+
+            font-size: 8px;
+            color: #555;
+            letter-spacing: 0.3px;
+        }
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 960px) {
+            .page {
+                min-height: 100vh;
+            }
+
+            .hero {
+                padding: 30px;
+            }
+
+            .form-panel {
+                padding: 24px;
+            }
+
+            .otp-card {
+                padding: 25px 20px 22px;
+            }
+
+            .otp-boxes {
+                gap: 6px;
+            }
+
+            .otp-box {
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+            body {
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .page {
+                display: flex;
+                flex-direction: column;
+
+                width: 100%;
+                min-height: 100vh;
+            }
+
+            .hero {
+                display: none;
+            }
+
+            .form-panel {
+                width: 100%;
+                min-height: 100vh;
+
+                padding: 24px 16px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .otp-card {
+                width: 100%;
+                max-width: 420px;
+
+                padding: 28px 20px 22px;
+            }
+
+            .otp-boxes {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+                gap: 7px;
+            }
+
+            .otp-box {
+                width: 100%;
+                height: 46px;
+                font-size: 18px;
+            }
+
+            .card-title {
+                font-size: 20px;
+            }
+
+            .card-legal {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .otp-card {
+                padding: 24px 14px 20px;
+            }
+
+            .otp-boxes {
+                gap: 5px;
+            }
+
+            .otp-box {
+                height: 42px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+        <!-- LEFT HERO SECTION -->
+
+        <section class="hero">
+
+            <img
+                class="hero-img"
+                src="{% static 'images/watch.jpg' %}"
+                alt="Luxury Wegnex Watch"
+            >
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-brand">
+
+                <span class="brand-wordmark">WEGNEX</span>
+
+                <div class="brand-watch-icon">
+                    <img
+                        src="{% static 'images/watch-logo.png' %}"
+                        alt="Wegnex Logo"
+                    >
+                </div>
+
+            </div>
+
+            <div class="hero-copy">
+
+                <h1 class="hero-headline">
+                    Verify &amp;<br>
+                    Regain Your<br>
+                    <span class="gold">Access.</span>
+                </h1>
+
+                <p class="hero-desc">
+                    Enter the 6-digit code we sent to your email to confirm
+                    your identity and proceed to reset your password.
+                </p>
+
+                <div class="gold-rule"></div>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT FORM PANEL -->
+
+        <section class="form-panel">
+
+            <div class="otp-card">
+
+                <div class="card-accent"></div>
+
+                <!-- CARD HEADER -->
+
+                <div class="card-logo">
+
+                    <div class="card-logo-icon">
+                        <i class="bi bi-envelope-check"></i>
+                    </div>
+
+                    <span class="card-logo-text">WEGNEX</span>
+
+                </div>
+
+                <h1 class="card-title">Enter Reset Code</h1>
+
+                <p class="card-subtitle">
+                    A 6-digit code was sent to:
+                </p>
+
+                <p class="email-hint">{{ email }}</p>
+
+                <!-- DJANGO MESSAGES -->
+
+                {% if messages %}
+                    <ul class="message-list">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <!-- OTP FORM -->
+
+                <form
+                    method="POST"
+                    action="{% url 'verify_reset_otp' %}"
+                    id="otpForm"
+                >
+
+                    {% csrf_token %}
+
+                    <label class="otp-label" for="otp1">
+                        Verification Code
+                    </label>
+
+                    <div class="otp-boxes">
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp1"
+                            name="otp1"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="one-time-code"
+                            aria-label="OTP digit 1"
+                            required
+                        >
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp2"
+                            name="otp2"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="off"
+                            aria-label="OTP digit 2"
+                            required
+                        >
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp3"
+                            name="otp3"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="off"
+                            aria-label="OTP digit 3"
+                            required
+                        >
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp4"
+                            name="otp4"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="off"
+                            aria-label="OTP digit 4"
+                            required
+                        >
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp5"
+                            name="otp5"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="off"
+                            aria-label="OTP digit 5"
+                            required
+                        >
+
+                        <input
+                            class="otp-box"
+                            type="text"
+                            id="otp6"
+                            name="otp6"
+                            maxlength="1"
+                            inputmode="numeric"
+                            pattern="[0-9]"
+                            autocomplete="off"
+                            aria-label="OTP digit 6"
+                            required
+                        >
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                        id="verifyBtn"
+                    >
+                        <i class="bi bi-shield-check"></i>
+                        Verify &amp; Continue
+                    </button>
+
+                </form>
+
+                <!-- FOOTER LINKS -->
+
+                <div class="card-footer-links">
+
+                    <div>
+                        Didn't receive the code?
+                        <a href="{% url 'resend_reset_otp' %}">
+                            Resend Code
+                        </a>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'profile_forgotpass' %}">
+                            <i
+                                class="bi bi-arrow-left"
+                                style="margin-right: 4px;"
+                            ></i>
+                            Back to Forgot Password
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- LEGAL FOOTER -->
+
+                <div class="card-legal">
+
+                    <span>© 2026 WEGNEX</span>
+
+                    <span>Privacy Policy · Terms of Service</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        /* =========================
+           OTP INPUT HANDLING
+        ========================= */
+
+        const boxes = Array.from(
+            document.querySelectorAll('.otp-box')
+        );
+
+        const otpForm = document.getElementById('otpForm');
+
+        /*
+         * Keep only numeric digits.
+         * Automatically focus the next box.
+         */
+
+        boxes.forEach((box, index) => {
+
+            box.addEventListener('input', function () {
+
+                this.value = this.value.replace(/\D/g, '').slice(-1);
+
+                if (this.value && index < boxes.length - 1) {
+                    boxes[index + 1].focus();
+                }
+
+            });
+
+            /*
+             * Backspace moves to the previous box
+             * when the current box is empty.
+             */
+
+            box.addEventListener('keydown', function (event) {
+
+                if (
+                    event.key === 'Backspace' &&
+                    !this.value &&
+                    index > 0
+                ) {
+                    boxes[index - 1].focus();
+                }
+
+                /*
+                 * Arrow keys navigate between OTP boxes.
+                 */
+
+                if (
+                    event.key === 'ArrowLeft' &&
+                    index > 0
+                ) {
+                    event.preventDefault();
+                    boxes[index - 1].focus();
+                }
+
+                if (
+                    event.key === 'ArrowRight' &&
+                    index < boxes.length - 1
+                ) {
+                    event.preventDefault();
+                    boxes[index + 1].focus();
+                }
+
+            });
+
+            /*
+             * Support pasting the complete six-digit OTP.
+             */
+
+            box.addEventListener('paste', function (event) {
+
+                event.preventDefault();
+
+                const clipboard = event.clipboardData ||
+                    window.clipboardData;
+
+                const pastedValue = clipboard
+                    .getData('text')
+                    .replace(/\D/g, '')
+                    .slice(0, 6);
+
+                if (!pastedValue) {
+                    return;
+                }
+
+                pastedValue.split('').forEach((digit, digitIndex) => {
+
+                    if (boxes[digitIndex]) {
+                        boxes[digitIndex].value = digit;
+                    }
+
+                });
+
+                const nextEmptyIndex = boxes.findIndex(
+                    input => !input.value
+                );
+
+                if (nextEmptyIndex !== -1) {
+                    boxes[nextEmptyIndex].focus();
+                } else {
+                    boxes[boxes.length - 1].focus();
+                }
+
+            });
+
+        });
+
+        /*
+         * Prevent form submission until all six digits
+         * have been entered.
+         */
+
+        otpForm.addEventListener('submit', function (event) {
+
+            const complete = boxes.every(
+                box => /^\d$/.test(box.value)
+            );
+
+            if (!complete) {
+                event.preventDefault();
+
+                const firstEmpty = boxes.find(
+                    box => !/^\d$/.test(box.value)
+                );
+
+                if (firstEmpty) {
+                    firstEmpty.focus();
+                }
+
+                return;
+            }
+
+        });
+
+        /* =========================
+           AUTO-DISMISS DJANGO MESSAGES
+        ========================= */
+
+        setTimeout(function () {
+
+            const messageList = document.querySelector('.message-list');
+
+            if (messageList) {
+
+                messageList.style.transition = 'opacity 0.4s ease';
+                messageList.style.opacity = '0';
+
+                setTimeout(function () {
+                    messageList.remove();
+                }, 400);
+
+            }
+
+        }, 5000);
+    </script>
+
+</body>
+</html>

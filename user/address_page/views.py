@@ -98,6 +98,7 @@ def add_address(request):
         return redirect("login")
 
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    next_url = request.GET.get('next') or request.POST.get('next')
 
     if request.method == "POST":
         errors, cleaned = validate_address_data(request.POST)
@@ -110,6 +111,7 @@ def add_address(request):
                 "profile": profile,
                 "user": request.user,
                 "form_data": request.POST,
+                "next": next_url,
             })
 
         has_existing = Add_Address.objects.filter(user=request.user).exists()
@@ -133,6 +135,10 @@ def add_address(request):
         )
 
         messages.success(request, "Address saved successfully.")
+        if next_url == 'checkout' or next_url == '/checkout/' or next_url == '/checkout':
+            return redirect("checkout")
+        elif next_url:
+            return redirect(next_url)
         return redirect("address")
 
     return render(request, "add_address.html", {
@@ -142,6 +148,7 @@ def add_address(request):
             "country": "India",
             "address_type": "Home",
         },
+        "next": next_url,
     })
 
 
@@ -153,6 +160,7 @@ def edit_address(request, address_id):
 
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     addr = get_object_or_404(Add_Address, id=address_id, user=request.user)
+    next_url = request.GET.get('next') or request.POST.get('next')
 
     if request.method == "POST":
         errors, cleaned = validate_address_data(request.POST)
@@ -166,6 +174,7 @@ def edit_address(request, address_id):
                 "profile": profile,
                 "user": request.user,
                 "form_data": request.POST,
+                "next": next_url,
             })
 
         total_addresses = Add_Address.objects.filter(user=request.user).count()
@@ -194,6 +203,10 @@ def edit_address(request, address_id):
         addr.save()
 
         messages.success(request, "Address updated successfully.")
+        if next_url == 'checkout' or next_url == '/checkout/' or next_url == '/checkout':
+            return redirect("checkout")
+        elif next_url:
+            return redirect(next_url)
         return redirect("address")
 
     return render(request, "edit_address.html", {
@@ -211,6 +224,7 @@ def edit_address(request, address_id):
             "address_type": addr.address_type,
             "is_default": addr.is_default,
         },
+        "next": next_url,
     })
 
 
@@ -222,6 +236,7 @@ def delete_address(request, address_id):
 
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     addr = get_object_or_404(Add_Address, id=address_id, user=request.user)
+    next_url = request.GET.get('next') or request.POST.get('next')
 
     if request.method == "POST" or request.GET.get("confirm") == "1":
         was_default = addr.is_default
@@ -235,12 +250,17 @@ def delete_address(request, address_id):
                 next_addr.save()
 
         messages.success(request, f"Address for '{name}' was deleted successfully.")
+        if next_url == 'checkout' or next_url == '/checkout/' or next_url == '/checkout':
+            return redirect("checkout")
+        elif next_url:
+            return redirect(next_url)
         return redirect("address")
 
     return render(request, "delete_address.html", {
         "address": addr,
         "profile": profile,
         "user": request.user,
+        "next": next_url,
     })
 
 

@@ -17,7 +17,6 @@ def category(request):
 
     return render(request, 'category.html', context)
 
-
 def category_products(request, category_id):
 
     cat = get_object_or_404(Category, id=category_id, is_active=True, is_deleted=False)

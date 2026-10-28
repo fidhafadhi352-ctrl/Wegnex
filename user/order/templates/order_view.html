@@ -1,0 +1,3504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wegnex | Order Details</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050505;
+            --navbar: #080808;
+            --card: #141414;
+            --card-light: #191919;
+            --gold: #e4bd35;
+            --text: #e9e9e9;
+            --muted: #888888;
+            --border: #242424;
+            --green: #16c784;
+            --red: #e56b6b;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
+        }
+
+
+        /* =========================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ========================= */
+
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-container {
+            width: 100%;
+            padding: 0 1.6%;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 16px 0 17px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #999999;
+            font-size: 7px;
+            letter-spacing: .6px;
+            margin-bottom: 7px;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        .order-title {
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .order-title span {
+            color: #dedede;
+        }
+
+        .new-badge {
+            display: inline-block;
+            margin-left: 5px;
+            padding: 3px 5px;
+
+            background: var(--gold);
+            color: #111;
+
+            font-size: 6px;
+            font-weight: 700;
+            vertical-align: middle;
+        }
+
+        .all-orders-btn {
+            padding: 8px 13px;
+
+            border: 1px solid #252525;
+            background: transparent;
+            color: #dedede;
+
+            font-size: 6px;
+            letter-spacing: 1px;
+        }
+
+        .all-orders-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+
+        /* =========================
+           DELIVERY TRACKER
+        ========================= */
+
+        .tracking-card {
+            background: var(--card);
+            border: 1px solid #222222;
+            border-radius: 4px;
+
+            padding: 24px 35px 26px;
+            margin-bottom: 19px;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .tracking-heading {
+            font-size: 7px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #a7a7a7;
+        }
+
+        .tracking-brand {
+            font-size: 6px;
+            letter-spacing: 2px;
+            color: #777777;
+        }
+
+        .tracking-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            position: relative;
+        }
+
+        .tracking-steps::before {
+            content: "";
+            position: absolute;
+
+            top: 11px;
+            left: 12.5%;
+            right: 12.5%;
+
+            height: 1px;
+            background: #292929;
+        }
+
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-icon {
+            width: 23px;
+            height: 23px;
+
+            border: 1px solid #292929;
+            border-radius: 50%;
+
+            background: #080808;
+            color: #777777;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+
+        .tracking-step.completed .step-icon {
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 10px rgba(228, 189, 53, .12);
+        }
+
+        .tracking-step.current .step-icon {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #111111;
+        }
+
+        .step-label {
+            color: #777777;
+            font-size: 7px;
+            text-align: center;
+        }
+
+        .tracking-step.completed .step-label,
+        .tracking-step.current .step-label {
+            color: #eeeeee;
+        }
+
+
+        /* =========================
+           MAIN CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(240px, .96fr);
+            align-items: start;
+            gap: 15px;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+
+        /* =========================
+           ORDER ITEM CARD
+        ========================= */
+
+        .item-card {
+            min-height: 86px;
+            padding: 12px;
+
+            display: grid;
+            grid-template-columns: 62px minmax(0, 1fr);
+            gap: 12px;
+
+            background: var(--card);
+            border: 1px solid #202020;
+        }
+
+        .item-image {
+            display: block;
+            width: 62px;
+            height: 62px;
+
+            object-fit: cover;
+            background: #222222;
+            border-radius: 2px;
+        }
+
+        .item-content {
+            min-width: 0;
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .item-name {
+            font-size: 9px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #e6e6e6;
+        }
+
+        .item-price {
+            color: var(--gold);
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .item-date {
+            color: #858585;
+            font-size: 6px;
+            letter-spacing: .5px;
+            margin-top: 3px;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 7px;
+
+            margin-top: 12px;
+        }
+
+        .item-btn {
+            min-height: 20px;
+            padding: 0 9px;
+
+            border: 1px solid #292929;
+            background: transparent;
+            color: #a9a9a9;
+
+            font-size: 6px;
+            letter-spacing: .5px;
+
+            transition: .2s;
+        }
+
+        .item-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .item-btn.cancel:hover,
+        .item-btn.return:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .item-status {
+            display: inline-block;
+            padding: 4px 7px;
+
+            font-size: 6px;
+            font-weight: 700;
+            letter-spacing: .6px;
+        }
+
+        .status-shipped {
+            color: var(--gold);
+            background: #342d14;
+        }
+
+        .status-delivered {
+            color: var(--green);
+            background: #103222;
+        }
+
+        .status-processing {
+            color: #e9c65c;
+            background: #302819;
+        }
+
+        .status-returned,
+        .status-cancelled {
+            color: var(--red);
+            background: #351b1b;
+        }
+
+        .status-return_requested {
+            color: var(--gold);
+            background: #342d14;
+        }
+
+        .quantity-badge {
+            color: #111;
+            background: var(--gold);
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           RIGHT COLUMN
+        ========================= */
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .summary-card {
+            background: var(--card);
+            border: 1px solid #202020;
+            padding: 17px 16px;
+        }
+
+        .card-heading {
+            color: #9a9a9a;
+            font-size: 7px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+
+        /* =========================
+           ORDER SUMMARY
+        ========================= */
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 11px;
+
+            color: #a7a7a7;
+            font-size: 8px;
+        }
+
+        .summary-row span:last-child {
+            color: #d4d4d4;
+            white-space: nowrap;
+        }
+
+        .summary-row .discount {
+            color: var(--gold) !important;
+        }
+
+        .summary-row .free {
+            color: var(--green) !important;
+            font-weight: 600;
+        }
+
+        .summary-divider {
+            height: 1px;
+            background: #292929;
+            margin: 14px 0;
+        }
+
+        .grand-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 17px;
+        }
+
+        .grand-total span:first-child {
+            color: #d0d0d0;
+            font-size: 9px;
+        }
+
+        .grand-total span:last-child {
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .invoice-btn {
+            width: 100%;
+            height: 31px;
+
+            border: 1px solid var(--gold);
+            background: var(--gold);
+            color: #111111;
+
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            transition: .2s;
+        }
+
+        .invoice-btn:hover {
+            background: #f6d35a;
+        }
+
+
+        /* =========================
+           ADDRESS + PAYMENT CARDS
+        ========================= */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+        }
+
+        .info-card {
+            min-width: 0;
+
+            padding: 13px 12px;
+
+            background: var(--card);
+            border: 1px solid #202020;
+        }
+
+        .info-card .card-heading {
+            margin-bottom: 11px;
+            font-size: 6px;
+            letter-spacing: 1.3px;
+        }
+
+        .info-name {
+            font-size: 7px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #e1e1e1;
+        }
+
+        .info-description {
+            font-size: 6px;
+            line-height: 1.7;
+            color: #8d8d8d;
+            overflow-wrap: anywhere;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            font-size: 7px;
+            font-weight: 600;
+        }
+
+        .payment-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 6px rgba(228, 189, 53, .25);
+        }
+
+        .payment-reference {
+            margin-top: 7px;
+            color: #888888;
+            font-size: 5px;
+            letter-spacing: .5px;
+        }
+
+
+        /* =========================
+           MODALS
+        ========================= */
+
+        .modal-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            padding: 20px;
+
+            background: rgba(0, 0, 0, .82);
+            backdrop-filter: blur(4px);
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 440px;
+
+            padding: 24px;
+
+            background: #171717;
+            border: 1px solid #39301d;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Modal Item Preview */
+        .modal-item-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: #101010;
+            border: 1px solid #282828;
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+
+        .modal-item-img {
+            width: 46px;
+            height: 46px;
+            object-fit: cover;
+            background: #202020;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .modal-item-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .modal-item-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #eeeeee;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .modal-item-meta {
+            font-size: 9px;
+            color: #888888;
+            margin-top: 3px;
+        }
+
+        .modal-item-meta strong {
+            color: var(--gold);
+        }
+
+        /* Cancellation Scope Selector */
+        .cancel-scope-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .cancel-scope-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #121212;
+            border: 1px solid #282828;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-scope-card:hover {
+            border-color: #4a3e21;
+        }
+
+        .cancel-scope-card.active {
+            border-color: var(--gold);
+            background: #1c1810;
+        }
+
+        .cancel-scope-card input[type="radio"] {
+            margin-top: 2px;
+            accent-color: var(--gold);
+            cursor: pointer;
+        }
+
+        .scope-header-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scope-header-line strong {
+            font-size: 10px;
+            color: #e2e2e2;
+        }
+
+        .badge-individual {
+            font-size: 7px;
+            font-weight: 700;
+            padding: 2px 6px;
+            background: var(--gold);
+            color: #111;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .scope-desc {
+            font-size: 8px;
+            color: #888;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        /* Quantity Stepper ( - 1 + ) */
+        .cancel-qty-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #232018;
+        }
+
+        .cancel-qty-title {
+            font-size: 8px;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .qty-stepper-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            background: #090909;
+            border: 1px solid #2d281a;
+            border-radius: 3px;
+            padding: 4px 14px;
+            user-select: none;
+        }
+
+        .qty-stepper-box .qty-btn {
+            background: transparent;
+            border: none;
+            color: #dcdcdc;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s, transform 0.15s;
+            line-height: 1;
+            padding: 0;
+            font-family: monospace, sans-serif;
+        }
+
+        .qty-stepper-box .qty-btn:hover:not(:disabled) {
+            color: var(--gold);
+            transform: scale(1.2);
+        }
+
+        .qty-stepper-box .qty-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+
+        .qty-stepper-box .qty-number {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            min-width: 18px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .qty-hint-text {
+            font-size: 8px;
+            color: #777777;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            border: none;
+            background: transparent;
+            color: #ddd;
+            font-size: 24px;
+        }
+
+        .modal-description {
+            color: #a0a0a0;
+            font-size: 11px;
+            line-height: 1.7;
+            margin-bottom: 17px;
+        }
+
+        .modal-label {
+            display: block;
+            color: #a4a4a4;
+            font-size: 9px;
+            margin-bottom: 8px;
+        }
+
+        .modal-select,
+        .modal-textarea {
+            width: 100%;
+            background: #101010;
+            color: #eee;
+
+            border: 1px solid #333;
+            border-radius: 0;
+
+            padding: 10px;
+            outline: none;
+
+            font-family: inherit;
+            font-size: 11px;
+        }
+
+        .modal-select:focus,
+        .modal-textarea:focus {
+            border-color: var(--gold);
+        }
+
+        .modal-textarea {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .modal-field {
+            margin-bottom: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            min-height: 34px;
+            padding: 0 14px;
+
+            border: 1px solid #393939;
+            background: transparent;
+            color: #ddd;
+
+            font-size: 9px;
+            letter-spacing: .5px;
+        }
+
+        .modal-btn.primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #111;
+            font-weight: 700;
+        }
+
+        .modal-btn.danger {
+            background: #351b1b;
+            border-color: #693333;
+            color: #ffaaaa;
+        }
+
+        .modal-btn:hover {
+            opacity: .85;
+        }
+
+        .notice {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+
+            background: #16291c;
+            border: 1px solid #264c32;
+
+            color: #87e0a7;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .notice.show {
+            display: block;
+        }
+
+
+        /* =========================
+           DESKTOP SIZE
+        ========================= */
+
+        @media (min-width: 1024px) {
+
+            .page-container {
+                padding-left: 1.6%;
+                padding-right: 1.6%;
+            }
+
+            .tracking-card {
+                min-height: 124px;
+            }
+
+            .content-grid {
+                grid-template-columns: minmax(0, 2fr) minmax(260px, .96fr);
+                gap: 15px;
+            }
+
+            .item-card {
+                min-height: 86px;
+            }
+        }
+
+
+        /* =========================
+           LARGE DESKTOP
+        ========================= */
+
+        @media (min-width: 1440px) {
+
+            .navbar {
+                height: 60px;
+                padding: 0 4%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .nav-links a {
+                font-size: 10px;
+            }
+
+            .nav-icons a {
+                font-size: 16px;
+            }
+
+            .page-container {
+                padding: 0 3%;
+            }
+
+            .page-header {
+                padding: 23px 0;
+            }
+
+            .order-title {
+                font-size: 16px;
+            }
+
+            .back-link {
+                font-size: 9px;
+            }
+
+            .tracking-card {
+                padding: 28px 40px;
+                min-height: 150px;
+                margin-bottom: 22px;
+            }
+
+            .tracking-heading {
+                font-size: 9px;
+            }
+
+            .tracking-brand {
+                font-size: 8px;
+            }
+
+            .tracking-steps {
+                max-width: 100%;
+            }
+
+            .step-icon {
+                width: 29px;
+                height: 29px;
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .tracking-steps::before {
+                top: 14px;
+            }
+
+            .step-label {
+                font-size: 9px;
+            }
+
+            .content-grid {
+                gap: 22px;
+            }
+
+            .order-items {
+                gap: 15px;
+            }
+
+            .item-card {
+                min-height: 125px;
+                padding: 18px;
+                grid-template-columns: 95px minmax(0, 1fr);
+                gap: 18px;
+            }
+
+            .item-image {
+                width: 95px;
+                height: 95px;
+            }
+
+            .item-name {
+                font-size: 13px;
+            }
+
+            .item-price {
+                font-size: 12px;
+            }
+
+            .item-date {
+                font-size: 8px;
+            }
+
+            .item-btn {
+                min-height: 26px;
+                font-size: 8px;
+                padding: 0 12px;
+            }
+
+            .item-status {
+                font-size: 8px;
+            }
+
+            .summary-card {
+                padding: 23px;
+            }
+
+            .card-heading {
+                font-size: 9px;
+            }
+
+            .summary-row {
+                font-size: 11px;
+                margin-bottom: 14px;
+            }
+
+            .grand-total span:first-child {
+                font-size: 12px;
+            }
+
+            .grand-total span:last-child {
+                font-size: 17px;
+            }
+
+            .invoice-btn {
+                height: 39px;
+                font-size: 9px;
+            }
+
+            .info-card {
+                padding: 17px;
+            }
+
+            .info-card .card-heading {
+                font-size: 7px;
+            }
+
+            .info-name {
+                font-size: 9px;
+            }
+
+            .info-description {
+                font-size: 8px;
+            }
+
+            .payment-method {
+                font-size: 9px;
+            }
+        }
+
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .page-container {
+                padding: 0 14px;
+            }
+
+            .content-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .right-column {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
+
+            .summary-card {
+                grid-column: 1 / -1;
+            }
+
+            .info-grid {
+                grid-column: 1 / -1;
+            }
+
+            .tracking-card {
+                padding: 22px 18px;
+            }
+
+            .item-name {
+                font-size: 11px;
+            }
+
+            .item-price {
+                font-size: 10px;
+            }
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 520px) {
+
+            .navbar {
+                height: 52px;
+                padding: 0 14px;
+            }
+
+            .logo {
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-icons {
+                gap: 14px;
+            }
+
+            .page-container {
+                padding: 0 12px;
+            }
+
+            .page-header {
+                padding: 16px 0;
+            }
+
+            .order-title {
+                font-size: 12px;
+            }
+
+            .all-orders-btn {
+                padding: 8px;
+                font-size: 6px;
+            }
+
+            .tracking-card {
+                padding: 19px 10px;
+                margin-bottom: 14px;
+            }
+
+            .tracking-header {
+                margin-bottom: 23px;
+                padding: 0 5px;
+            }
+
+            .tracking-heading {
+                font-size: 6px;
+                letter-spacing: 1px;
+            }
+
+            .tracking-brand {
+                font-size: 6px;
+                letter-spacing: 1px;
+            }
+
+            .step-icon {
+                width: 23px;
+                height: 23px;
+                font-size: 9px;
+            }
+
+            .tracking-steps::before {
+                top: 11px;
+            }
+
+            .step-label {
+                font-size: 6px;
+            }
+
+            .content-grid {
+                gap: 14px;
+            }
+
+            .order-items {
+                gap: 10px;
+            }
+
+            .item-card {
+                grid-template-columns: 72px minmax(0, 1fr);
+                gap: 10px;
+                padding: 10px;
+                min-height: 100px;
+            }
+
+            .item-image {
+                width: 72px;
+                height: 76px;
+            }
+
+            .item-name {
+                font-size: 10px;
+            }
+
+            .item-top {
+                gap: 6px;
+            }
+
+            .item-price {
+                font-size: 9px;
+            }
+
+            .item-date {
+                font-size: 6px;
+            }
+
+            .item-actions {
+                gap: 5px;
+                margin-top: 10px;
+            }
+
+            .item-btn {
+                min-height: 22px;
+                padding: 0 7px;
+                font-size: 6px;
+            }
+
+            .item-status {
+                padding: 4px 6px;
+                font-size: 6px;
+            }
+
+            .right-column {
+                display: flex;
+            }
+
+            .summary-card {
+                padding: 17px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .info-card {
+                padding: 12px;
+            }
+
+            .modal {
+                padding: 20px;
+            }
+        }
+
+
+        /* =========================
+           SMALL MOBILE
+        ========================= */
+
+        @media (max-width: 360px) {
+
+            .page-container {
+                padding: 0 8px;
+            }
+
+            .tracking-card {
+                padding: 16px 6px;
+            }
+
+            .tracking-heading {
+                font-size: 5px;
+            }
+
+            .tracking-brand {
+                font-size: 5px;
+            }
+
+            .step-label {
+                font-size: 5px;
+            }
+
+            .item-card {
+                grid-template-columns: 60px minmax(0, 1fr);
+                padding: 8px;
+                gap: 8px;
+            }
+
+            .item-image {
+                width: 60px;
+                height: 65px;
+            }
+
+            .item-name {
+                font-size: 9px;
+            }
+
+            .item-price {
+                font-size: 8px;
+            }
+
+            .item-btn {
+                padding: 0 5px;
+                font-size: 5px;
+            }
+        }
+
+        /* =========================================================
+           RETURN ORDER MODAL (LUXURY WEGNEX DESIGN)
+        ========================================================= */
+        .return-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .return-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .return-modal-container {
+            background: #111113;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            max-width: 960px;
+            width: 100%;
+            max-height: 92vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(228, 189, 53, 0.06);
+            padding: 36px 40px;
+            color: #ffffff;
+            box-sizing: border-box;
+            animation: returnModalZoom 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes returnModalZoom {
+            from {
+                opacity: 0;
+                transform: scale(0.97) translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .return-modal-close-btn {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 26px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .return-modal-close-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .return-modal-header {
+            margin-bottom: 24px;
+        }
+
+        .return-modal-title {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .return-modal-subtitle {
+            font-size: 13px;
+            color: #9ca3af;
+            margin: 0;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .return-modal-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* Product Card inside return modal */
+        .return-product-card {
+            background: #17171a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 16px 18px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .return-product-img-box {
+            width: 95px;
+            height: 95px;
+            min-width: 95px;
+            border-radius: 8px;
+            background: #09090b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .return-product-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .return-product-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .return-order-badge {
+            color: #e4bd35;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .return-product-heading {
+            color: #ffffff;
+            font-size: 14.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .return-product-specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px;
+            font-size: 11px;
+        }
+
+        .return-spec-item {
+            display: flex;
+            gap: 4px;
+            align-items: baseline;
+        }
+
+        .return-spec-label {
+            color: #71717a;
+            white-space: nowrap;
+        }
+
+        .return-spec-val {
+            color: #d4d4d8;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Form fields */
+        .return-form-group {
+            margin-top: 18px;
+        }
+
+        .return-form-label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #e4e4e7;
+            margin-bottom: 8px;
+        }
+
+        .return-select-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .return-custom-select {
+            width: 100%;
+            background: #17171a;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px 36px 12px 14px;
+            font-size: 13px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.2s, background-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .return-custom-select:focus {
+            outline: none;
+            border-color: #e4bd35;
+            background: #1a1a1e;
+        }
+
+        .return-custom-select option {
+            background: #17171a;
+            color: #ffffff;
+        }
+
+        .return-chevron-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #71717a;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        .return-custom-textarea {
+            width: 100%;
+            background: #17171a;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px 14px;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 85px;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .return-custom-textarea:focus {
+            outline: none;
+            border-color: #e4bd35;
+            background: #1a1a1e;
+        }
+
+        .return-custom-textarea::placeholder {
+            color: #52525b;
+        }
+
+        /* Refund Method selectable cards */
+        .refund-method-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .refund-card-option {
+            background: #17171a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-sizing: border-box;
+        }
+
+        .refund-card-option:hover {
+            border-color: rgba(228, 189, 53, 0.35);
+            background: #1c1c20;
+        }
+
+        .refund-card-option.active {
+            border: 1.5px solid #e4bd35;
+            background: rgba(228, 189, 53, 0.06);
+            box-shadow: 0 0 16px rgba(228, 189, 53, 0.12);
+        }
+
+        .refund-option-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+        }
+
+        .refund-card-option.active .refund-option-icon {
+            color: #e4bd35;
+            background: rgba(228, 189, 53, 0.12);
+        }
+
+        .refund-option-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .refund-option-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .refund-option-subtext {
+            font-size: 10.5px;
+            color: #71717a;
+            margin-top: 3px;
+        }
+
+        .refund-card-option.active .refund-option-subtext {
+            color: #d4af37;
+        }
+
+        /* Right Summary card */
+        .return-summary-box {
+            background: #17171a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 22px 20px;
+            box-sizing: border-box;
+        }
+
+        .return-summary-heading {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0 0 18px 0;
+            letter-spacing: 0.3px;
+        }
+
+        .return-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12.5px;
+        }
+
+        .return-summary-row .label-text {
+            color: #9ca3af;
+        }
+
+        .return-summary-row .value-text {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .return-summary-row .value-text.green {
+            color: #22c55e;
+        }
+
+        .return-summary-row .value-text.muted {
+            color: #71717a;
+        }
+
+        .return-summary-hr {
+            border: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 16px 0;
+        }
+
+        .return-summary-row.total-row {
+            margin-bottom: 18px;
+        }
+
+        .return-summary-row.total-row .total-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .return-summary-row.total-row .total-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e4bd35;
+        }
+
+        .return-action-submit-btn {
+            width: 100%;
+            background: #e4bd35;
+            color: #0c0c0e;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .return-action-submit-btn:hover {
+            background: #f0c946;
+            box-shadow: 0 4px 18px rgba(228, 189, 53, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .return-action-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .return-disclaimer-text {
+            font-size: 10.5px;
+            color: #71717a;
+            line-height: 1.45;
+            margin: 14px 0 0 0;
+            text-align: center;
+        }
+
+        .return-disclaimer-text a {
+            color: #e4bd35;
+            text-decoration: underline;
+        }
+
+        .return-trust-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 18px;
+            padding-top: 10px;
+        }
+
+        .return-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #8b8b93;
+        }
+
+        .return-trust-item svg {
+            color: #9ca3af;
+        }
+
+        .return-alert-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .return-alert-box.show {
+            display: block;
+            animation: returnAlertFade 0.3s ease;
+        }
+
+        .return-alert-box.success {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            color: #4ade80;
+        }
+
+        .return-alert-box.error {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #f87171;
+        }
+
+        @keyframes returnAlertFade {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 820px) {
+            .return-modal-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .return-modal-container {
+                padding: 24px 20px;
+            }
+            .return-modal-title {
+                font-size: 22px;
+            }
+            .refund-method-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- =========================
+         PAGE CONTENT
+    ========================= -->
+
+    <main class="page-container">
+
+
+        <!-- PAGE HEADER -->
+
+        <section class="page-header">
+
+            <div>
+
+                <a href="{% url 'order' %}" class="back-link">
+                    ← BACK TO ORDERS
+                </a>
+
+                <h1 class="order-title">
+                    Order <span id="pageOrderId">{% if order %}#{{ order.order_number }}{% elif demo_order %}#{{ demo_order.order_number }}{% else %}#WGX-17701255{% endif %}</span>
+
+                    <span class="new-badge" id="newBadge">
+                        {% if order %}{{ order.order_status }}{% elif demo_order %}{{ demo_order.status|upper }}{% else %}NEW{% endif %}
+                    </span>
+                </h1>
+
+            </div>
+
+            <a href="{% url 'order' %}" class="all-orders-btn">
+                VIEW ALL ORDERS
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             DELIVERY TRACKER
+        ========================= -->
+
+        <section class="tracking-card">
+
+            <div class="tracking-header">
+
+                <h2 class="tracking-heading">
+                    DELIVERY STATUS TRACKER
+                </h2>
+
+                <span class="tracking-brand">
+                    WEGNEX
+                </span>
+
+            </div>
+
+
+            <div class="tracking-steps" id="trackingSteps">
+
+                <div class="tracking-step completed">
+
+                    <div class="step-icon">♧</div>
+
+                    <span class="step-label">
+                        Order Placed
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-step">
+
+                    <div class="step-icon">◇</div>
+
+                    <span class="step-label">
+                        Shipped
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-step">
+
+                    <div class="step-icon">♧</div>
+
+                    <span class="step-label">
+                        Out for Delivery
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-step">
+
+                    <div class="step-icon">✓</div>
+
+                    <span class="step-label">
+                        Delivered
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CONTENT GRID
+        ========================= -->
+
+        <section class="content-grid">
+
+
+            <!-- LEFT: ORDER ITEMS -->
+
+            <div class="order-items" id="orderItems">
+
+                {% if order and order_items %}
+                    {% for oi in order_items %}
+                        <article class="item-card"
+                            data-item-id="{{ oi.id }}"
+                            data-name="{{ oi.product_name }}"
+                            data-price="{{ oi.price|floatformat:0 }}"
+                            data-total="{{ oi.item_total|floatformat:0 }}"
+                            data-quantity="{{ oi.quantity }}"
+                            data-status="{{ oi.status }}"
+                            data-image="{{ oi.image_url }}"
+                            data-color="{{ oi.color }}"
+                            data-movement="{{ oi.movement }}"
+                            data-diameter="{{ oi.case_size }}"
+                            data-order-number="{{ order.order_number }}">
+
+                            <img
+                                class="item-image"
+                                src="{{ oi.image_url }}"
+                                alt="{{ oi.product_name }}"
+                            >
+
+                            <div class="item-content">
+
+                                <div class="item-top">
+
+                                    <h3 class="item-name">
+                                        {{ oi.product_name }}{% if oi.variant_info %} - {{ oi.variant_info }}{% endif %}
+                                    </h3>
+
+                                    <span class="item-price">
+                                        ₹{{ oi.item_total|floatformat:0 }}
+                                    </span>
+
+                                </div>
+
+                                <p class="item-date">
+                                    DATE: {{ order.created_at|date:"M d, Y"|upper }}
+                                </p>
+
+                                <div class="item-actions">
+
+                                    {% if oi.is_delivered %}
+                                        <button
+                                            type="button"
+                                            class="item-btn return"
+                                            onclick="openReturnModal(this)"
+                                        >
+                                            RETURN ORDER
+                                        </button>
+                                    {% elif oi.is_return_requested %}
+                                        <span class="item-status status-return_requested" style="border:1px solid rgba(228,189,53,0.4); border-radius:3px; padding:3px 8px; font-size:7px;">
+                                            ⏳ RETURN REQUESTED (PENDING ADMIN CONFIRMATION)
+                                        </span>
+                                    {% elif oi.is_returned %}
+                                        <span class="item-status status-delivered" style="border:1px solid rgba(22,199,132,0.4); border-radius:3px; padding:3px 8px; font-size:7px;">
+                                            ✓ RETURNED & REFUNDED TO WALLET
+                                        </span>
+                                    {% elif not oi.is_cancelled %}
+                                        <button
+                                            type="button"
+                                            class="item-btn cancel"
+                                            onclick="openItemAction(this, 'cancel')"
+                                        >
+                                            CANCEL ITEM
+                                        </button>
+                                    {% endif %}
+
+                                    <span class="item-status status-{{ oi.status_raw|lower }}">
+                                        {{ oi.status|upper }}
+                                    </span>
+
+                                    <span class="item-status quantity-badge">
+                                        QTY: {{ oi.quantity }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    {% endfor %}
+                {% elif demo_order %}
+                    <article class="item-card"
+                        data-item-id="demo-1"
+                        data-name="{{ demo_order.product_name }}"
+                        data-price="{{ demo_order.price }}"
+                        data-total="{{ demo_order.price }}"
+                        data-quantity="1"
+                        data-status="{{ demo_order.status }}"
+                        data-image="{{ demo_order.img }}"
+                        data-color="Midnight Black"
+                        data-movement="Automatic Mechanical"
+                        data-diameter="42 mm"
+                        data-order-number="{{ demo_order.order_number }}">
+
+                        <img
+                            class="item-image"
+                            src="{{ demo_order.img }}"
+                            alt="{{ demo_order.product_name }}"
+                        >
+
+                        <div class="item-content">
+
+                            <div class="item-top">
+
+                                <h3 class="item-name">
+                                    {{ demo_order.product_name }}
+                                </h3>
+
+                                <span class="item-price">
+                                    ₹{{ demo_order.price }}
+                                </span>
+
+                            </div>
+
+                            <p class="item-date">
+                                DATE: {{ demo_order.date|upper }}
+                            </p>
+
+                            <div class="item-actions">
+
+                                {% if demo_order.status == 'Delivered' %}
+                                    <button
+                                        type="button"
+                                        class="item-btn return"
+                                        onclick="openReturnModal(this)"
+                                    >
+                                        RETURN ORDER
+                                    </button>
+                                {% elif demo_order.status != 'Cancelled' and demo_order.status != 'Returned' %}
+                                    <button
+                                        type="button"
+                                        class="item-btn cancel"
+                                        onclick="openItemAction(this, 'cancel')"
+                                    >
+                                        CANCEL ITEM
+                                    </button>
+                                {% endif %}
+
+                                <span class="item-status status-{{ demo_order.status|lower }}">
+                                    {{ demo_order.status|upper }}
+                                </span>
+
+                                <span class="item-status quantity-badge">
+                                    QTY: 1
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                {% else %}
+                    <!-- DEFAULT DEMO ITEMS -->
+                    <article class="item-card"
+                        data-item-id="101"
+                        data-name="Wegnex Heritage Automatic"
+                        data-price="48999"
+                        data-quantity="1"
+                        data-status="Shipped">
+
+                        <img
+                            class="item-image"
+                            src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Heritage Automatic"
+                        >
+
+                        <div class="item-content">
+
+                            <div class="item-top">
+
+                                <h3 class="item-name">
+                                    Wegnex Heritage Automatic
+                                </h3>
+
+                                <span class="item-price">
+                                    ₹48,999
+                                </span>
+
+                            </div>
+
+                            <p class="item-date">
+                                DATE: OCT 24, 2026
+                            </p>
+
+                            <div class="item-actions">
+
+                                <button
+                                    type="button"
+                                    class="item-btn cancel"
+                                    onclick="openItemAction(this, 'cancel')"
+                                >
+                                    CANCEL ITEM
+                                </button>
+
+                                <span class="item-status status-shipped">
+                                    SHIPPED
+                                </span>
+
+                                <span class="item-status quantity-badge">
+                                    QTY: 1
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                    <article class="item-card"
+                        data-item-id="102"
+                        data-name="Wegnex Executive Black"
+                        data-price="38999"
+                        data-total="38999"
+                        data-quantity="1"
+                        data-status="Delivered"
+                        data-image="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=400&q=80"
+                        data-color="Midnight Black"
+                        data-movement="Automatic Mechanical"
+                        data-diameter="42 mm"
+                        data-order-number="WGX-982910">
+
+                        <img
+                            class="item-image"
+                            src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Executive Black"
+                        >
+
+                        <div class="item-content">
+
+                            <div class="item-top">
+
+                                <h3 class="item-name">
+                                    Wegnex Executive Black
+                                </h3>
+
+                                <span class="item-price">
+                                    ₹38,999
+                                </span>
+
+                            </div>
+
+                            <p class="item-date">
+                                DATE: OCT 24, 2026
+                            </p>
+
+                            <div class="item-actions">
+
+                                <button
+                                    type="button"
+                                    class="item-btn return"
+                                    onclick="openReturnModal(this)"
+                                >
+                                    RETURN ORDER
+                                </button>
+
+                                <span class="item-status quantity-badge">
+                                    QTY: 1
+                                </span>
+
+                                <span class="item-status status-delivered">
+                                    DELIVERED
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                {% endif %}
+
+            </div>
+
+
+            <!-- RIGHT: SUMMARY AND ADDRESS -->
+
+            <aside class="right-column">
+
+
+                <!-- ORDER SUMMARY -->
+
+                <section class="summary-card">
+
+                    <h2 class="card-heading">
+                        ORDER SUMMARY
+                    </h2>
+
+
+                    <div class="summary-row">
+
+                        <span>Subtotal</span>
+
+                        <span id="subtotal">{% if order %}₹{{ order.subtotal|floatformat:0 }}{% elif demo_order %}₹{{ demo_order.price }}{% else %}₹88,998{% endif %}</span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Discount</span>
+
+                        <span class="discount" id="discount">
+                            {% if order %}-₹{{ order.discount|floatformat:0 }}{% else %}-₹0{% endif %}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Shipping</span>
+
+                        <span class="free">FREE</span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Tax</span>
+
+                        <span id="tax">{% if order %}₹{{ order.tax|floatformat:0 }}{% else %}₹0{% endif %}</span>
+
+                    </div>
+
+
+                    <div class="summary-divider"></div>
+
+
+                    <div class="grand-total">
+
+                        <span>Grand Total</span>
+
+                        <span id="grandTotal">
+                            {% if order %}₹{{ order.total_amount|floatformat:0 }}{% elif demo_order %}₹{{ demo_order.price }}{% else %}₹88,998{% endif %}
+                        </span>
+
+                    </div>
+
+
+                    {% if order %}
+                    {# ── Real order: server-generated PDF ── #}
+                    <a
+                        href="{% url 'download_invoice_pdf' order.order_number %}"
+                        class="invoice-btn"
+                        id="downloadInvoiceBtn"
+                        style="display:flex; align-items:center; justify-content:center; text-decoration:none;"
+                        title="Download PDF Invoice"
+                    >
+                        ⬇ DOWNLOAD INVOICE (PDF)
+                    </a>
+                    {% else %}
+                    {# ── Demo order fallback: JS text download ── #}
+                    <button
+                        type="button"
+                        class="invoice-btn"
+                        onclick="downloadInvoice()"
+                    >
+                        DOWNLOAD INVOICE
+                    </button>
+                    {% endif %}
+
+                </section>
+
+
+                <!-- SHIPPING ADDRESS + PAYMENT -->
+
+                <div class="info-grid">
+
+
+                    <section class="info-card">
+
+                        <h2 class="card-heading">
+                            SHIPPING ADDRESS
+                        </h2>
+
+                        <p class="info-name" id="shippingName">
+                            {% if order %}{{ order.shipping_full_name }}{% else %}Marua{% endif %}
+                        </p>
+
+                        <p class="info-description" id="shippingAddress">
+                            {% if order %}
+                                {{ order.shipping_street_address }}, {{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}
+                            {% else %}
+                                Malappuram, Kerala, India
+                            {% endif %}
+                        </p>
+
+                    </section>
+
+
+                    <section class="info-card">
+
+                        <h2 class="card-heading">
+                            PAYMENT METHOD
+                        </h2>
+
+                        <div class="payment-method">
+
+                            <span class="payment-dot"></span>
+
+                            <span id="paymentMethod">
+                                {% if order %}{{ order.get_payment_method_display }}{% elif demo_order %}{{ demo_order.payment }}{% else %}Razorpay{% endif %}
+                            </span>
+
+                        </div>
+
+                        <p class="payment-reference">
+                            {% if order %}STATUS: {{ order.payment_status }}{% else %}SECURED TRANSACTION{% endif %}
+                        </p>
+
+                    </section>
+
+
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         CANCEL / RETURN MODAL
+    ========================= -->
+
+    <div
+        class="modal-overlay"
+        id="actionModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="actionModalTitle"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2 id="actionModalTitle">
+                    Cancel Item
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeActionModal()"
+                    aria-label="Close"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <p class="modal-description" id="actionDescription">
+                Select your cancellation preference and reason below.
+            </p>
+
+
+            <form id="actionForm">
+
+                <input type="hidden" id="actionType" value="cancel">
+
+                <input type="hidden" id="actionItemId" value="">
+
+
+                <!-- ITEM PREVIEW -->
+                <div class="modal-item-preview" id="modalItemPreview">
+                    <img id="modalItemImg" src="" alt="Product" class="modal-item-img">
+                    <div class="modal-item-info">
+                        <div class="modal-item-name" id="modalItemName">Product Name</div>
+                        <div class="modal-item-meta" id="modalItemMeta">
+                            QTY: <span id="modalItemQty">1</span> • PRICE: <strong id="modalItemPrice">₹0</strong>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- CANCELLATION SCOPE (INDIVIDUAL VS FULL ORDER) -->
+                <div class="modal-field" id="cancellationScopeField">
+                    <label class="modal-label">CANCELLATION PREFERENCE</label>
+                    <div class="cancel-scope-group">
+                        <label class="cancel-scope-card active" id="scopeItemCard" onclick="selectCancelScope('item')">
+                            <input type="radio" name="cancel_scope" id="scopeItem" value="item" checked>
+                            <div style="flex: 1;">
+                                <div class="scope-header-line">
+                                    <strong>Cancel This Item Only</strong>
+                                    <span class="badge-individual">Individual Cancellation</span>
+                                </div>
+                                <div class="scope-desc">Select how many quantities of this item you wish to cancel:</div>
+
+                                <!-- QUANTITY STEPPER ( - 1 + ) -->
+                                <div class="cancel-qty-wrapper" id="cancelQtyWrapper" onclick="event.stopPropagation()">
+                                    <span class="cancel-qty-title">Quantity:</span>
+                                    <div class="qty-stepper-box">
+                                        <button type="button" class="qty-btn minus" id="qtyMinusBtn" onclick="stepCancelQty(-1)">−</button>
+                                        <span class="qty-number" id="cancelQtyNum">1</span>
+                                        <button type="button" class="qty-btn plus" id="qtyPlusBtn" onclick="stepCancelQty(1)">+</button>
+                                    </div>
+                                    <span class="qty-hint-text" id="cancelQtySubtext">of 1 available</span>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="cancel-scope-card" id="scopeOrderCard" onclick="selectCancelScope('order')">
+                            <input type="radio" name="cancel_scope" id="scopeOrder" value="order">
+                            <div>
+                                <div class="scope-header-line">
+                                    <strong>Cancel Entire Order</strong>
+                                </div>
+                                <div class="scope-desc">Cancel all items and completely void this entire order.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="modal-field">
+
+                    <label class="modal-label" for="actionReason">
+                        REASON
+                    </label>
+
+                    <select
+                        class="modal-select"
+                        id="actionReason"
+                        required
+                    >
+
+                        <option value="">
+                            Select a reason
+                        </option>
+
+                        <option value="Changed my mind">
+                            Changed my mind
+                        </option>
+
+                        <option value="Ordered by mistake">
+                            Ordered by mistake
+                        </option>
+
+                        <option value="Delivery delay">
+                            Delivery delay
+                        </option>
+
+                        <option value="Found better price elsewhere">
+                            Found better price elsewhere
+                        </option>
+
+                        <option value="Product issue / Incorrect specifications">
+                            Product issue / Incorrect specifications
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="modal-field">
+
+                    <label class="modal-label" for="actionNote">
+                        ADDITIONAL DETAILS (OPTIONAL)
+                    </label>
+
+                    <textarea
+                        class="modal-textarea"
+                        id="actionNote"
+                        placeholder="Enter additional details..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="modal-btn"
+                        onclick="closeActionModal()"
+                    >
+                        GO BACK
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="modal-btn primary"
+                        id="confirmAction"
+                    >
+                        CONFIRM CANCELLATION
+                    </button>
+
+                </div>
+
+
+                <div class="notice" id="actionNotice"></div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         LUXURY RETURN ORDER MODAL (POPUP)
+    ========================================================= -->
+    <div
+        class="return-modal-overlay"
+        id="returnOrderModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="returnModalTitle"
+    >
+        <div class="return-modal-container">
+            <!-- Close Button -->
+            <button
+                type="button"
+                class="return-modal-close-btn"
+                onclick="closeReturnModal()"
+                aria-label="Close Return Modal"
+            >
+                &times;
+            </button>
+
+            <!-- Modal Header -->
+            <div class="return-modal-header">
+                <h2 class="return-modal-title" id="returnModalTitle">RETURN ORDER</h2>
+                <p class="return-modal-subtitle">
+                    Request a return for your luxury watch by confirming your order details and selecting a return reason.
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form id="returnOrderForm">
+                <input type="hidden" id="returnItemId" value="">
+                <input type="hidden" id="returnRefundMethod" value="wallet">
+
+                <div class="return-modal-grid">
+                    <!-- LEFT COLUMN -->
+                    <div class="return-left-col">
+                        <!-- Product Card -->
+                        <div class="return-product-card">
+                            <div class="return-product-img-box">
+                                <img id="returnProductImg" src="" alt="Product">
+                            </div>
+                            <div class="return-product-details">
+                                <div class="return-order-badge" id="returnOrderBadge">Order #WGX-000000</div>
+                                <div class="return-product-heading" id="returnProductHeading">Product Name</div>
+                                <div class="return-product-specs-grid">
+                                    <div class="return-spec-item">
+                                        <span class="return-spec-label">Color:</span>
+                                        <span class="return-spec-val" id="returnSpecColor">Midnight Black</span>
+                                    </div>
+                                    <div class="return-spec-item">
+                                        <span class="return-spec-label">Movement:</span>
+                                        <span class="return-spec-val" id="returnSpecMovement">Automatic Mechanical</span>
+                                    </div>
+                                    <div class="return-spec-item">
+                                        <span class="return-spec-label">Diameter:</span>
+                                        <span class="return-spec-val" id="returnSpecDiameter">42 mm</span>
+                                    </div>
+                                    <div class="return-spec-item">
+                                        <span class="return-spec-label">Quantity:</span>
+                                        <span class="return-spec-val" id="returnSpecQuantity">1 Unit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reason for Return -->
+                        <div class="return-form-group">
+                            <label class="return-form-label" for="returnReasonSelect">Reason for Return</label>
+                            <div class="return-select-box">
+                                <select id="returnReasonSelect" class="return-custom-select" required>
+                                    <option value="" disabled selected>Select a reason</option>
+                                    <option value="Defective or Damaged Watch">Defective or Damaged Watch</option>
+                                    <option value="Incorrect Item Received">Incorrect Item Received</option>
+                                    <option value="Size or Fit Issue">Size or Fit Issue</option>
+                                    <option value="Quality Not as Expected">Quality Not as Expected</option>
+                                    <option value="Changed Mind">Changed Mind</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span class="return-chevron-icon">▼</span>
+                            </div>
+                        </div>
+
+                        <!-- Additional Comments (Optional) -->
+                        <div class="return-form-group">
+                            <label class="return-form-label" for="returnNoteTextarea">Additional Comments (Optional)</label>
+                            <textarea
+                                id="returnNoteTextarea"
+                                class="return-custom-textarea"
+                                placeholder="Provide more details about the return..."
+                                rows="3"
+                            ></textarea>
+                        </div>
+
+                        <!-- Refund Method -->
+                        <div class="return-form-group">
+                            <label class="return-form-label">Refund Method</label>
+                            <div class="refund-method-options">
+                                <div class="refund-card-option" id="methodCardOriginal" onclick="selectRefundMethod('original')">
+                                    <div class="refund-option-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                            <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="refund-option-meta">
+                                        <div class="refund-option-name">Original Payment</div>
+                                        <div class="refund-option-subtext">Estimated 3-5 business days</div>
+                                    </div>
+                                </div>
+
+                                <div class="refund-card-option active" id="methodCardWallet" onclick="selectRefundMethod('wallet')">
+                                    <div class="refund-option-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                            <path d="M2 10h20"/>
+                                            <circle cx="16" cy="14" r="1.5" fill="currentColor"/>
+                                        </svg>
+                                    </div>
+                                    <div class="refund-option-meta">
+                                        <div class="refund-option-name">Wegnex Wallet</div>
+                                        <div class="refund-option-subtext">Instant credit available</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="return-right-col">
+                        <!-- Summary Box -->
+                        <div class="return-summary-box">
+                            <h3 class="return-summary-heading">Refund Summary</h3>
+
+                            <div class="return-summary-row">
+                                <span class="label-text">Product Price</span>
+                                <span class="value-text" id="returnSummaryProductPrice">₹0</span>
+                            </div>
+
+                            <div class="return-summary-row">
+                                <span class="label-text">Shipping Fee</span>
+                                <span class="value-text green">Free</span>
+                            </div>
+
+                            <div class="return-summary-row">
+                                <span class="label-text">Tax Recovery</span>
+                                <span class="value-text muted">Included</span>
+                            </div>
+
+                            <hr class="return-summary-hr">
+
+                            <div class="return-summary-row total-row">
+                                <span class="total-title">Total Refund</span>
+                                <span class="total-amount" id="returnSummaryTotalAmount">₹0</span>
+                            </div>
+
+                            <button type="submit" class="return-action-submit-btn" id="confirmReturnSubmitBtn">
+                                CONFIRM RETURN
+                            </button>
+
+                            <p class="return-disclaimer-text">
+                                By confirming, you agree to our <a href="javascript:void(0)">Returns Policy</a>. Our concierge will contact you within 24 hours to schedule the complimentary pickup.
+                            </p>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="return-trust-bar">
+                            <div class="return-trust-item">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                <span>Secure</span>
+                            </div>
+                            <div class="return-trust-item">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <rect x="1" y="3" width="15" height="13"/>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+                                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                                </svg>
+                                <span>Free Pickup</span>
+                            </div>
+                            <div class="return-trust-item">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                                </svg>
+                                <span>Concierge</span>
+                            </div>
+                        </div>
+
+                        <div class="return-alert-box" id="returnAlertBox"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /*
+         * FRONTEND DEMO
+         *
+         * Connect these actions to Django views and
+         * the actual order database before deployment.
+         */
+
+
+        /* =========================
+           DELIVERY TRACKER
+        ========================= */
+
+        function updateDeliveryTracker(status) {
+
+            const steps = document.querySelectorAll(
+                "#trackingSteps .tracking-step"
+            );
+
+            const statusSteps = {
+                "Processing": 0,
+                "Order Placed": 0,
+                "Shipped": 1,
+                "Out for Delivery": 2,
+                "Delivered": 3
+            };
+
+            const currentStep = statusSteps[status];
+
+            if (currentStep === undefined) {
+                return;
+            }
+
+            steps.forEach((step, index) => {
+
+                step.classList.remove("completed", "current");
+
+                if (index < currentStep) {
+                    step.classList.add("completed");
+                }
+
+                if (index === currentStep) {
+                    step.classList.add("current");
+                }
+
+            });
+
+        }
+
+        {% if order %}
+            updateDeliveryTracker("{{ current_status_name }}");
+        {% elif demo_order %}
+            updateDeliveryTracker("{{ demo_order.status }}");
+        {% else %}
+            updateDeliveryTracker("Shipped");
+        {% endif %}
+
+
+        /* =========================
+           OPEN CANCEL / RETURN MODAL
+        ========================= */
+
+        let currentCancelQty = 1;
+        let maxCancelQty = 1;
+        let itemUnitPrice = 0;
+
+        function stepCancelQty(delta) {
+            const nextVal = currentCancelQty + delta;
+            if (nextVal >= 1 && nextVal <= maxCancelQty) {
+                currentCancelQty = nextVal;
+                updateCancelQtyUI();
+            }
+        }
+
+        function updateCancelQtyUI() {
+            const numEl = document.getElementById("cancelQtyNum");
+            if (numEl) numEl.textContent = currentCancelQty;
+
+            const minusBtn = document.getElementById("qtyMinusBtn");
+            const plusBtn = document.getElementById("qtyPlusBtn");
+            if (minusBtn) minusBtn.disabled = (currentCancelQty <= 1);
+            if (plusBtn) plusBtn.disabled = (currentCancelQty >= maxCancelQty);
+
+            const priceEl = document.getElementById("modalItemPrice");
+            if (priceEl && itemUnitPrice > 0) {
+                const total = itemUnitPrice * currentCancelQty;
+                priceEl.textContent = "₹" + Math.round(total).toLocaleString("en-IN") + (currentCancelQty < maxCancelQty ? ` (${currentCancelQty} of ${maxCancelQty})` : '');
+            }
+        }
+
+        function selectCancelScope(scope) {
+            document.querySelectorAll('input[name="cancel_scope"]').forEach(r => {
+                r.checked = (r.value === scope);
+            });
+            const itemCard = document.getElementById("scopeItemCard");
+            const orderCard = document.getElementById("scopeOrderCard");
+            const qtyWrapper = document.getElementById("cancelQtyWrapper");
+
+            if (itemCard) itemCard.classList.toggle("active", scope === "item");
+            if (orderCard) orderCard.classList.toggle("active", scope === "order");
+            if (qtyWrapper) qtyWrapper.style.display = (scope === "item") ? "flex" : "none";
+        }
+
+        function openItemAction(button, action) {
+
+            if (action === "return") {
+                return openReturnModal(button);
+            }
+
+            const card = button.closest(".item-card");
+
+            const status = card.dataset.status;
+
+            if (action === "cancel" &&
+                ["Delivered", "Returned", "Return Requested", "Cancelled"].includes(status)) {
+
+                alert("This item cannot be cancelled in its current status.");
+                return;
+
+            }
+
+            document.getElementById("actionType").value = action;
+
+            document.getElementById("actionItemId").value =
+                card.dataset.itemId;
+
+            // Quantity & price calculations
+            const rawQty = parseInt(card.dataset.quantity || "1", 10);
+            maxCancelQty = rawQty > 0 ? rawQty : 1;
+            currentCancelQty = 1;
+
+            const rawPrice = parseFloat(card.dataset.price || 0);
+            itemUnitPrice = maxCancelQty > 0 ? (rawPrice / maxCancelQty) : rawPrice;
+
+            // Populate Item Preview
+            const img = card.querySelector(".item-image");
+            if (img) {
+                document.getElementById("modalItemImg").src = img.src;
+            }
+            document.getElementById("modalItemName").textContent = card.dataset.name || "Item";
+            document.getElementById("modalItemQty").textContent = maxCancelQty;
+
+            const subtext = document.getElementById("cancelQtySubtext");
+            if (subtext) {
+                subtext.textContent = `of ${maxCancelQty} available`;
+            }
+            updateCancelQtyUI();
+
+            // Toggle Cancellation Scope Field
+            const scopeField = document.getElementById("cancellationScopeField");
+            if (action === "cancel") {
+                scopeField.style.display = "block";
+                selectCancelScope("item");
+                document.getElementById("actionModalTitle").textContent = "Cancel Item";
+                document.getElementById("actionDescription").textContent = "Paid orders are directly refunded immediately to your Wegnex Wallet upon cancellation.";
+                document.getElementById("confirmAction").textContent = "CONFIRM CANCELLATION";
+            } else {
+                scopeField.style.display = "none";
+                document.getElementById("actionModalTitle").textContent = "Return Order Item";
+                document.getElementById("actionDescription").textContent = "Submit a return request. Refund will be credited to your Wegnex Wallet after administrator confirmation.";
+                document.getElementById("confirmAction").textContent = "SUBMIT RETURN REQUEST";
+            }
+
+            document.getElementById("actionReason").value = "";
+
+            document.getElementById("actionNote").value = "";
+
+            document.getElementById("actionNotice").classList.remove("show");
+
+            document.getElementById("actionModal").classList.add("show");
+
+            document.body.style.overflow = "hidden";
+
+        }
+
+
+        /* =========================
+           CLOSE MODAL
+        ========================= */
+
+        function closeActionModal() {
+
+            document.getElementById("actionModal")
+                .classList.remove("show");
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        document.getElementById("actionModal")
+            .addEventListener("click", function(event) {
+
+                if (event.target === this) {
+                    closeActionModal();
+                }
+
+            });
+
+
+        document.addEventListener("keydown", function(event) {
+
+            if (event.key === "Escape") {
+                closeActionModal();
+                closeReturnModal();
+            }
+
+        });
+
+
+        /* =========================
+           SUBMIT CANCEL / RETURN
+        ========================= */
+
+        document.getElementById("actionForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const action = document.getElementById("actionType").value;
+
+                const itemId = document.getElementById("actionItemId").value;
+
+                const reason = document.getElementById("actionReason").value;
+
+                const note = document.getElementById("actionNote").value;
+
+                const scopeRadio = document.querySelector('input[name="cancel_scope"]:checked');
+                const selectedScope = scopeRadio ? scopeRadio.value : 'item';
+
+                if (!reason) {
+                    alert("Please select a reason.");
+                    return;
+                }
+
+                {% if is_real_order %}
+                const formData = new FormData();
+                formData.append('action', action);
+                formData.append('cancel_scope', selectedScope);
+                formData.append('cancel_quantity', currentCancelQty);
+                formData.append('reason', reason);
+                formData.append('note', note);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const submitBtn = document.getElementById("confirmAction");
+                submitBtn.disabled = true;
+                submitBtn.textContent = "PROCESSING...";
+
+                fetch(`/order_view/cancel-item/${itemId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const notice = document.getElementById("actionNotice");
+                    notice.textContent = data.msg;
+                    notice.classList.add("show");
+                    if (data.success) {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1200);
+                    } else {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = action === "cancel" ? "CONFIRM CANCELLATION" : "SUBMIT RETURN REQUEST";
+                    }
+                })
+                .catch(err => {
+                    alert("Error submitting request. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = action === "cancel" ? "CONFIRM CANCELLATION" : "SUBMIT RETURN REQUEST";
+                });
+                {% else %}
+                // Demo fallback: update UI immediately
+                const card = document.querySelector(`[data-item-id="${itemId}"]`);
+                if (card && action === "cancel") {
+                    if (selectedScope === "order") {
+                        document.querySelectorAll(".item-card").forEach(c => {
+                            c.dataset.status = "Cancelled";
+                            const statusBadge = c.querySelector(".item-status:not(.quantity-badge)");
+                            if (statusBadge) {
+                                statusBadge.className = "item-status status-cancelled";
+                                statusBadge.textContent = "CANCELLED";
+                            }
+                            const cancelBtn = c.querySelector(".item-btn.cancel");
+                            if (cancelBtn) cancelBtn.remove();
+                        });
+                        const mainBadge = document.getElementById("newBadge");
+                        if (mainBadge) mainBadge.textContent = "CANCELLED";
+                    } else {
+                        if (currentCancelQty >= maxCancelQty) {
+                            card.dataset.status = "Cancelled";
+                            const statusBadge = card.querySelector(".item-status:not(.quantity-badge)");
+                            if (statusBadge) {
+                                statusBadge.className = "item-status status-cancelled";
+                                statusBadge.textContent = "CANCELLED";
+                            }
+                            const cancelBtn = card.querySelector(".item-btn.cancel");
+                            if (cancelBtn) cancelBtn.remove();
+                        } else {
+                            const newRemaining = maxCancelQty - currentCancelQty;
+                            card.dataset.quantity = newRemaining;
+                            const qtyBadge = card.querySelector(".quantity-badge");
+                            if (qtyBadge) qtyBadge.textContent = "QTY: " + newRemaining;
+                        }
+                    }
+                }
+
+                const notice = document.getElementById("actionNotice");
+                notice.textContent = selectedScope === "item" 
+                    ? `Individual item cancellation (${currentCancelQty} item) confirmed successfully.` 
+                    : "Entire order cancellation confirmed successfully.";
+                notice.classList.add("show");
+
+                setTimeout(() => {
+                    closeActionModal();
+                }, 1500);
+                {% endif %}
+
+            });
+
+
+        /* =========================================================
+           RETURN ORDER MODAL (POPUP) LOGIC
+        ========================================================= */
+
+        function selectRefundMethod(method) {
+            const hiddenInput = document.getElementById("returnRefundMethod");
+            if (hiddenInput) hiddenInput.value = method;
+
+            const cardOrig = document.getElementById("methodCardOriginal");
+            const cardWall = document.getElementById("methodCardWallet");
+            if (cardOrig) cardOrig.classList.toggle("active", method === "original");
+            if (cardWall) cardWall.classList.toggle("active", method === "wallet");
+        }
+
+        function openReturnModal(button) {
+            const card = button.closest(".item-card");
+            if (!card) return;
+
+            const status = card.dataset.status;
+            if (status !== "Delivered") {
+                alert("Only delivered items can be submitted for return.");
+                return;
+            }
+
+            const itemId = card.dataset.itemId;
+            const name = card.dataset.name || "Luxury Watch";
+            const qty = card.dataset.quantity || "1";
+            const color = card.dataset.color || "Midnight Black";
+            const movement = card.dataset.movement || "Automatic Mechanical";
+            const diameter = card.dataset.diameter || "42 mm";
+            const orderNum = card.dataset.orderNumber || "{{ order.order_number|default:'WGX-982910' }}";
+
+            // Price / total handling
+            let rawTotal = card.dataset.total || card.dataset.price || "0";
+            let numTotal = parseFloat(String(rawTotal).replace(/[^0-9.]/g, '')) || 0;
+            let formattedTotal = "₹" + Math.round(numTotal).toLocaleString("en-IN");
+
+            // Image handling
+            let imgSrc = card.dataset.image;
+            if (!imgSrc) {
+                const imgEl = card.querySelector(".item-image");
+                if (imgEl) imgSrc = imgEl.src;
+            }
+            if (!imgSrc) {
+                imgSrc = "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=400&q=80";
+            }
+
+            // Populate Modal Fields
+            document.getElementById("returnItemId").value = itemId;
+            document.getElementById("returnOrderBadge").textContent = "Order #" + orderNum;
+            document.getElementById("returnProductHeading").textContent = name;
+            document.getElementById("returnProductImg").src = imgSrc;
+            document.getElementById("returnProductImg").alt = name;
+            document.getElementById("returnSpecColor").textContent = color;
+            document.getElementById("returnSpecMovement").textContent = movement;
+            document.getElementById("returnSpecDiameter").textContent = diameter;
+            document.getElementById("returnSpecQuantity").textContent = qty + (parseInt(qty) > 1 ? " Units" : " Unit");
+
+            document.getElementById("returnSummaryProductPrice").textContent = formattedTotal;
+            document.getElementById("returnSummaryTotalAmount").textContent = formattedTotal;
+
+            // Reset Form Inputs
+            document.getElementById("returnReasonSelect").value = "";
+            document.getElementById("returnNoteTextarea").value = "";
+            selectRefundMethod("wallet");
+
+            const alertBox = document.getElementById("returnAlertBox");
+            if (alertBox) {
+                alertBox.className = "return-alert-box";
+                alertBox.textContent = "";
+            }
+
+            const submitBtn = document.getElementById("confirmReturnSubmitBtn");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "CONFIRM RETURN";
+            }
+
+            document.getElementById("returnOrderModal").classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeReturnModal() {
+            const modal = document.getElementById("returnOrderModal");
+            if (modal) modal.classList.remove("show");
+            document.body.style.overflow = "";
+        }
+
+        const returnModalOverlay = document.getElementById("returnOrderModal");
+        if (returnModalOverlay) {
+            returnModalOverlay.addEventListener("click", function(event) {
+                if (event.target === this) {
+                    closeReturnModal();
+                }
+            });
+        }
+
+        const returnOrderForm = document.getElementById("returnOrderForm");
+        if (returnOrderForm) {
+            returnOrderForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const itemId = document.getElementById("returnItemId").value;
+                const reason = document.getElementById("returnReasonSelect").value;
+                const note = document.getElementById("returnNoteTextarea").value;
+                const refundMethod = document.getElementById("returnRefundMethod").value || "wallet";
+                const alertBox = document.getElementById("returnAlertBox");
+                const submitBtn = document.getElementById("confirmReturnSubmitBtn");
+
+                if (!reason) {
+                    alert("Please select a reason for the return.");
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = "PROCESSING RETURN...";
+
+                {% if is_real_order %}
+                const formData = new FormData();
+                formData.append("action", "return");
+                formData.append("reason", reason);
+                formData.append("note", note);
+                formData.append("refund_method", refundMethod);
+                formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+                fetch(`/order_view/cancel-item/${itemId}/`, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alertBox.className = "return-alert-box show success";
+                        alertBox.innerHTML = `<strong>✓ Return Request Submitted!</strong><br>${data.msg}`;
+                        submitBtn.textContent = "REQUEST SUBMITTED";
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1300);
+                    } else {
+                        alertBox.className = "return-alert-box show error";
+                        alertBox.textContent = data.msg || "Failed to process return.";
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "CONFIRM RETURN";
+                    }
+                })
+                .catch(err => {
+                    alertBox.className = "return-alert-box show error";
+                    alertBox.textContent = "Server error while processing return. Please try again.";
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "CONFIRM RETURN";
+                });
+                {% else %}
+                // Demo fallback: simulate instant refund to wallet
+                const totalText = document.getElementById("returnSummaryTotalAmount").textContent;
+                alertBox.className = "return-alert-box show success";
+                alertBox.innerHTML = `<strong>✓ Return Request Completed!</strong><br>${totalText} has been refunded directly to your Wegnex Wallet.`;
+                submitBtn.textContent = "RETURN PROCESSED";
+
+                const card = document.querySelector(`[data-item-id="${itemId}"]`);
+                if (card) {
+                    card.dataset.status = "Returned";
+                    const actionsDiv = card.querySelector(".item-actions");
+                    if (actionsDiv) {
+                        const returnBtn = actionsDiv.querySelector(".item-btn.return");
+                        if (returnBtn) {
+                            returnBtn.outerHTML = `<span class="item-status status-delivered" style="border:1px solid rgba(22,199,132,0.4); border-radius:3px; padding:3px 8px; font-size:7px;">✓ RETURNED & REFUNDED TO WALLET</span>`;
+                        }
+                    }
+                }
+
+                setTimeout(() => {
+                    closeReturnModal();
+                }, 1600);
+                {% endif %}
+            });
+        }
+
+
+        /* =========================
+           DOWNLOAD INVOICE
+        ========================= */
+
+        /*
+         * Real orders: the "DOWNLOAD INVOICE (PDF)" link above is a direct
+         * anchor to the Django view /download-invoice/<order_number>/ which
+         * streams a ReportLab-generated PDF.
+         *
+         * The function below is kept only as a fallback for demo/preview
+         * orders (when no real order data is available in the template).
+         */
+        function downloadInvoice() {
+
+            const orderId = document.getElementById("pageOrderId")
+                .textContent;
+
+            const invoiceText = [
+                "WEGNEX",
+                "ORDER INVOICE",
+                "------------------------------",
+                "Order ID: " + orderId,
+                "",
+                "Products:"
+            ];
+
+            document.querySelectorAll(".item-card").forEach(card => {
+
+                invoiceText.push(
+                    card.dataset.name +
+                    " | Qty: " + card.dataset.quantity +
+                    " | INR " + Number(card.dataset.price).toLocaleString("en-IN")
+                );
+
+            });
+
+            invoiceText.push(
+                "",
+                "Subtotal: " +
+                document.getElementById("subtotal").textContent,
+
+                "Discount: " +
+                document.getElementById("discount").textContent,
+
+                "Shipping: FREE",
+
+                "Tax: " +
+                document.getElementById("tax").textContent,
+
+                "Grand Total: " +
+                document.getElementById("grandTotal").textContent,
+
+                "",
+                "Thank you for shopping with Wegnex."
+            );
+
+            const blob = new Blob(
+                [invoiceText.join("\n")],
+                { type: "text/plain;charset=utf-8" }
+            );
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Wegnex-Invoice.txt";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

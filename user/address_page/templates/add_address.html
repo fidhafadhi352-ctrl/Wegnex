@@ -37,49 +37,66 @@
            NAVBAR
         ===================================================== */
         .navbar {
-            background: #0b0b0b;
-            min-height: 76px;
-            padding: 0 45px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
 
-        .logo {
+        .navbar .logo, .navbar-brand.logo {
             color: #ffffff !important;
-            font-size: 27px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .navbar-nav {
-            gap: 28px;
+            gap: 28px !important;
         }
 
         .nav-link {
             color: #a5a5a5 !important;
-            font-size: 14px;
-            font-weight: 400;
-            transition: 0.3s;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .nav-link:hover {
             color: #D4AF37 !important;
         }
 
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
         .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
         }
 
         .nav-icons i {
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
         }
 
         .nav-icons i:hover {
-            color: #D4AF37;
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
         }
 
         /* ================= MAIN LAYOUT ================= */
@@ -547,9 +564,9 @@
 <body>
 
     <!-- =====================================================
-         NAVBAR
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
     ===================================================== -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand logo" href="{% url 'home' %}">
@@ -569,31 +586,47 @@
                  id="navbarMenu">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#products">Products</a>
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#category">Category</a>
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#about">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
                     </li>
                 </ul>
             </div>
 
             <!-- Icons & User Menu -->
             <div class="nav-icons">
-                <i class="bi bi-search"></i>
-                <i class="bi bi-heart"></i>
-                <i class="bi bi-cart3"></i>
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
 
                 {% if user.is_authenticated %}
                     <div class="d-flex align-items-center gap-3">
-                        <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
-                            {% if profile.profile_picture %}
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
                                 <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
                             {% else %}
                                 <i class="bi bi-person-circle" style="font-size: 20px;"></i>
                             {% endif %}
@@ -601,7 +634,7 @@
                         </a>
                     </div>
                 {% else %}
-                    <a href="{% url 'login' %}?next={% url 'add_address' %}" class="text-decoration-none" title="Sign In" style="color: #fff;">
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
                         <i class="bi bi-person" style="font-size: 20px;"></i>
                     </a>
                 {% endif %}
@@ -642,17 +675,17 @@
                 <span>ADDRESS</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'order' %}" class="side-link">
                 <i class="bi bi-arrow-counterclockwise"></i>
                 <span>MY ORDERS</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'wishlist' %}" class="side-link">
                 <i class="bi bi-heart"></i>
                 <span>WISHLIST</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'wallet' %}" class="side-link">
                 <i class="bi bi-wallet2"></i>
                 <span>WALLET</span>
             </a>
@@ -666,8 +699,8 @@
         <!-- ================= CONTENT ================= -->
         <main class="content">
 
-            <a href="{% url 'address' %}" class="back-link">
-                <i class="bi bi-arrow-left"></i> Back to Addresses
+            <a href="{% if next == 'checkout' %}{% url 'checkout' %}{% else %}{% url 'address' %}{% endif %}" class="back-link">
+                <i class="bi bi-arrow-left"></i> {% if next == 'checkout' %}Back to Checkout{% else %}Back to Addresses{% endif %}
             </a>
 
             <h1 class="page-title">ADD DELIVERY ADDRESS</h1>
@@ -676,8 +709,11 @@
             </p>
 
             <div class="address-form-box">
-                <form method="POST" action="{% url 'add_address' %}" id="addAddressForm" novalidate>
+                <form method="POST" action="{% url 'add_address' %}{% if next %}?next={{ next }}{% endif %}" id="addAddressForm" novalidate>
                     {% csrf_token %}
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
 
                     <div class="form-grid">
 
@@ -840,7 +876,7 @@
                         <button type="submit" class="save-btn" id="submitBtn">
                             <i class="bi bi-check2"></i> SAVE ADDRESS
                         </button>
-                        <a href="{% url 'address' %}" class="cancel-btn">
+                        <a href="{% if next == 'checkout' %}{% url 'checkout' %}{% else %}{% url 'address' %}{% endif %}" class="cancel-btn">
                             CANCEL
                         </a>
                     </div>

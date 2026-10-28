@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wegnex | Order History</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        /* ==============================
+           GLOBAL STYLES
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0b0b0b;
+            --navbar: #111111;
+            --sidebar: #0c0c0c;
+            --card: #191919;
+            --gold: #eac33d;
+            --border: #292929;
+            --text: #e8e8e8;
+            --muted: #8e8a82;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
+        }
+
+
+        /* ==============================
+           NAVBAR
+        ============================== */
+
+        /* ==============================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ============================== */
+
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+
+        /* ================= MAIN LAYOUT ================= */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 265px;
+            padding: 40px 0 0 52px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0b0b0b;
+            flex-shrink: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .account-title {
+            color: #D4AF37;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .account-subtitle {
+            color: #777777;
+            font-size: 11px;
+            margin-bottom: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .side-link {
+            width: 200px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 14px;
+            color: #bdb5a5;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            transition: all 0.25s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .side-link i {
+            font-size: 17px;
+        }
+
+        .side-link:hover {
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .side-link.active {
+            background: rgba(212, 175, 55, 0.12);
+            color: #D4AF37;
+            border-right: 3px solid #D4AF37;
+            font-weight: 600;
+        }
+
+        .logout-side-link {
+            color: #ff7575 !important;
+            margin-top: 20px;
+        }
+
+        .logout-side-link:hover {
+            background: rgba(255, 117, 117, 0.1) !important;
+            color: #ff9e9e !important;
+        }
+
+        /* ================= LOGOUT POPUP MODAL ================= */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-backdrop-custom.active {
+            display: flex;
+        }
+
+        .modal-backdrop-custom.active .modal-box-custom {
+            transform: scale(1);
+        }
+
+        .modal-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 117, 117, 0.1);
+            border: 1px solid rgba(255, 117, 117, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #ff7575;
+            font-size: 24px;
+        }
+
+        .modal-title-custom {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-desc-custom {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-modal-cancel {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #202020;
+            border: 1px solid #303030;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #282828;
+            color: #fff;
+        }
+
+        .btn-modal-confirm {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #b52a2a;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-modal-confirm:hover {
+            background: #d63636;
+            color: #fff;
+        }
+
+        /* ==============================
+           MAIN CONTENT
+        ============================== */
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+
+            padding: 42px 55px 0 40px;
+        }
+
+        .page-heading {
+            font-size: 27px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .page-heading span {
+            color: var(--gold);
+        }
+
+        .page-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* ==============================
+           ORDER LIST
+        ============================== */
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .order-card {
+            width: 100%;
+            min-height: 155px;
+
+            padding: 22px;
+
+            background: var(--card);
+            border: 1px solid #1c1c1c;
+            border-radius: 2px;
+
+            display: grid;
+
+            grid-template-columns: 115px minmax(0, 1fr) auto;
+
+            align-items: center;
+            gap: 22px;
+
+            transition: border-color 0.2s;
+        }
+
+        .order-card:hover {
+            border-color: #42391f;
+        }
+
+
+        /* PRODUCT IMAGE */
+
+        .product-image {
+            display: block;
+
+            width: 115px;
+            height: 115px;
+
+            object-fit: cover;
+
+            border-radius: 3px;
+            background: #252525;
+        }
+
+
+        /* ORDER INFORMATION */
+
+        .order-info {
+            min-width: 0;
+        }
+
+        .product-name {
+            color: #e5e2dd;
+
+            font-size: 17px;
+            font-weight: 500;
+
+            line-height: 1.5;
+
+            margin-bottom: 12px;
+        }
+
+        .order-meta {
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 10px 18px;
+
+            color: #b5afa3;
+            font-size: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        .order-meta span {
+            line-height: 1.5;
+        }
+
+        .order-meta strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+
+        /* ==============================
+           VIEW DETAILS BUTTON
+        ============================== */
+
+        .view-details {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            min-width: 105px;
+            height: 34px;
+
+            padding: 0 15px;
+
+            border: 1px solid #776020;
+            border-radius: 1px;
+
+            background: transparent;
+            color: var(--gold);
+
+            font-size: 11px;
+
+            transition: all 0.2s;
+        }
+
+        .view-details:hover {
+            background: var(--gold);
+            color: #111;
+        }
+
+
+        /* ==============================
+           ORDER STATUS
+        ============================== */
+
+        .order-status {
+            align-self: start;
+            justify-self: end;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.7px;
+
+            white-space: nowrap;
+        }
+
+        .status-shipped {
+            color: #6db6ff;
+            background: #172638;
+        }
+
+        .status-delivered {
+            color: #4dd69a;
+            background: #102a20;
+        }
+
+        .status-processing {
+            color: #e8bf47;
+            background: #302719;
+        }
+
+        .status-returned {
+            color: #e87b7b;
+            background: #321c1c;
+        }
+
+        .status-cancelled {
+            color: #e87b7b;
+            background: #321c1c;
+        }
+
+
+        /* ==============================
+           PAGINATION
+        ============================== */
+
+        .pagination-wrapper {
+            margin: 45px -55px 0 -40px;
+
+            padding: 22px;
+
+            border-top: 1px solid #1d1d1d;
+            background: #0e0e0e;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+
+            border: 1px solid #393327;
+            border-radius: 1px;
+
+            background: transparent;
+            color: #c5bca8;
+
+            font-size: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .page-btn.active {
+            background: var(--gold);
+            color: #17130a;
+            border-color: var(--gold);
+            font-weight: 700;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+
+        /* ==============================
+           ORDER DETAILS MODAL
+        ============================== */
+
+        .modal-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            z-index: 1000;
+
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(4px);
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .details-modal {
+            width: 100%;
+            max-width: 500px;
+
+            padding: 32px;
+
+            background: #191919;
+            border: 1px solid #3b3220;
+            border-radius: 3px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 21px;
+            font-weight: 500;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+
+            color: #eee;
+            font-size: 28px;
+
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--gold);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #292929;
+
+            font-size: 13px;
+        }
+
+        .detail-row span:first-child {
+            color: var(--muted);
+        }
+
+        .detail-row span:last-child {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-total {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+
+        /* ==============================
+           LARGE DESKTOP
+        ============================== */
+
+        @media (min-width: 1440px) {
+
+            .main-content {
+                padding: 50px 70px 0 50px;
+            }
+
+            .page-heading {
+                font-size: 30px;
+            }
+
+            .page-description {
+                font-size: 14px;
+                margin-bottom: 35px;
+            }
+
+            .order-list {
+                gap: 20px;
+            }
+
+            .order-card {
+                min-height: 175px;
+
+                padding: 25px;
+
+                grid-template-columns: 125px minmax(0, 1fr) auto;
+
+                gap: 25px;
+            }
+
+            .product-image {
+                width: 125px;
+                height: 125px;
+            }
+
+            .product-name {
+                font-size: 19px;
+            }
+
+            .order-meta {
+                font-size: 11px;
+                gap: 12px 22px;
+            }
+
+            .view-details {
+                min-width: 115px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .pagination-wrapper {
+                margin-left: -50px;
+                margin-right: -70px;
+            }
+        }
+
+
+        /* ==============================
+           LAPTOP / SMALL DESKTOP
+        ============================== */
+
+        @media (min-width: 1024px) and (max-width: 1199px) {
+
+            .main-content {
+                padding: 35px 30px 0 25px;
+            }
+
+            .order-card {
+                grid-template-columns: 95px minmax(0, 1fr) auto;
+                gap: 16px;
+                padding: 18px;
+            }
+
+            .product-image {
+                width: 95px;
+                height: 95px;
+            }
+
+            .product-name {
+                font-size: 15px;
+            }
+
+            .order-meta {
+                gap: 8px 12px;
+                font-size: 9px;
+            }
+
+            .pagination-wrapper {
+                margin-left: -25px;
+                margin-right: -30px;
+            }
+        }
+
+
+        /* ==============================
+           TABLET
+        ============================== */
+
+        @media (max-width: 1023px) {
+
+            .navbar {
+                padding: 0 25px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .nav-links {
+                gap: 18px;
+            }
+
+            .nav-links a {
+                font-size: 10px;
+            }
+
+            .nav-icons {
+                gap: 15px;
+            }
+
+            .main-content {
+                padding: 30px 22px 0;
+            }
+
+            .page-heading {
+                font-size: 23px;
+            }
+
+            .page-description {
+                font-size: 11px;
+            }
+
+            .order-card {
+                grid-template-columns: 85px minmax(0, 1fr);
+                gap: 14px;
+                padding: 15px;
+            }
+
+            .product-image {
+                width: 85px;
+                height: 85px;
+            }
+
+            .order-info {
+                grid-column: 2;
+                grid-row: 1;
+                padding-top: 23px;
+            }
+
+            .order-status {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+                align-self: start;
+            }
+
+            .product-name {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+
+            .order-meta {
+                gap: 6px 10px;
+                font-size: 8px;
+                margin-bottom: 10px;
+            }
+
+            .view-details {
+                min-width: 85px;
+                height: 29px;
+                font-size: 9px;
+            }
+
+            .order-status {
+                font-size: 8px;
+                padding: 5px 8px;
+            }
+
+            .pagination-wrapper {
+                margin-left: -22px;
+                margin-right: -22px;
+            }
+        }
+
+
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 200px;
+                padding-left: 20px;
+            }
+            .side-link {
+                width: 170px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            .account-title, .account-subtitle {
+                display: none;
+            }
+            .side-link {
+                width: auto;
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+            .logout-side-link {
+                margin-top: 0;
+            }
+            .main-content {
+                padding: 25px 14px 0;
+            }
+        }
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-icons {
+                gap: 14px;
+            }
+
+            .nav-icons a {
+                font-size: 17px;
+            }
+
+            .page-heading {
+                font-size: 21px;
+            }
+
+            .page-description {
+                font-size: 10px;
+                margin-bottom: 22px;
+            }
+
+            .order-list {
+                gap: 12px;
+            }
+
+            .order-card {
+                min-height: 115px;
+                padding: 12px;
+
+                grid-template-columns: 75px minmax(0, 1fr);
+
+                gap: 12px;
+            }
+
+            .product-image {
+                width: 75px;
+                height: 80px;
+            }
+
+            .order-info {
+                padding-top: 22px;
+            }
+
+            .product-name {
+                font-size: 12px;
+                line-height: 1.5;
+                margin-bottom: 7px;
+            }
+
+            .order-meta {
+                gap: 5px 8px;
+                font-size: 7px;
+                margin-bottom: 9px;
+            }
+
+            .view-details {
+                min-width: 78px;
+                height: 27px;
+                font-size: 8px;
+            }
+
+            .order-status {
+                padding: 4px 7px;
+                font-size: 6px;
+                letter-spacing: 0.4px;
+            }
+
+            .pagination-wrapper {
+                margin: 25px -14px 0;
+                padding: 16px;
+                gap: 6px;
+            }
+
+            .page-btn {
+                width: 31px;
+                height: 31px;
+                font-size: 11px;
+            }
+
+            .details-modal {
+                padding: 22px;
+            }
+
+            .modal-header h2 {
+                font-size: 18px;
+            }
+
+            .detail-row {
+                font-size: 11px;
+                padding: 12px 0;
+            }
+        }
+
+
+        /* ==============================
+           EXTRA SMALL MOBILE
+        ============================== */
+
+        @media (max-width: 360px) {
+
+            .main-content {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .order-card {
+                grid-template-columns: 62px minmax(0, 1fr);
+                gap: 9px;
+                padding: 9px;
+            }
+
+            .product-image {
+                width: 62px;
+                height: 70px;
+            }
+
+            .product-name {
+                font-size: 11px;
+            }
+
+            .order-meta {
+                font-size: 6px;
+            }
+
+            .order-status {
+                font-size: 5px;
+                padding: 4px 5px;
+            }
+
+            .pagination-wrapper {
+                margin-left: -10px;
+                margin-right: -10px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
+    ===================================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+    <div class="main-container">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="sidebar">
+            <div class="account-title">ACCOUNT</div>
+            <div class="account-subtitle">Manage your account</div>
+
+            <a href="{% url 'profile' %}" class="side-link">
+                <i class="bi bi-person-fill"></i>
+                <span>PROFILE</span>
+            </a>
+
+            <a href="{% url 'address' %}" class="side-link">
+                <i class="bi bi-geo-alt"></i>
+                <span>ADDRESS</span>
+            </a>
+
+            <a href="{% url 'order' %}" class="side-link active">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                <span>MY ORDERS</span>
+            </a>
+
+            <a href="{% url 'wishlist' %}" class="side-link">
+                <i class="bi bi-heart"></i>
+                <span>WISHLIST</span>
+            </a>
+
+            <a href="{% url 'wallet' %}" class="side-link">
+                <i class="bi bi-wallet2"></i>
+                <span>WALLET</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openLogoutModal()" class="side-link logout-side-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>LOGOUT</span>
+            </a>
+        </aside>
+
+
+        <!-- ==============================
+             MAIN CONTENT
+        ============================== -->
+
+        <main class="main-content">
+
+            <h1 class="page-heading">
+                ORDER <span>HISTORY</span>
+            </h1>
+
+            <p class="page-description">
+                Review and track your recent horological acquisitions.
+            </p>
+
+
+            <!-- ORDER LIST -->
+
+            <section class="order-list" id="orderList">
+
+                {% if user_orders %}
+                    {% for ord in user_orders %}
+                        <article class="order-card"
+                            data-id="{{ ord.order_number }}"
+                            data-date="{{ ord.date }}"
+                            data-product="{{ ord.product_name }}"
+                            data-price="{{ ord.price }}"
+                            data-payment="{{ ord.payment }}"
+                            data-status="{{ ord.status }}">
+
+                            <img
+                                class="product-image"
+                                src="{{ ord.image_url }}"
+                                alt="{{ ord.product_name }}"
+                            >
+
+                            <div class="order-info">
+
+                                <h2 class="product-name">
+                                    {{ ord.product_name }}{% if ord.item_count > 1 %} <span style="font-size:12px; color:var(--muted); font-weight:normal;">(+{{ ord.item_count|add:"-1" }} more)</span>{% endif %}
+                                </h2>
+
+                                <div class="order-meta">
+
+                                    <span>
+                                        ORDER #{{ ord.order_number }}
+                                    </span>
+
+                                    <span>
+                                        DATE {{ ord.date|upper }}
+                                    </span>
+
+                                    <span>
+                                        PRICE <strong>₹{{ ord.price|floatformat:0 }}</strong>
+                                    </span>
+
+                                </div>
+
+                                <a
+                                    class="view-details"
+                                    href="{% url 'order_view_detail' ord.order_number %}"
+                                >
+                                    View Details
+                                </a>
+
+                            </div>
+
+                            <span class="order-status status-{{ ord.status_raw|lower }}">
+                                {{ ord.status|upper }}
+                            </span>
+
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <!-- DEMO ORDERS -->
+                    <!-- ORDER 1 -->
+
+                    <article class="order-card"
+                        data-id="WGX-982381"
+                        data-date="Jun 24, 2026"
+                        data-product="Wegnex Heritage Automatic"
+                        data-price="48999"
+                        data-payment="Razorpay"
+                        data-status="Shipped">
+
+                        <img
+                            class="product-image"
+                            src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Heritage Automatic"
+                        >
+
+                        <div class="order-info">
+
+                            <h2 class="product-name">
+                                Wegnex Heritage Automatic
+                            </h2>
+
+                            <div class="order-meta">
+
+                                <span>
+                                    ORDER #WGX-982381
+                                </span>
+
+                                <span>
+                                    DATE JUN 24, 2026
+                                </span>
+
+                                <span>
+                                    PRICE <strong>₹48,999</strong>
+                                </span>
+
+                            </div>
+
+                            <a
+                                class="view-details"
+                                href="{% url 'order_view' %}?order_id=WGX-982381"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+
+                        <span class="order-status status-shipped">
+                            SHIPPED
+                        </span>
+
+                    </article>
+
+
+                    <!-- ORDER 2 -->
+
+                    <article class="order-card"
+                        data-id="WGX-921145"
+                        data-date="Jun 18, 2026"
+                        data-product="Wegnex Royal Chronograph"
+                        data-price="54999"
+                        data-payment="Razorpay"
+                        data-status="Delivered">
+
+                        <img
+                            class="product-image"
+                            src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Royal Chronograph"
+                        >
+
+                        <div class="order-info">
+
+                            <h2 class="product-name">
+                                Wegnex Royal Chronograph
+                            </h2>
+
+                            <div class="order-meta">
+
+                                <span>
+                                    ORDER #WGX-921145
+                                </span>
+
+                                <span>
+                                    DATE JUN 18, 2026
+                                </span>
+
+                                <span>
+                                    PRICE <strong>₹54,999</strong>
+                                </span>
+
+                            </div>
+
+                            <a
+                                class="view-details"
+                                href="{% url 'order_view' %}?order_id=WGX-921145"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+
+                        <span class="order-status status-delivered">
+                            DELIVERED
+                        </span>
+
+                    </article>
+
+
+                    <!-- ORDER 3 -->
+
+                    <article class="order-card"
+                        data-id="WGX-991845"
+                        data-date="Jun 12, 2026"
+                        data-product="Wegnex Prestige Gold"
+                        data-price="62999"
+                        data-payment="Wallet"
+                        data-status="Processing">
+
+                        <img
+                            class="product-image"
+                            src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Prestige Gold"
+                        >
+
+                        <div class="order-info">
+
+                            <h2 class="product-name">
+                                Wegnex Prestige Gold
+                            </h2>
+
+                            <div class="order-meta">
+
+                                <span>
+                                    ORDER #WGX-991845
+                                </span>
+
+                                <span>
+                                    DATE JUN 12, 2026
+                                </span>
+
+                                <span>
+                                    PRICE <strong>₹62,999</strong>
+                                </span>
+
+                            </div>
+
+                            <a
+                                class="view-details"
+                                href="{% url 'order_view' %}?order_id=WGX-991845"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+
+                        <span class="order-status status-processing">
+                            PROCESSING
+                        </span>
+
+                    </article>
+
+
+                    <!-- ORDER 4 -->
+
+                    <article class="order-card"
+                        data-id="WGX-990721"
+                        data-date="Jun 05, 2026"
+                        data-product="Wegnex Skeleton Automatic"
+                        data-price="72999"
+                        data-payment="Razorpay"
+                        data-status="Returned">
+
+                        <img
+                            class="product-image"
+                            src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80"
+                            alt="Wegnex Skeleton Automatic"
+                        >
+
+                        <div class="order-info">
+
+                            <h2 class="product-name">
+                                Wegnex Skeleton Automatic
+                            </h2>
+
+                            <div class="order-meta">
+
+                                <span>
+                                    ORDER #WGX-990721
+                                </span>
+
+                                <span>
+                                    DATE JUN 05, 2026
+                                </span>
+
+                                <span>
+                                    PRICE <strong>₹72,999</strong>
+                                </span>
+
+                            </div>
+
+                            <a
+                                class="view-details"
+                                href="{% url 'order_view' %}?order_id=WGX-990721"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+
+                        <span class="order-status status-returned">
+                            RETURNED
+                        </span>
+
+                    </article>
+                {% endif %}
+
+            </section>
+
+
+            <!-- PAGINATION -->
+
+            <div class="pagination-wrapper" id="pagination">
+
+                <button
+                    class="page-btn"
+                    id="previousPage"
+                    onclick="changePage(currentPage - 1)"
+                    aria-label="Previous page"
+                >
+                    ‹
+                </button>
+
+                <button
+                    class="page-btn active"
+                    data-page="1"
+                    onclick="changePage(1)"
+                >
+                    1
+                </button>
+
+                <button
+                    class="page-btn"
+                    data-page="2"
+                    onclick="changePage(2)"
+                >
+                    2
+                </button>
+
+                <button
+                    class="page-btn"
+                    id="nextPage"
+                    onclick="changePage(currentPage + 1)"
+                    aria-label="Next page"
+                >
+                    ›
+                </button>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==============================
+         JAVASCRIPT
+    ============================== -->
+
+    <script>
+
+
+        /* ==============================
+           PAGINATION DEMO
+        ============================== */
+
+        let currentPage = 1;
+
+        function changePage(page) {
+
+            if (page < 1 || page > 2) {
+                return;
+            }
+
+            currentPage = page;
+
+            document.querySelectorAll("[data-page]")
+                .forEach(button => {
+
+                    button.classList.toggle(
+                        "active",
+                        Number(button.dataset.page) === currentPage
+                    );
+
+                });
+
+            document.getElementById("previousPage").disabled =
+                currentPage === 1;
+
+            document.getElementById("nextPage").disabled =
+                currentPage === 2;
+
+            /*
+                Demo pagination only.
+
+                Page 1 and Page 2 buttons currently update
+                the active button only.
+
+                Actual orders pagination should be connected
+                to Django Paginator or your API.
+            */
+
+        }
+
+        changePage(1);
+
+    </script>
+
+    <!-- ================= LOGOUT CONFIRMATION POPUP MODAL ================= -->
+    <div class="modal-backdrop-custom" id="logoutModal" onclick="handleBackdropClick(event)">
+        <div class="modal-box-custom">
+            <div class="modal-icon-badge">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 class="modal-title-custom">Confirm Sign Out</h3>
+            <p class="modal-desc-custom">
+                Are you sure you want to log out of your WEGNEX account?
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">
+                    No, Cancel
+                </button>
+                <a href="{% url 'logout' %}" class="btn-modal-confirm">
+                    Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleBackdropClick(event) {
+            if (event.target === document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLogoutModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

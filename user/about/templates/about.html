@@ -1,0 +1,1371 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | WEGNEX Luxury Timepieces</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --gold-dark: #A67C1E;
+            --gold-gradient: linear-gradient(135deg, #E6C25B 0%, #D4AF37 50%, #A67C1E 100%);
+            --black: #080808;
+            --dark-900: #0b0b0b;
+            --dark-800: #121212;
+            --dark-700: #181818;
+            --dark-600: #222222;
+            --border-subtle: rgba(212, 175, 55, 0.15);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b5b5b5;
+            --text-muted: #7e7e7e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =====================================================
+           NAVBAR (CONSISTENT WITH WEGNEX STANDARDS)
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .logo:hover, .navbar-brand.logo:hover {
+            color: var(--gold) !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+            font-weight: 500 !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+        /* =====================================================
+           BREADCRUMB HEADER
+        ===================================================== */
+        .breadcrumb-strip {
+            background: #0e0e0e;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 14px 0;
+            font-size: 12px;
+        }
+
+        .breadcrumb-strip a {
+            color: #888;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-strip a:hover {
+            color: var(--gold);
+        }
+
+        .breadcrumb-strip .separator {
+            margin: 0 10px;
+            color: #555;
+        }
+
+        .breadcrumb-strip .active-crumb {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* =====================================================
+           HERO SECTION
+        ===================================================== */
+        .about-hero {
+            position: relative;
+            padding: 90px 0 100px;
+            background: radial-gradient(ellipse at 80% 40%, rgba(212, 175, 55, 0.08) 0%, rgba(11, 11, 11, 0.95) 55%, #080808 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .gold-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 30px;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.9;
+            max-width: 540px;
+            margin-bottom: 36px;
+        }
+
+        .btn-gold-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 34px;
+            background: var(--gold-gradient);
+            color: #0b0b0b;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            border: none;
+            transition: all 0.35s ease;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+        }
+
+        .btn-gold-primary:hover {
+            background: #ffffff;
+            color: #0b0b0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline-gold {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background: transparent;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-gold:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* Hero Image Card */
+        .hero-image-wrapper {
+            position: relative;
+            padding: 16px;
+        }
+
+        .hero-image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 16px;
+            transform: rotate(-1.5deg);
+            pointer-events: none;
+            transition: transform 0.4s ease;
+        }
+
+        .hero-image-wrapper:hover::before {
+            transform: rotate(0deg);
+            border-color: var(--gold);
+        }
+
+        .hero-img-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--dark-800);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-img-box img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .hero-image-wrapper:hover .hero-img-box img {
+            transform: scale(1.04);
+        }
+
+        .hero-badge-floating {
+            position: absolute;
+            bottom: 28px;
+            left: 28px;
+            background: rgba(12, 12, 12, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            padding: 14px 22px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-badge-floating .badge-label {
+            font-size: 10px;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .hero-badge-floating .badge-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* =====================================================
+           STATS BAR
+        ===================================================== */
+        .stats-bar-section {
+            background: #0d0d0d;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 45px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 15px;
+            position: relative;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 6px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        @media (max-width: 767px) {
+            .stat-item:not(:last-child)::after {
+                display: none;
+            }
+            .stat-item {
+                margin-bottom: 25px;
+            }
+        }
+
+        /* =====================================================
+           OUR HERITAGE & STORY
+        ===================================================== */
+        .story-section {
+            padding: 110px 0;
+            background: #0b0b0b;
+            position: relative;
+        }
+
+        .section-eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .section-heading-large {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+            margin-bottom: 24px;
+        }
+
+        .section-heading-large span {
+            color: var(--gold);
+        }
+
+        .story-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 2;
+            margin-bottom: 22px;
+        }
+
+        .quote-box {
+            padding: 24px 30px;
+            background: rgba(212, 175, 55, 0.04);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-style: italic;
+            color: #d8d8d8;
+            font-size: 14px;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .quote-box cite {
+            display: block;
+            margin-top: 10px;
+            font-style: normal;
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .story-image-box {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .story-image-box img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .story-image-box:hover img {
+            transform: scale(1.03);
+        }
+
+        .story-image-tag {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #d4af37;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* =====================================================
+           PILLARS OF EXCELLENCE (CARDS)
+        ===================================================== */
+        .craftsmanship-section {
+            padding: 100px 0;
+            background: #080808;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .section-header-center {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 65px;
+        }
+
+        .pillar-card {
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 38px 30px;
+            height: 100%;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold-gradient);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.08);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--gold);
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .pillar-card:hover .pillar-icon {
+            background: var(--gold);
+            color: #0b0b0b;
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .pillar-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 14px;
+        }
+
+        .pillar-card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.85;
+            margin: 0;
+        }
+
+        /* =====================================================
+           WATCHMAKING PROCESS / TIMELINE
+        ===================================================== */
+        .process-section {
+            padding: 105px 0;
+            background: #0c0c0c;
+        }
+
+        .process-card {
+            background: #131313;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 35px 25px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .process-card:hover {
+            border-color: rgba(212, 175, 55, 0.35);
+            transform: translateY(-5px);
+        }
+
+        .process-step-num {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            display: inline-block;
+            padding: 4px 14px;
+            background: rgba(212, 175, 55, 0.08);
+            border-radius: 20px;
+        }
+
+        .process-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .process-card p {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* =====================================================
+           WHY CHOOSE WEGNEX
+        ===================================================== */
+        .why-choose-section {
+            padding: 110px 0;
+            background: #080808;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .perk-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .perk-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .perk-check {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .perk-content h5 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .perk-content p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* =====================================================
+           CTA SHOWCASE BANNER
+        ===================================================== */
+        .about-cta-banner {
+            padding: 85px 30px;
+            background: linear-gradient(135deg, #181512 0%, #111111 50%, #0d0d0d 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .about-cta-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: var(--gold-gradient);
+        }
+
+        .cta-title {
+            font-size: clamp(26px, 3.8vw, 42px);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta-title span {
+            color: var(--gold);
+        }
+
+        .cta-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            max-width: 580px;
+            margin: 0 auto 35px;
+            line-height: 1.8;
+        }
+
+        /* =====================================================
+           FOOTER (MATCHING WEGNEX PRODUCT_LIST / HOME)
+        ===================================================== */
+        .footer {
+            background: #080808;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 80px 0 30px;
+        }
+
+        .footer-logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-text {
+            color: #888888;
+            font-size: 13px;
+            line-height: 1.9;
+            max-width: 320px;
+            margin-bottom: 25px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icons a {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: #D4AF37;
+            color: #000000;
+            border-color: #D4AF37;
+            transform: translateY(-3px);
+        }
+
+        .footer-heading {
+            color: #D4AF37;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #888888;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #D4AF37;
+            padding-left: 4px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: 50px;
+            padding-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-bottom p {
+            color: #666666;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            margin: 0;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR (WEGNEX STANDARD)
+    ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu"
+                    aria-controls="navbarMenu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">Category</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'about' %}">About</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="navProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'about' %}" id="navLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- =====================================================
+         BREADCRUMB STRIP
+    ===================================================== -->
+    <div class="breadcrumb-strip">
+        <div class="container">
+            <a href="{% url 'home' %}"><i class="bi bi-house-door me-1"></i>Home</a>
+            <span class="separator">/</span>
+            <span class="active-crumb">About Wegnex</span>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         HERO SECTION
+    ===================================================== -->
+    <section class="about-hero">
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-6">
+                    <div class="gold-tag">
+                        <i class="bi bi-stars"></i> TIMELESS HOROLOGY & CRAFTSMANSHIP
+                    </div>
+
+                    <h1 class="hero-title">
+                        CRAFTING<br>
+                        TIMELESS<br>
+                        <span>LUXURY.</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Discover a world where Swiss-inspired horological precision meets sculptural artistry.
+                        Every WEGNEX timepiece is forged with uncompromising attention to detail, seamlessly marrying
+                        classical heritage with modern masculine sophistication.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{% url 'product_list' %}" class="btn-gold-primary">
+                            Explore Collection <i class="bi bi-arrow-up-right"></i>
+                        </a>
+                        <a href="#story" class="btn-outline-gold">
+                            Our Heritage <i class="bi bi-arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="hero-image-wrapper">
+                        <div class="hero-img-box">
+                            <img src="{% static 'images/hero_watch.jpg' %}" alt="WEGNEX Luxury Watch">
+                            <div class="hero-badge-floating">
+                                <span class="badge-label">Signature Chronograph</span>
+                                <h3 class="badge-title">WEGNEX MASTER CALIBER</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         KEY STATS & MILESTONES BAR
+    ===================================================== -->
+    <section class="stats-bar-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Authentic Precision</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">316L</div>
+                        <div class="stat-label">Surgical Steel Grade</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Collectors Worldwide</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">5 YRS</div>
+                        <div class="stat-label">Global Warranty</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         OUR STORY / HERITAGE SECTION
+    ===================================================== -->
+    <section class="story-section" id="story">
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-6 order-2 order-lg-1">
+                    <div class="story-image-box">
+                        <img src="{% static 'images/watch_movement_banner.jpg' %}" alt="Wegnex Movement Engineering">
+                        <div class="story-image-tag">
+                            <i class="bi bi-gear-wide-connected me-1"></i> CALIBER REGULATION
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 order-1 order-lg-2">
+                    <span class="section-eyebrow">OUR HERITAGE & VISION</span>
+                    <h2 class="section-heading-large">
+                        A LEGACY FORGED IN <span>PASSION & PRECISION</span>
+                    </h2>
+
+                    <p class="story-text">
+                        WEGNEX was born out of a profound admiration for the art of mechanical watchmaking.
+                        We set out to create luxury timepieces that transcend passing trends, delivering chronometric
+                        perfection and imposing architectural presence directly into the hands of connoisseurs.
+                    </p>
+
+                    <div class="quote-box">
+                        "A watch does not merely mark the passing seconds; it reflects the wearer's discipline,
+                        ambition, and appreciation for extraordinary engineering."
+                        <cite>— WEGNEX Master Horology Atelier</cite>
+                    </div>
+
+                    <p class="story-text">
+                        From hand-finished bevels to anti-reflective sapphire crystals and high-beat automatic movements,
+                        every component is scrutinized under 10x magnification. We build heirlooms — instruments destined to
+                        be passed down through generations.
+                    </p>
+
+                    <a href="{% url 'product_list' %}" class="btn-gold-primary mt-2">
+                        Discover The Watches <i class="bi bi-chevron-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         CRAFTSMANSHIP & CORE PILLARS
+    ===================================================== -->
+    <section class="craftsmanship-section">
+        <div class="container">
+
+            <div class="section-header-center">
+                <span class="section-eyebrow">UNCOMPROMISING STANDARDS</span>
+                <h2 class="section-heading-large">
+                    THE FOUR PILLARS OF <span>WEGNEX HOROLOGY</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    Every timepiece is an orchestration of metallurgical science, micro-mechanics, and artistic finishing.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <i class="bi bi-gem"></i>
+                        </div>
+                        <h3>Sapphire Crystal</h3>
+                        <p>
+                            Virtually scratch-proof synthetic sapphire crystals with five-layer interior anti-reflective coating for crystal-clear legibility under any light.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h3>High-Beat Calibers</h3>
+                        <p>
+                            Calibrated mechanical and automatic movements regulated across multiple positions for chronometer-grade accuracy and buttery-smooth second sweeps.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3>316L Stainless Steel</h3>
+                        <p>
+                            Forged from surgical marine-grade 316L stainless steel, combining mirror-polished chamfers with hand-satin brushed flanks for stunning contrast.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <i class="bi bi-water"></i>
+                        </div>
+                        <h3>Pressure Tested</h3>
+                        <p>
+                            Engineered with screw-down crowns and dual O-ring gaskets to withstand depth pressures up to 100M-200M, ready for boardroom or open ocean.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =====================================================
+         WATCHMAKING PROCESS
+    ===================================================== -->
+    <section class="process-section">
+        <div class="container">
+
+            <div class="section-header-center">
+                <span class="section-eyebrow">THE ATELIER JOURNEY</span>
+                <h2 class="section-heading-large">
+                    FROM BLUEPRINT TO <span>WRIST</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    An exacting process that takes hundreds of hours of precision design and hand-assembly.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="process-card">
+                        <span class="process-step-num">Step 01</span>
+                        <h4>Architectural Concept</h4>
+                        <p>
+                            Detailed ergonomic blueprints and 3D modeling to balance dial proportion, bezel geometry, and wrist curvature.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="process-card">
+                        <span class="process-step-num">Step 02</span>
+                        <h4>Precision Milling</h4>
+                        <p>
+                            High-precision CNC cutting of case components with micrometer tolerances, followed by multi-stage hand deburring.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="process-card">
+                        <span class="process-step-num">Step 03</span>
+                        <h4>Master Assembly</h4>
+                        <p>
+                            Carefully seated gear trains, balance springs, and jewel bearings assembled in ISO-certified cleanroom environments.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="process-card">
+                        <span class="process-step-num">Step 04</span>
+                        <h4>200-Hour Testing</h4>
+                        <p>
+                            Each watch undergoes rigorous shock resistance, thermal stability, water pressure, and chronometric variance testing.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =====================================================
+         WHY CHOOSE WEGNEX
+    ===================================================== -->
+    <section class="why-choose-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-6">
+                    <span class="section-eyebrow">THE WEGNEX COMMITMENT</span>
+                    <h2 class="section-heading-large">
+                        WHY DISCERNING COLLECTORS <span>CHOOSE WEGNEX</span>
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 30px;">
+                        When you acquire a WEGNEX, you do not just purchase an accessory. You invest in horological prestige, backed by industry-leading warranties and dedicated white-glove customer care.
+                    </p>
+
+                    <ul class="perk-list">
+                        <li class="perk-item">
+                            <div class="perk-check">
+                                <i class="bi bi-check2"></i>
+                            </div>
+                            <div class="perk-content">
+                                <h5>100% Genuine Authenticity & Registered Serial</h5>
+                                <p>Every watch carries an engraved unique serial number and physical authenticity certificate registered in our digital vault.</p>
+                            </div>
+                        </li>
+
+                        <li class="perk-item">
+                            <div class="perk-check">
+                                <i class="bi bi-check2"></i>
+                            </div>
+                            <div class="perk-content">
+                                <h5>Complimentary Express Global Shipping</h5>
+                                <p>Secure, fully-insured door-to-door express delivery with tamper-proof luxury packaging on all orders.</p>
+                            </div>
+                        </li>
+
+                        <li class="perk-item">
+                            <div class="perk-check">
+                                <i class="bi bi-check2"></i>
+                            </div>
+                            <div class="perk-content">
+                                <h5>5-Year Comprehensive International Warranty</h5>
+                                <p>Full coverage for mechanical defects and caliber servicing with certified horological technicians.</p>
+                            </div>
+                        </li>
+
+                        <li class="perk-item">
+                            <div class="perk-check">
+                                <i class="bi bi-check2"></i>
+                            </div>
+                            <div class="perk-content">
+                                <h5>30-Day Hassle-Free Returns</h5>
+                                <p>Unconditional peace of mind with our no-questions-asked luxury inspection return guarantee.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="story-image-box">
+                        <img src="{% static 'images/classic-watch.jpg' %}" alt="Wegnex Classic Watch">
+                        <div class="story-image-tag">
+                            <i class="bi bi-award me-1"></i> MASTERPIECE COLLECTION
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         CALL TO ACTION BANNER
+    ===================================================== -->
+    <section class="py-5" style="background: #080808;">
+        <div class="container">
+            <div class="about-cta-banner">
+                <span class="section-eyebrow">YOUR HOROLOGICAL STATEMENT</span>
+                <h2 class="cta-title">
+                    DISCOVER YOUR SIGNATURE <span>TIMEPIECE TODAY</span>
+                </h2>
+                <p class="cta-text">
+                    Explore our curated collection of automatic calibers, sports chronographs, and timeless dress watches crafted to elevate every moment.
+                </p>
+                <div class="d-flex justify-content-center flex-wrap gap-3">
+                    <a href="{% url 'product_list' %}" class="btn-gold-primary">
+                        Browse Full Collection <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="{% url 'category' %}" class="btn-outline-gold">
+                        Explore Categories <i class="bi bi-grid"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         FOOTER (WEGNEX LUXURY)
+    ===================================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+
+                <!-- Brand Column -->
+                <div class="col-lg-4 col-md-6 mb-5">
+                    <a href="{% url 'home' %}" class="footer-logo">WEGNEX</a>
+                    <p class="footer-text">
+                        Curating the finest horological masterpieces for those who appreciate the intersection of engineering and timeless elegance.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" aria-label="Twitter X"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 mb-5">
+                    <h6 class="footer-heading">Navigation</h6>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'product_list' %}">All Products</a></li>
+                        <li><a href="{% url 'category' %}">Categories</a></li>
+                        <li><a href="{% url 'about' %}">About Wegnex</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Care -->
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <h6 class="footer-heading">Client Services</h6>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                        <li><a href="{% url 'cart' %}">Shopping Bag</a></li>
+                        <li><a href="{% url 'order' %}">Order History</a></li>
+                        <li><a href="{% url 'wallet' %}">Wegnex Wallet</a></li>
+                    </ul>
+                </div>
+
+                <!-- Security & Authenticity -->
+                <div class="col-lg-3 col-md-6 mb-5">
+                    <h6 class="footer-heading">Trust & Warranty</h6>
+                    <ul class="footer-links">
+                        <li><a href="#story">Authenticity Guarantee</a></li>
+                        <li><a href="#story">5-Year Global Warranty</a></li>
+                        <li><a href="{% url 'profile' %}">Client Profile</a></li>
+                        <li><a href="{% url 'about' %}">Horology Atelier</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>© 2026 WEGNEX. ALL RIGHTS RESERVED.</p>
+                <div class="footer-bottom-links">
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'product_list' %}">Products</a>
+                    <a href="{% url 'category' %}">Categories</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

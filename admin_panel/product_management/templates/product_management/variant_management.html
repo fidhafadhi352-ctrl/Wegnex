@@ -21,8 +21,8 @@
         .menu li span:first-child { width:14px; text-align:center; font-size:14px; }
         .menu li:hover { background:#1c1c1c; color:#fff; }
         .menu li.active { color:#fff; border-left:2px solid #fff; padding-left:10px; background:#191919; }
-        .logout-link { position:absolute; bottom:35px; left:22px; color:#777; font-size:10px; letter-spacing:1px; text-decoration:none; transition:.2s; }
-        .logout-link:hover { color:#fff; }
+        .logout, .logout-link { position:absolute; bottom:35px; left:22px; color:#777; font-size:10px; letter-spacing:1px; text-decoration:none; transition:.2s; }
+        .logout:hover, .logout-link:hover { color:#fff; }
 
         .main { margin-left:180px; min-height:100vh; }
 
@@ -211,17 +211,79 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="logo"><h2>HOROLOGY</h2><p>Management Suite</p></div>
+
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
         <ul class="menu">
-            <li><a href="{% url 'admin_dashboard' %}"><span>▦</span><span>DASHBOARD</span></a></li>
-            <li><span>♧</span><span>ORDERS</span></li>
-            <li class="active"><a href="{% url 'admin_product_list' %}"><span>♧</span><span>PRODUCTS</span></a></li>
-            <li><a href="{% url 'category_management' %}"><span>♢</span><span>CATEGORIES</span></a></li>
-            <li><span>♙</span><span>CUSTOMERS</span></li>
-            <li><span>♜</span><span>COUPONS</span></li>
-            <li><span>▣</span><span>REVIEWS</span></li>
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
         </ul>
-        <a href="{% url 'admin_logout' %}" class="logout-link">⇥ &nbsp; LOGOUT</a>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
     </aside>
 
     <!-- MAIN -->

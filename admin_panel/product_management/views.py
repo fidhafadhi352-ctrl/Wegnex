@@ -20,7 +20,7 @@ def is_admin(user):
     return user.is_authenticated and (user.is_staff or user.is_superuser) and user.is_active
 
 
-def _save_cropped_image(b64_data, folder, filename_prefix='img'):
+def _save_cropped_image(b64_data, filename_prefix='img'):
     if ',' in b64_data:
         b64_data = b64_data.split(',', 1)[1]
 
@@ -273,10 +273,11 @@ def add_variant(request, product_id):
 
     for i, b64 in enumerate(valid_images):
         try:
-            content_file = _save_cropped_image(b64, 'products/variants', filename_prefix=f'v{variant.id}')
+            content_file = _save_cropped_image(b64, filename_prefix=f'var{variant.id}_{i}')
             vi = VariantImage(variant=variant, order=i, is_primary=(i == 0))
             vi.image.save(content_file.name, content_file, save=True)
         except Exception as e:
+            import traceback; traceback.print_exc()
             pass
 
     messages.success(request, f"Variant added successfully to '{product.name}'.")
@@ -343,10 +344,11 @@ def edit_variant(request, product_id, variant_id):
     next_order = variant.images.count()
     for i, b64 in enumerate(new_valid):
         try:
-            content_file = _save_cropped_image(b64, 'products/variants', filename_prefix=f'v{variant.id}e')
+            content_file = _save_cropped_image(b64, filename_prefix=f'var{variant.id}_e{i}')
             vi = VariantImage(variant=variant, order=next_order + i, is_primary=False)
             vi.image.save(content_file.name, content_file, save=True)
         except Exception:
+            import traceback; traceback.print_exc()
             pass
 
     if not variant.images.filter(is_primary=True).exists():

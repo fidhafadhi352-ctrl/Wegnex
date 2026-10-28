@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wegnex Admin | Order Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        /* =========================
+           GLOBAL STYLES
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080808;
+            --sidebar: #1d1d1d;
+            --card: #1d1d1d;
+            --border: #3a3a3a;
+            --text: #f1f1f1;
+            --muted: #777777;
+            --gold: #e6c447;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 12px;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 180px;
+            height: 100vh;
+            background: #111111;
+            border-right: 1px solid #292929;
+            padding: 30px 10px;
+            z-index: 100;
+        }
+
+        .logo {
+            padding-left: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo h2 {
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 3px;
+            color: #858585;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .menu li span:first-child {
+            width: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .menu li:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .menu li.active {
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+            background: #191919;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 35px;
+            left: 22px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .logout:hover {
+            color: #fff;
+        }
+
+        /* =========================
+           MAIN AREA
+        ========================= */
+
+        .main-area {
+            margin-left: 180px;
+            min-height: 100vh;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           TOP TOOLBAR
+        ========================= */
+
+        .toolbar {
+            min-height: 41px;
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid #454545;
+        }
+
+        .search-box {
+            width: 265px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 9px;
+            background: #242424;
+            border: 1px solid #484848;
+            border-radius: 6px;
+        }
+
+        .search-icon {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .search-box input {
+            width: 100%;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #eee;
+            font-size: 9px;
+        }
+
+        .search-box input::placeholder {
+            color: #777;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 13px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .toolbar-actions button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .toolbar-actions button:hover {
+            color: var(--gold);
+        }
+
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            width: 100%;
+            padding: 20px 23px 23px;
+            min-width: 0;
+        }
+
+        .page-heading {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .page-description {
+            font-size: 8px;
+            color: #777;
+            letter-spacing: .4px;
+            margin-bottom: 23px;
+        }
+
+
+        /* =========================
+           STATISTICS CARDS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr 1fr 1fr;
+            gap: 13px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            min-height: 69px;
+            padding: 14px;
+            border: 1px solid #444;
+            border-radius: 9px;
+            background: var(--card);
+            position: relative;
+        }
+
+        .stat-label {
+            color: #747474;
+            font-size: 7px;
+            letter-spacing: 1px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 17px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .stat-footer {
+            position: absolute;
+            right: 7px;
+            bottom: 10px;
+            padding: 3px 5px;
+            border-radius: 3px;
+            background: #f0f0f0;
+            color: #222;
+            font-size: 6px;
+            white-space: nowrap;
+        }
+
+        .stat-footer.positive {
+            color: #168d50;
+        }
+
+        .stat-footer.negative {
+            color: #555;
+        }
+
+        .pending-indicator {
+            width: 5px;
+            height: 5px;
+            background: #ff3333;
+            border-radius: 50%;
+            position: absolute;
+            right: 14px;
+            bottom: 18px;
+        }
+
+
+        /* =========================
+           ORDER TABLE CARD
+        ========================= */
+
+        .table-card {
+            border: 1px solid #484848;
+            border-radius: 9px;
+            overflow: hidden;
+            background: #171717;
+        }
+
+        .table-toolbar {
+            min-height: 42px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #383838;
+        }
+
+        .table-controls {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .control-button {
+            height: 24px;
+            padding: 0 10px;
+            border: 1px solid #777;
+            border-radius: 5px;
+            background: transparent;
+            color: #e2e2e2;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-button:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .showing-text {
+            color: #666;
+            font-size: 7px;
+            text-align: right;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .orders-table th {
+            height: 48px;
+            padding: 9px 12px;
+            background: #1a1a1a;
+            color: #626262;
+            text-align: left;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 1px solid #606060;
+        }
+
+        .orders-table td {
+            height: 47px;
+            padding: 8px 12px;
+            color: #e1e1e1;
+            font-size: 9px;
+            border-bottom: 1px solid #626262;
+            overflow-wrap: anywhere;
+            vertical-align: middle;
+        }
+
+        .orders-table tbody tr:hover {
+            background: #222;
+        }
+
+        .orders-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .orders-table th:nth-child(1) {
+            width: 14%;
+        }
+
+        .orders-table th:nth-child(2) {
+            width: 20%;
+        }
+
+        .orders-table th:nth-child(3) {
+            width: 13%;
+        }
+
+        .orders-table th:nth-child(4) {
+            width: 13%;
+        }
+
+        .orders-table th:nth-child(5) {
+            width: 13%;
+        }
+
+        .orders-table th:nth-child(6) {
+            width: 15%;
+        }
+
+        .orders-table th:nth-child(7) {
+            width: 12%;
+        }
+
+        .order-id {
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .customer-name {
+            font-size: 9px;
+            font-weight: 500;
+            color: #eee;
+            margin-bottom: 3px;
+        }
+
+        .customer-product {
+            font-size: 7px;
+            color: #686868;
+            line-height: 1.4;
+        }
+
+        .order-date {
+            color: #747474 !important;
+            line-height: 1.5;
+        }
+
+        .total-amount {
+            font-size: 9px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           STATUS BADGES
+        ========================= */
+
+        .status-badge {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .status-paid {
+            color: #25d982;
+            background: rgba(37, 217, 130, 0.12);
+            border: 1px solid rgba(37, 217, 130, 0.3);
+        }
+
+        .status-delivered {
+            color: #25d982;
+            background: rgba(37, 217, 130, 0.12);
+            border: 1px solid rgba(37, 217, 130, 0.3);
+        }
+
+        .status-pending {
+            color: #e6c447;
+            background: rgba(230, 196, 71, 0.12);
+            border: 1px solid rgba(230, 196, 71, 0.3);
+        }
+
+        .status-shipped {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.12);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .status-out-for-delivery {
+            color: #c084fc;
+            background: rgba(192, 132, 252, 0.12);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+        }
+
+        .status-cancelled {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.12);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+        }
+
+
+        /* =========================
+           VIEW DETAILS BUTTON
+        ========================= */
+
+        .view-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #ffffff;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .view-button:hover {
+            background: #e5e5e5;
+            color: #000000;
+            border-color: #e5e5e5;
+        }
+
+
+        /* =========================
+           TABLE FOOTER / PAGINATION
+        ========================= */
+
+        .table-footer {
+            min-height: 41px;
+            padding: 7px 9px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid #404040;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination button {
+            min-width: 23px;
+            height: 23px;
+            padding: 0 6px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            background: transparent;
+            color: #ddd;
+            font-size: 9px;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: #777;
+        }
+
+        .pagination button.active {
+            background: #f2f2f2;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .pagination button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        .pagination .pagination-outline {
+            border-color: #555;
+            padding: 0 10px;
+        }
+
+        .pagination-ellipsis {
+            color: #888;
+            padding: 0 2px;
+        }
+
+
+        /* =========================
+           FILTER DROPDOWN
+        ========================= */
+
+        .filter-wrapper {
+            position: relative;
+        }
+
+        .filter-menu {
+            display: none;
+            position: absolute;
+            top: 31px;
+            left: 0;
+            z-index: 100;
+            width: 150px;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #222;
+            box-shadow: 0 8px 25px #0008;
+        }
+
+        .filter-menu.show {
+            display: block;
+        }
+
+        .filter-menu label {
+            display: block;
+            color: #bbb;
+            font-size: 9px;
+            margin-bottom: 7px;
+        }
+
+        .filter-menu select {
+            width: 100%;
+            padding: 7px;
+            background: #111;
+            color: white;
+            border: 1px solid #444;
+            font-size: 9px;
+        }
+
+        .control-select {
+            height: 24px;
+            padding: 0 8px;
+            border: 1px solid #777;
+            border-radius: 5px;
+            background: #1d1d1d;
+            color: #e2e2e2;
+            font-size: 8px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .control-select:focus,
+        .control-select:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .clear-filter-btn {
+            height: 24px;
+            padding: 0 10px;
+            border: 1px solid #d9534f;
+            border-radius: 5px;
+            background: rgba(217, 83, 79, 0.15);
+            color: #ff8585;
+            font-size: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .clear-filter-btn:hover {
+            background: #d9534f;
+            color: #fff;
+        }
+
+
+
+        .pagination a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #ddd;
+        }
+
+        .pagination a button {
+            pointer-events: none;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #181818;
+            border: 1px solid var(--gold);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            font-size: 11px;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+
+        /* =========================
+           DETAILS MODAL
+        ========================= */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: #000b;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .details-modal {
+            width: 100%;
+            max-width: 430px;
+            padding: 25px;
+            background: #202020;
+            border: 1px solid #444;
+            border-radius: 9px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            border: none;
+            background: transparent;
+            color: #ccc;
+            font-size: 24px;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #393939;
+            font-size: 11px;
+        }
+
+        .detail-row span:first-child {
+            color: #999;
+        }
+
+        .detail-row span:last-child {
+            color: #eee;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .modal-action-button {
+            min-height: 32px;
+            padding: 0 12px;
+            border: 1px solid #555;
+            background: transparent;
+            color: #eee;
+            font-size: 9px;
+        }
+
+        .modal-action-button.primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #111;
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           RESPONSIVE TABLET
+        ========================= */
+
+        @media (min-width: 1200px) {
+            .app-layout {
+                grid-template-columns: 210px minmax(0, 1fr);
+            }
+
+            .brand {
+                padding-left: 25px;
+            }
+
+            .sidebar-menu {
+                padding-left: 20px;
+            }
+
+            .content {
+                padding: 25px 30px;
+            }
+
+            .toolbar {
+                padding: 0 30px;
+            }
+
+            .page-heading {
+                font-size: 23px;
+            }
+
+            .page-description {
+                font-size: 10px;
+            }
+
+            .stat-card {
+                min-height: 83px;
+                padding: 16px;
+            }
+
+            .stat-label {
+                font-size: 8px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .orders-table th {
+                height: 52px;
+                font-size: 10px;
+                padding: 12px 14px;
+            }
+
+            .orders-table td {
+                height: 54px;
+                padding: 10px 14px;
+                font-size: 10px;
+            }
+
+            .customer-name {
+                font-size: 10px;
+            }
+
+            .customer-product {
+                font-size: 8px;
+            }
+
+            .status-badge {
+                font-size: 8px;
+            }
+
+            .table-footer {
+                min-height: 45px;
+            }
+        }
+
+
+        /* =========================
+           LARGE DESKTOP
+        ========================= */
+
+        @media (min-width: 1600px) {
+
+            .toolbar {
+                min-height: 52px;
+            }
+
+            .search-box {
+                width: 350px;
+                height: 30px;
+            }
+
+            .search-box input {
+                font-size: 11px;
+            }
+
+            .content {
+                padding: 30px 40px;
+            }
+
+            .page-heading {
+                font-size: 26px;
+            }
+
+            .page-description {
+                font-size: 11px;
+                margin-bottom: 28px;
+            }
+
+            .stats-grid {
+                gap: 18px;
+                margin-bottom: 16px;
+            }
+
+            .stat-card {
+                min-height: 100px;
+                padding: 20px;
+            }
+
+            .stat-label {
+                font-size: 9px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .table-toolbar {
+                min-height: 52px;
+                padding: 10px 15px;
+            }
+
+            .control-button {
+                height: 30px;
+                font-size: 10px;
+            }
+
+            .showing-text {
+                font-size: 9px;
+            }
+
+            .orders-table th {
+                height: 58px;
+                font-size: 11px;
+            }
+
+            .orders-table td {
+                height: 65px;
+                font-size: 11px;
+                padding: 12px 16px;
+            }
+
+            .customer-name {
+                font-size: 12px;
+            }
+
+            .customer-product {
+                font-size: 9px;
+            }
+
+            .total-amount {
+                font-size: 12px;
+            }
+
+            .view-button {
+                font-size: 10px;
+            }
+
+            .status-badge {
+                font-size: 9px;
+            }
+
+            .table-footer {
+                min-height: 52px;
+                padding: 9px 15px;
+            }
+
+            .pagination button {
+                min-width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+        }
+
+
+        /* =========================
+           SMALL LAPTOP / TABLET
+        ========================= */
+
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 65px;
+                padding: 20px 5px;
+            }
+
+            .logo h2,
+            .logo p,
+            .menu li span:last-child,
+            .logout {
+                display: none;
+            }
+
+            .menu li {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .menu li a {
+                justify-content: center;
+            }
+
+            .main-area {
+                margin-left: 65px;
+            }
+
+            .toolbar {
+                padding: 0 14px;
+            }
+
+            .content {
+                padding: 20px 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .stat-card {
+                min-height: 72px;
+            }
+
+            .table-scroll {
+                overflow-x: auto;
+            }
+
+            .orders-table {
+                min-width: 670px;
+            }
+
+            .showing-text {
+                font-size: 6px;
+            }
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 560px) {
+
+            .toolbar {
+                min-height: 45px;
+                padding: 0 12px;
+            }
+
+            .search-box {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .toolbar-actions {
+                gap: 10px;
+            }
+
+            .content {
+                padding: 20px 10px;
+            }
+
+            .page-heading {
+                font-size: 20px;
+            }
+
+            .page-description {
+                font-size: 9px;
+                margin-bottom: 20px;
+            }
+
+            .stats-grid {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px;
+                min-height: 75px;
+            }
+
+            .stat-value {
+                font-size: 17px;
+            }
+
+            .stat-label {
+                font-size: 7px;
+            }
+
+            .stat-footer {
+                position: static;
+                display: inline-block;
+                margin-top: 5px;
+            }
+
+            .pending-indicator {
+                right: 10px;
+                bottom: 12px;
+            }
+
+            .table-toolbar {
+                flex-wrap: wrap;
+            }
+
+            .showing-text {
+                width: 100%;
+                text-align: left;
+                padding: 2px 0;
+            }
+
+            .orders-table {
+                min-width: 670px;
+            }
+
+            .table-footer {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
+        <ul class="menu">
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
+        </ul>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
+    </aside>
+
+
+        <!-- MAIN AREA -->
+
+        <main class="main-area">
+
+
+            <!-- TOOLBAR -->
+
+            <header class="toolbar">
+
+                <form method="GET" action="{% url 'order_management' %}" style="display:flex; align-items:center; gap:8px; width:100%; max-width:440px;">
+                    <label class="search-box" style="flex:1;">
+                        <span class="search-icon">⌕</span>
+                        <input
+                            type="search"
+                            name="search"
+                            id="searchInput"
+                            placeholder="Search orders, customers, phone, email..."
+                            value="{{ search_query }}"
+                            autocomplete="off"
+                        >
+                    </label>
+                    {% if status_filter and status_filter != 'all' %}
+                        <input type="hidden" name="status" value="{{ status_filter }}">
+                    {% endif %}
+                    {% if sort_by and sort_by != 'date_desc' %}
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                    {% endif %}
+                    <button type="submit" class="control-button" style="height:28px; padding:0 12px; cursor:pointer;">Search</button>
+                </form>
+
+
+                <div class="toolbar-actions">
+
+                    <button type="button" aria-label="Notifications">♧</button>
+
+                    <button type="button" aria-label="Settings">⚙</button>
+
+                    <button type="button" aria-label="Account">◎</button>
+
+                </div>
+
+            </header>
+
+
+            <!-- PAGE CONTENT -->
+
+            <section class="content">
+
+
+                <h1 class="page-heading">
+                    Orders Management
+                </h1>
+
+                <p class="page-description">
+                    Review, process, and manage luxury watch orders.
+                </p>
+
+
+                <!-- STATISTICS -->
+
+                <div class="stats-grid">
+
+
+                    <article class="stat-card">
+
+                        <p class="stat-label">TOTAL REVENUE</p>
+
+                        <p class="stat-value">₹{{ total_revenue|floatformat:2 }}</p>
+
+                        <span class="stat-footer positive">
+                            Confirmed Orders
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <p class="stat-label">TOTAL ORDERS</p>
+
+                        <p class="stat-value">{{ total_orders_count }}</p>
+
+                        <span class="stat-footer">
+                            All Time
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <p class="stat-label">
+                            PENDING<br>FULFILLMENT
+                        </p>
+
+                        <p class="stat-value">{{ pending_fulfillment_count }}</p>
+
+                        <span class="pending-indicator"></span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <p class="stat-label">RETURN / CANCELLED</p>
+
+                        <p class="stat-value">{{ return_rate }}%</p>
+
+                        <span class="stat-footer negative">
+                            {{ cancelled_orders_count }} cancelled
+                        </span>
+
+                    </article>
+
+
+                </div>
+
+
+                <!-- ORDERS TABLE -->
+
+                <section class="table-card">
+
+
+                    <!-- TABLE TOOLBAR -->
+
+                    <div class="table-toolbar">
+
+                        <form id="filterSortForm" method="GET" action="{% url 'order_management' %}" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            {% if search_query %}
+                                <input type="hidden" name="search" value="{{ search_query }}">
+                            {% endif %}
+
+                            <!-- STATUS FILTER (Requirement iv: Filter) -->
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span style="color:#888; font-size:8px; font-weight:600;">STATUS:</span>
+                                <select name="status" id="statusFilter" class="control-select" onchange="document.getElementById('filterSortForm').submit()">
+                                    <option value="all" {% if not status_filter or status_filter == 'all' %}selected{% endif %}>All Statuses</option>
+                                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="shipped" {% if status_filter == 'shipped' %}selected{% endif %}>Shipped</option>
+                                    <option value="out_for_delivery" {% if status_filter == 'out_for_delivery' or status_filter == 'out for delivery' %}selected{% endif %}>Out for Delivery</option>
+                                    <option value="delivered" {% if status_filter == 'delivered' %}selected{% endif %}>Delivered</option>
+                                    <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                    <option value="return_requested" {% if status_filter == 'return_requested' %}selected{% endif %}>Return Requests</option>
+                                    <option value="returned" {% if status_filter == 'returned' %}selected{% endif %}>Returned</option>
+                                </select>
+                            </div>
+
+                            <!-- SORT FILTER (Requirement iv: Sort, Requirement i: Date Descending default) -->
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span style="color:#888; font-size:8px; font-weight:600;">SORT:</span>
+                                <select name="sort" id="sortSelect" class="control-select" onchange="document.getElementById('filterSortForm').submit()">
+                                    <option value="date_desc" {% if sort_by == 'date_desc' %}selected{% endif %}>Date: Newest First (Desc)</option>
+                                    <option value="date_asc" {% if sort_by == 'date_asc' %}selected{% endif %}>Date: Oldest First (Asc)</option>
+                                    <option value="total_desc" {% if sort_by == 'total_desc' %}selected{% endif %}>Total: High to Low</option>
+                                    <option value="total_asc" {% if sort_by == 'total_asc' %}selected{% endif %}>Total: Low to High</option>
+                                    <option value="order_id_desc" {% if sort_by == 'order_id_desc' %}selected{% endif %}>Order ID: Descending</option>
+                                    <option value="order_id_asc" {% if sort_by == 'order_id_asc' %}selected{% endif %}>Order ID: Ascending</option>
+                                </select>
+                            </div>
+
+                            <!-- CLEAR FILTER (Requirement iv: Clear functionality) -->
+                            {% if has_active_filters %}
+                                <a href="{% url 'order_management' %}" class="clear-filter-btn" title="Reset all search, status and sort filters">
+                                    ✕ Clear Filters
+                                </a>
+                            {% endif %}
+                        </form>
+
+                        <p class="showing-text" id="showingText">
+                            Showing {{ showing_start }}-{{ showing_end }} of {{ total_filtered }} orders
+                        </p>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-scroll">
+
+                        <table class="orders-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Order ID</th>
+
+                                    <th>Customer &amp; Product</th>
+
+                                    <th>Date</th>
+
+                                    <th>Payment</th>
+
+                                    <th>Status</th>
+
+                                    <th>Total</th>
+
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="ordersTableBody">
+
+                                {% for order in orders %}
+                                <tr
+                                    data-id="{{ order.order_number }}"
+                                    data-customer="{{ order.shipping_full_name|default:order.user.username }}"
+                                    data-product="{{ order.items.first.product_name|default:'Timepiece' }}"
+                                    data-date="{{ order.created_at|date:'Y-m-d' }}"
+                                    data-payment="{{ order.payment_method }}"
+                                    data-status="{{ order.order_status }}"
+                                    data-total="{{ order.total_amount }}"
+                                >
+
+                                    <td class="order-id">
+                                        <a href="{% url 'order_details' order.order_number %}" style="color:#e6c447; font-weight:600; text-decoration:none;" title="View Order #{{ order.order_number }}">
+                                            #{{ order.order_number }}
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <div class="customer-name">
+                                            {{ order.shipping_full_name|default:order.user.get_full_name|default:order.user.username }}
+                                        </div>
+
+                                        <div class="customer-product" style="display:flex; align-items:center; gap:5px;">
+                                            <span>{{ order.items.first.product_name|default:"Luxury Watch" }}</span>
+                                            {% if order.items.count > 1 %}
+                                                <span style="color:#e6c447; font-size:7px; font-weight:600;">+{{ order.items.count|add:"-1" }} more</span>
+                                            {% endif %}
+                                        </div>
+                                        <div style="font-size:7px; color:#888; margin-top:2px;">
+                                            {{ order.user.email }}{% if order.shipping_phone %} • {{ order.shipping_phone }}{% endif %}
+                                        </div>
+                                    </td>
+
+                                    <td class="order-date">
+                                        {{ order.created_at|date:"M d, Y" }}<br>
+                                        <span style="font-size:8px; color:#777;">{{ order.created_at|date:"h:i A" }}</span>
+                                    </td>
+
+                                    <td>
+                                        <div style="font-weight:500;">{{ order.payment_method }}</div>
+                                        <span style="font-size:7px; font-weight:700; color:{% if order.payment_status == 'PAID' %}#25d982{% elif order.payment_status == 'FAILED' %}#ff4d4d{% else %}#e6c447{% endif %};">
+                                            ● {{ order.payment_status }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge {% if order.order_status == 'DELIVERED' %}status-delivered{% elif order.order_status == 'OUT_FOR_DELIVERY' %}status-out-for-delivery{% elif order.order_status == 'SHIPPED' or order.order_status == 'PROCESSING' %}status-shipped{% elif order.order_status == 'CANCELLED' %}status-cancelled{% elif order.order_status == 'RETURN_REQUESTED' %}status-pending{% elif order.order_status == 'RETURNED' %}status-delivered{% else %}status-pending{% endif %}" id="badge-{{ order.order_number }}">
+                                            ● {{ order.get_order_status_display }}
+                                        </span>
+                                        {% for itm in order.items.all %}
+                                            {% if itm.status == 'RETURN_REQUESTED' %}
+                                                <div style="margin-top:3px;">
+                                                    <span style="background:rgba(228,189,53,0.18); color:#e4bd35; border:1px solid #e4bd35; font-size:7px; font-weight:700; padding:2px 5px; border-radius:3px; display:inline-block;">
+                                                        ⏳ RETURN REQ
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <td class="total-amount">
+                                        ₹{{ order.total_amount|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        <!-- Requirement ii: View detail button -->
+                                        <a
+                                            href="{% url 'order_details' order.order_number %}"
+                                            class="view-button"
+                                        >
+                                            View Details
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" style="text-align:center; padding:35px 20px; color:#888;">
+                                        <div style="font-size:24px; margin-bottom:8px;">🛒</div>
+                                        <p style="font-size:11px; color:#ccc;">No orders found matching your criteria.</p>
+                                        {% if has_active_filters %}
+                                            <a href="{% url 'order_management' %}" class="clear-filter-btn" style="margin-top:12px; display:inline-flex;">
+                                                ✕ Clear Filters &amp; View All Orders
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- TABLE FOOTER / Requirement v: Pagination admin_panel side -->
+
+                    <footer class="table-footer">
+
+                        <div class="pagination">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="pagination-outline" style="text-decoration:none;">
+                                    Previous
+                                </a>
+                            {% else %}
+                                <button
+                                    class="pagination-outline"
+                                    id="previousButton"
+                                    disabled
+                                >
+                                    Previous
+                                </button>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="pagination" id="pageNumbers">
+                            {% for p in page_obj.paginator.page_range %}
+                                {% if p == page_obj.number %}
+                                    <button class="active" disabled>{{ p }}</button>
+                                {% elif p >= page_obj.number|add:"-2" and p <= page_obj.number|add:"2" %}
+                                    <a href="?page={{ p }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" style="text-decoration:none;">
+                                        <button>{{ p }}</button>
+                                    </a>
+                                {% elif p == 1 or p == page_obj.paginator.num_pages %}
+                                    <a href="?page={{ p }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" style="text-decoration:none;">
+                                        <button>{{ p }}</button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+
+                        <div class="pagination">
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="pagination-outline" style="text-decoration:none;">
+                                    Next
+                                </a>
+                            {% else %}
+                                <button
+                                    class="pagination-outline"
+                                    id="nextButton"
+                                    disabled
+                                >
+                                    Next
+                                </button>
+                            {% endif %}
+                        </div>
+
+                    </footer>
+
+
+                </section>
+
+            </section>
+
+        </main>
+
+
+    <!-- =========================
+         ORDER DETAILS MODAL
+    ========================= -->
+
+    <div
+        class="modal-overlay"
+        id="orderModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+
+        <div class="details-modal">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">Order Details</h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    onclick="closeOrderModal()"
+                    aria-label="Close"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <div class="detail-row">
+                <span>Order ID</span>
+                <span id="modalOrderId">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Customer</span>
+                <span id="modalCustomer">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Product</span>
+                <span id="modalProduct">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Date</span>
+                <span id="modalDate">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Payment</span>
+                <span id="modalPayment">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Status</span>
+                <span id="modalStatus">-</span>
+            </div>
+
+            <div class="detail-row">
+                <span>Total</span>
+                <span id="modalTotal">-</span>
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="modal-action-button"
+                    onclick="closeOrderModal()"
+                >
+                    CLOSE
+                </button>
+
+                <button
+                    type="button"
+                    class="modal-action-button primary"
+                    onclick="openActualOrder()"
+                >
+                    FULL ORDER
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        const searchInput = document.getElementById("searchInput");
+
+        const tableBody = document.getElementById("ordersTableBody");
+
+        const statusFilter = document.getElementById("statusFilter");
+
+        let sortAscending = true;
+
+        let currentPage = 1;
+
+
+        function getAllRows() {
+
+            return Array.from(tableBody.querySelectorAll("tr"));
+
+        }
+
+
+        function applyFilters() {
+
+            const query = searchInput.value.toLowerCase().trim();
+
+            const status = statusFilter.value;
+
+            getAllRows().forEach(row => {
+
+                const searchableText = [
+                    row.dataset.id,
+                    row.dataset.customer,
+                    row.dataset.product,
+                    row.dataset.payment,
+                    row.dataset.status
+                ].join(" ").toLowerCase();
+
+                const matchesSearch = searchableText.includes(query);
+
+                const matchesStatus =
+                    status === "all" || row.dataset.status === status;
+
+                row.style.display =
+                    matchesSearch && matchesStatus ? "" : "none";
+
+            });
+
+            updateShowingText();
+
+        }
+
+
+        searchInput.addEventListener("input", applyFilters);
+
+        statusFilter.addEventListener("change", () => {
+
+            applyFilters();
+
+            document.getElementById("filterMenu").classList.remove("show");
+
+        });
+
+
+        /* =========================
+           FILTER DROPDOWN
+        ========================= */
+
+        document.getElementById("filterButton")
+            .addEventListener("click", function(event) {
+
+                event.stopPropagation();
+
+                document.getElementById("filterMenu")
+                    .classList.toggle("show");
+
+            });
+
+
+        document.addEventListener("click", function(event) {
+
+            const menu = document.getElementById("filterMenu");
+
+            const button = document.getElementById("filterButton");
+
+            if (!menu.contains(event.target) &&
+                !button.contains(event.target)) {
+
+                menu.classList.remove("show");
+
+            }
+
+        });
+
+
+        /* =========================
+           SORT BY ORDER ID
+        ========================= */
+
+        document.getElementById("sortButton")
+            .addEventListener("click", function() {
+
+                const rows = getAllRows();
+
+                sortAscending = !sortAscending;
+
+                rows.sort((a, b) => {
+
+                    const idA = Number(a.dataset.id.split("-").pop());
+
+                    const idB = Number(b.dataset.id.split("-").pop());
+
+                    return sortAscending ? idA - idB : idB - idA;
+
+                });
+
+                rows.forEach(row => tableBody.appendChild(row));
+
+                applyFilters();
+
+                this.textContent = sortAscending ? "↑ Sort" : "↓ Sort";
+
+            });
+
+
+        /* =========================
+           SHOWING TEXT
+        ========================= */
+
+        function updateShowingText() {
+
+            const visibleRows = getAllRows().filter(row => {
+
+                return row.style.display !== "none";
+
+            });
+
+            document.getElementById("showingText").textContent =
+
+                `Showing ${visibleRows.length ? 1 : 0}-${visibleRows.length} of ${visibleRows.length} orders`;
+
+        }
+
+
+        /* =========================
+           VIEW ORDER DETAILS
+        ========================= */
+
+        let selectedOrderId = null;
+
+        function viewOrder(button) {
+            const row = button.closest("tr");
+            selectedOrderId = row.dataset.id;
+
+            document.getElementById("modalOrderId").textContent = "#" + row.dataset.id;
+            document.getElementById("modalCustomer").textContent = row.dataset.customer;
+            document.getElementById("modalProduct").textContent = row.dataset.product;
+            document.getElementById("modalDate").textContent = row.dataset.date;
+            document.getElementById("modalPayment").textContent = row.dataset.payment;
+            document.getElementById("modalStatus").textContent = row.dataset.status;
+
+            document.getElementById("modalTotal").textContent =
+                new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0
+                }).format(Number(row.dataset.total));
+
+            document.getElementById("orderModal").classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeOrderModal() {
+            document.getElementById("orderModal").classList.remove("show");
+            document.body.style.overflow = "";
+        }
+
+        document.getElementById("orderModal").addEventListener("click", function(event) {
+            if (event.target === this) {
+                closeOrderModal();
+            }
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                closeOrderModal();
+            }
+        });
+
+        function openActualOrder() {
+            if (!selectedOrderId) return;
+            window.location.href = "{% url 'order_details_default' %}" + encodeURIComponent(selectedOrderId) + "/";
+        }
+
+        /* =========================
+           TOAST NOTIFICATION
+        ========================= */
+        function showToast(message) {
+            let toast = document.getElementById("toastNotification");
+            if (!toast) {
+                toast = document.createElement("div");
+                toast.id = "toastNotification";
+                toast.className = "toast-notification";
+                document.body.appendChild(toast);
+            }
+            toast.textContent = "✓ " + message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+        /* =========================
+           AJAX ORDER STATUS UPDATE (Requirement iii)
+        ========================= */
+        async function changeOrderStatus(orderNumber, newStatus) {
+            const selectElem = document.querySelector(`select[data-order="${orderNumber}"]`);
+            try {
+                const formData = new FormData();
+                formData.append('order_number', orderNumber);
+                formData.append('status', newStatus);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                const response = await fetch('/admin_panel/order_status_update/' + encodeURIComponent(orderNumber) + '/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message || `Order #${orderNumber} updated to ${data.new_status_display}`);
+                    
+                    // Update the badge in the row
+                    const badge = document.getElementById("badge-" + orderNumber);
+                    if (badge) {
+                        badge.textContent = data.new_status_display;
+                        badge.className = "status-badge";
+                        if (data.new_status === "DELIVERED") {
+                            badge.classList.add("status-delivered");
+                        } else if (data.new_status === "SHIPPED" || data.new_status === "OUT_FOR_DELIVERY") {
+                            badge.classList.add("status-shipped");
+                        } else if (data.new_status === "CANCELLED") {
+                            badge.classList.add("status-cancelled");
+                        } else {
+                            badge.classList.add("status-pending");
+                        }
+                    }
+                } else {
+                    alert("Status update failed: " + (data.message || "Unknown error"));
+                }
+            } catch (err) {
+                console.error("Error updating status:", err);
+                alert("Failed to update status. Please verify your connection.");
+            }
+        }
+    </script>
+
+    <div id="toastNotification" class="toast-notification"></div>
+</body>
+
+</html>

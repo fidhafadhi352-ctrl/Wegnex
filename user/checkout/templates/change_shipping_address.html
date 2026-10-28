@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wegnex | Shipping Address</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gold: #dfb832;
+    --background: #0b0b0b;
+    --card: #191817;
+    --border: #39352c;
+    --text: #e7e4de;
+    --muted: #89847a;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* DEMO BACKGROUND */
+
+.background-content {
+    min-height: 100vh;
+    padding: 50px;
+    filter: blur(5px);
+    opacity: 0.25;
+}
+
+.background-content h1 {
+    margin-bottom: 20px;
+}
+
+.background-content button {
+    padding: 12px 25px;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+}
+
+/* MODAL OVERLAY */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* MODAL */
+
+.address-modal {
+    width: 100%;
+    max-width: 430px;
+    background: #191817;
+    border: 1px solid #211f1b;
+    border-radius: 6px;
+    padding: 22px 21px 20px;
+    position: relative;
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5);
+    margin: auto;
+}
+
+/* HEADER */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.modal-header p {
+    color: #aaa49a;
+    font-size: 9px;
+    line-height: 1.6;
+}
+
+.close-button {
+    background: transparent;
+    border: none;
+    color: #c9c2b5;
+    font-size: 23px;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0 0 10px;
+}
+
+.close-button:hover {
+    color: var(--gold);
+}
+
+/* LABELS */
+
+.field-label {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: #8f8879;
+    margin-bottom: 9px;
+    font-weight: 500;
+}
+
+/* ADDRESS TYPE */
+
+.address-type-section {
+    margin-bottom: 22px;
+}
+
+.address-types {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.address-type {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid #39352d;
+    background: #201f1d;
+    color: #c2bcb0;
+    font-size: 9px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.address-type input {
+    display: none;
+}
+
+.address-type.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 7px rgba(223, 184, 50, 0.1);
+}
+
+.address-type:hover {
+    border-color: var(--gold);
+}
+
+/* FORM */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px 15px;
+}
+
+.form-group {
+    min-width: 0;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: #918a7d;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+    background: #201f1d;
+    border: 1px solid #403a30;
+    border-radius: 1px;
+    outline: none;
+    color: #e4dfd4;
+    font-family: inherit;
+    font-size: 9px;
+    transition: border-color 0.2s;
+}
+
+.form-group input::placeholder {
+    color: #77766f;
+    font-size: 8px;
+    letter-spacing: 0.4px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--gold);
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: #201f1d;
+    color: white;
+}
+
+/* FOOTER BUTTONS */
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #292722;
+    margin-top: 17px;
+    padding-top: 11px;
+}
+
+.btn {
+    height: 33px;
+    padding: 0 25px;
+    border: 1px solid #3b352a;
+    background: transparent;
+    color: #d4cec3;
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cancel:hover {
+    border-color: #777;
+}
+
+.btn-save {
+    min-width: 140px;
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #17140c;
+    font-weight: 700;
+}
+
+.btn-save:hover {
+    background: #f0cb45;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 12px;
+        align-items: center;
+    }
+
+    .address-modal {
+        padding: 20px 15px;
+        max-width: 100%;
+    }
+
+    .modal-header h2 {
+        font-size: 10px;
+    }
+
+    .modal-header p {
+        font-size: 8px;
+    }
+
+    .address-types {
+        gap: 5px;
+    }
+
+    .address-type {
+        font-size: 8px;
+    }
+
+    .form-grid {
+        gap: 15px 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0 7px;
+        font-size: 9px;
+    }
+
+    .btn {
+        padding: 0 15px;
+    }
+
+    .btn-save {
+        min-width: 125px;
+    }
+}
+
+@media (max-height: 650px) {
+    .modal-overlay {
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- DEMO BACKGROUND -->
+<div class="background-content">
+    <h1>Wegnex Checkout</h1>
+    <p>Review your order and complete your purchase.</p>
+    <br>
+    <button onclick="openModal()">Add Shipping Address</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="addressModal">
+
+    <div class="address-modal">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h2>SHIPPING ADDRESS</h2>
+                <p>
+                    Add or update your delivery address for your Wegnex
+                    luxury watch order.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="close-button"
+                onclick="closeModal()"
+                aria-label="Close"
+            >&times;</button>
+        </div>
+
+        <form id="addressForm">
+
+            <!-- ADDRESS TYPE -->
+            <div class="address-type-section">
+
+                <label class="field-label">SELECT ADDRESS TYPE</label>
+
+                <div class="address-types">
+
+                    <label class="address-type active">
+                        <input type="radio" name="address_type"
+                               value="Home" checked>
+                        <span>⌂</span> HOME
+                    </label>
+
+                    <label class="address-type">
+                        <input type="radio" name="address_type"
+                               value="Office">
+                        <span>▤</span> OFFICE
+                    </label>
+
+                    <label class="address-type">
+                        <input type="radio" name="address_type"
+                               value="Other">
+                        <span>♧</span> OTHER
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- ADDRESS FORM -->
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="full_name">FULL NAME</label>
+                    <input
+                        type="text"
+                        id="full_name"
+                        name="full_name"
+                        placeholder="ENTER FULL NAME"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">PHONE NUMBER</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="+91 000 000 0000"
+                        pattern="[0-9+\-\s]{10,16}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="address1">ADDRESS LINE 1</label>
+                    <input
+                        type="text"
+                        id="address1"
+                        name="address1"
+                        placeholder="STREET ADDRESS, P.O. BOX, COMPANY NAME"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="address2">ADDRESS LINE 2 (OPTIONAL)</label>
+                    <input
+                        type="text"
+                        id="address2"
+                        name="address2"
+                        placeholder="APARTMENT, SUITE, UNIT, BUILDING, FLOOR"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="city">CITY</label>
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="MUMBAI"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="state">STATE</label>
+                    <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        placeholder="MAHARASHTRA"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="pin_code">PIN CODE</label>
+                    <input
+                        type="text"
+                        id="pin_code"
+                        name="pin_code"
+                        placeholder="400001"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="country">COUNTRY / REGION</label>
+                    <select id="country" name="country" required>
+                        <option value="India" selected>India</option>
+                        <option value="Australia">Australia</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United Arab Emirates">
+                            United Arab Emirates
+                        </option>
+                        <option value="Canada">Canada</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    onclick="closeModal()"
+                >
+                    CANCEL
+                </button>
+
+                <button type="submit" class="btn btn-save">
+                    SAVE ADDRESS
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+// Open modal
+function openModal() {
+    document.getElementById('addressModal').style.display = 'flex';
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById('addressModal').style.display = 'none';
+}
+
+// Address type selection
+const addressTypes = document.querySelectorAll('.address-type');
+
+addressTypes.forEach(type => {
+    type.addEventListener('click', function () {
+
+        addressTypes.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        this.classList.add('active');
+    });
+});
+
+// Close modal by clicking outside
+document.getElementById('addressModal').addEventListener(
+    'click',
+    function (event) {
+
+        if (event.target === this) {
+            closeModal();
+        }
+    }
+);
+
+// Form submission
+document.getElementById('addressForm').addEventListener(
+    'submit',
+    function (event) {
+
+        event.preventDefault();
+
+        const formData = new FormData(this);
+
+        const address = Object.fromEntries(formData.entries());
+
+        console.log('Shipping Address:', address);
+
+        alert('Address form validated successfully!');
+
+        // Connect your Django backend here to save the address.
+    }
+);
+
+</script>
+
+</body>
+</html>

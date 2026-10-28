@@ -42,11 +42,13 @@
             color:#fff; border-left:2px solid #fff;
             padding-left:10px; background:#191919;
         }
+        .logout,
         .logout-link {
             position:absolute; bottom:35px; left:22px;
             color:#777; font-size:10px; letter-spacing:1px;
             text-decoration:none; transition:.2s;
         }
+        .logout:hover,
         .logout-link:hover { color:#fff; }
 
         /* ===== MAIN ===== */
@@ -166,6 +168,8 @@
         .prod-thumb img { width:100%; height:100%; object-fit:cover; }
         .prod-name-txt { font-size:11px; color:#eee; font-weight:600; }
         .prod-sub { color:#666; font-size:9px; margin-top:2px; }
+        a:hover .prod-name-txt { color:#8bb4e8; }
+        a:hover .prod-thumb { border-color:#3a5585; }
 
         .status {
             font-size:7px; padding:3px 7px;
@@ -305,20 +309,79 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
+
         <div class="logo">
             <h2>HOROLOGY</h2>
             <p>Management Suite</p>
         </div>
+
         <ul class="menu">
-            <li><a href="{% url 'admin_dashboard' %}"><span>▦</span><span>DASHBOARD</span></a></li>
-            <li><span>♧</span><span>ORDERS</span></li>
-            <li class="active"><a href="{% url 'admin_product_list' %}"><span>♧</span><span>PRODUCTS</span></a></li>
-            <li><a href="{% url 'category_management' %}"><span>♢</span><span>CATEGORIES</span></a></li>
-            <li><span>♙</span><span>CUSTOMERS</span></li>
-            <li><span>♜</span><span>COUPONS</span></li>
-            <li><span>▣</span><span>REVIEWS</span></li>
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
         </ul>
-        <a href="{% url 'admin_logout' %}" class="logout-link">⇥ &nbsp; LOGOUT</a>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
     </aside>
 
     <!-- MAIN -->
@@ -415,21 +478,23 @@
                                     <td class="sl-no">{{ forloop.counter0|add:page_obj.start_index|stringformat:"02d" }}</td>
                                     <td class="prod-id">PR-{{ prod.id|stringformat:"04d" }}</td>
                                     <td>
-                                        <div class="prod-name-cell">
-                                            <div class="prod-thumb">
-                                                {% with thumb=prod.thumbnail %}
-                                                    {% if thumb %}
-                                                        <img src="{{ thumb.url }}" alt="{{ prod.name }}">
-                                                    {% else %}
-                                                        ⌚
-                                                    {% endif %}
-                                                {% endwith %}
+                                        <a href="{% url 'variant_management' prod.id %}" style="text-decoration:none; display:block;">
+                                            <div class="prod-name-cell" style="cursor:pointer;">
+                                                <div class="prod-thumb">
+                                                    {% with thumb=prod.thumbnail %}
+                                                        {% if thumb %}
+                                                            <img src="{{ thumb.url }}" alt="{{ prod.name }}">
+                                                        {% else %}
+                                                            ⌚
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                </div>
+                                                <div>
+                                                    <div class="prod-name-txt" style="transition:.15s;">{{ prod.name }}</div>
+                                                    <div class="prod-sub">{{ prod.brand|default:"—" }} &nbsp;·&nbsp; <span style="color:#4a7cc7; font-size:8px;">View Variants →</span></div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div class="prod-name-txt">{{ prod.name }}</div>
-                                                <div class="prod-sub">{{ prod.brand|default:"—" }}</div>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </td>
                                     <td style="font-size:10px; color:#aaa;">{{ prod.category.name|default:"—" }}</td>
                                     <td style="font-size:11px; text-align:center;">

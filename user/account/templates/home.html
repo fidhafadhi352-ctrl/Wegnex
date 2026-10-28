@@ -53,32 +53,34 @@
 
 
         /* =====================================================
-           NAVBAR
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
         ===================================================== */
-
         .navbar {
-            background: #0b0b0b;
-            min-height: 76px;
-            padding: 0 45px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
 
-        .logo {
+        .navbar .logo, .navbar-brand.logo {
             color: #ffffff !important;
-            font-size: 27px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .navbar-nav {
-            gap: 28px;
+            gap: 28px !important;
         }
 
         .nav-link {
             color: #a5a5a5 !important;
-            font-size: 14px;
-            font-weight: 400;
-            transition: 0.3s;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .nav-link:hover {
@@ -90,20 +92,30 @@
         }
 
         .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
         }
 
         .nav-icons i {
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
         }
 
         .nav-icons i:hover {
-            color: #D4AF37;
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
         }
 
 
@@ -630,7 +642,7 @@
      NAVBAR
 ===================================================== -->
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
 
     <div class="container-fluid">
 
@@ -676,7 +688,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#about">
+                    <a class="nav-link" href="{% url 'about' %}">
                         About
                     </a>
                 </li>
@@ -688,15 +700,23 @@
 
         <!-- Icons & User Menu -->
         <div class="nav-icons">
-            <i class="bi bi-search"></i>
-            <i class="bi bi-heart"></i>
-            <i class="bi bi-cart3"></i>
+            <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                <i class="bi bi-search"></i>
+            </a>
+            <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                <i class="bi bi-heart"></i>
+            </a>
+            <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                <i class="bi bi-cart3"></i>
+            </a>
 
             {% if user.is_authenticated %}
                 <div class="d-flex align-items-center gap-3">
                     <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
-                        {% if profile.profile_picture %}
+                        {% if profile and profile.profile_picture %}
                             <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                        {% elif user.profile and user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
                         {% else %}
                             <i class="bi bi-person-circle" style="font-size: 20px;"></i>
                         {% endif %}
@@ -772,8 +792,7 @@
                         TIMELESS<br>
                         ELEGANCE<br>
                         FOR EVERY<br>
-                        MOMENT<br>
-                        MODEL FAYIS 
+                        MOMENT
 
                     </h1>
 
@@ -987,7 +1006,7 @@
 
                         <!-- BUTTON -->
 
-                        <a href="#"
+                        <a href="{% if user.is_authenticated %}{% url 'wallet' %}{% else %}{% url 'login' %}?next={% url 'wallet' %}{% endif %}"
                            class="referral-code-btn">
 
                             <i class="bi bi-link-45deg"></i>
@@ -1075,26 +1094,20 @@
                 <ul class="footer-links">
 
                     <li>
-                        <a href="#">
+                        <a href="{% url 'product_list' %}">
                             Collection
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
-                            New Arrivals
+                        <a href="{% url 'category' %}">
+                            Categories
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
-                            Best Sellers
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#">
-                            Gift Guide
+                        <a href="{% url 'about' %}">
+                            About Us
                         </a>
                     </li>
 

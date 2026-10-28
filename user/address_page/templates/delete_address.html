@@ -33,51 +33,70 @@
             text-decoration: none;
         }
 
-        /* NAVBAR */
+        /* =====================================================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ===================================================== */
         .navbar {
-            background: #0b0b0b;
-            min-height: 76px;
-            padding: 0 45px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
 
-        .logo {
+        .navbar .logo, .navbar-brand.logo {
             color: #ffffff !important;
-            font-size: 27px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .navbar-nav {
-            gap: 28px;
+            gap: 28px !important;
         }
 
         .nav-link {
             color: #a5a5a5 !important;
-            font-size: 14px;
-            font-weight: 400;
-            transition: 0.3s;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .nav-link:hover {
             color: #D4AF37 !important;
         }
 
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
         .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
         }
 
         .nav-icons i {
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
         }
 
         .nav-icons i:hover {
-            color: #D4AF37;
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
         }
 
         /* MAIN WRAPPER */
@@ -283,6 +302,112 @@
             background: #d63636;
         }
 
+        /* ================= LOGOUT POPUP MODAL ================= */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-backdrop-custom.active {
+            display: flex;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+        }
+
+        .modal-backdrop-custom.active .modal-box-custom {
+            transform: scale(1);
+        }
+
+        .modal-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 117, 117, 0.1);
+            border: 1px solid rgba(255, 117, 117, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #ff7575;
+            font-size: 24px;
+        }
+
+        .modal-title-custom {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc-custom {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-modal-cancel {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #202020;
+            border: 1px solid #303030;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #282828;
+            color: #fff;
+        }
+
+        .btn-modal-confirm {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #b52a2a;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-modal-confirm:hover {
+            background: #d63636;
+            color: #fff;
+        }
+
         @media (max-width: 767px) {
             .main-wrapper {
                 flex-direction: column;
@@ -302,22 +427,81 @@
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- =====================================================
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
+    ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
+            <!-- Logo -->
             <a class="navbar-brand logo" href="{% url 'home' %}">
                 WEGNEX
             </a>
 
-            <div class="nav-icons ms-auto">
-                <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 text-decoration-none" style="color: #D4AF37;">
-                    {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
-                    {% else %}
-                        <i class="bi bi-person-circle" style="font-size: 20px;"></i>
-                    {% endif %}
-                    <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
                 </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -338,19 +522,24 @@
                 <span>ADDRESS</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'order' %}" class="side-link">
                 <i class="bi bi-arrow-counterclockwise"></i>
                 <span>MY ORDERS</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'wishlist' %}" class="side-link">
                 <i class="bi bi-heart"></i>
                 <span>WISHLIST</span>
             </a>
 
-            <a href="#" class="side-link">
+            <a href="{% url 'wallet' %}" class="side-link">
                 <i class="bi bi-wallet2"></i>
                 <span>WALLET</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openLogoutModal()" class="side-link logout-side-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>LOGOUT</span>
             </a>
         </aside>
 
@@ -379,10 +568,13 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{% url 'delete_address' address.id %}">
+                <form method="POST" action="{% url 'delete_address' address.id %}{% if next %}?next={{ next }}{% endif %}">
                     {% csrf_token %}
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
                     <div class="actions-row">
-                        <a href="{% url 'address' %}" class="btn-cancel">
+                        <a href="{% if next == 'checkout' %}{% url 'checkout' %}{% else %}{% url 'address' %}{% endif %}" class="btn-cancel">
                             No, Keep It
                         </a>
                         <button type="submit" class="btn-delete-confirm">
@@ -394,7 +586,51 @@
         </main>
     </div>
 
+    <!-- ================= LOGOUT CONFIRMATION POPUP MODAL ================= -->
+    <div class="modal-backdrop-custom" id="logoutModal" onclick="handleBackdropClick(event)">
+        <div class="modal-box-custom">
+            <div class="modal-icon-badge">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 class="modal-title-custom">Confirm Sign Out</h3>
+            <p class="modal-desc-custom">
+                Are you sure you want to log out of your WEGNEX account?
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">
+                    No, Cancel
+                </button>
+                <a href="{% url 'logout' %}" class="btn-modal-confirm">
+                    Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Logout modal
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleBackdropClick(event) {
+            if (event.target === document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLogoutModal();
+        });
+    </script>
 </body>
 </html>

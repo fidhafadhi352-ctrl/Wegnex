@@ -1,0 +1,974 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEGNEX | Customer Details</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080909;
+    color: #f5f5f5;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 180px;
+    height: 100vh;
+    background: #111111;
+    border-right: 1px solid #292929;
+    padding: 30px 10px;
+    z-index: 100;
+}
+
+.logo {
+    padding-left: 12px;
+    margin-bottom: 45px;
+}
+
+.logo h2 {
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.logo p {
+    color: #777;
+    font-size: 9px;
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    margin-bottom: 3px;
+    color: #858585;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.menu li span:first-child {
+    width: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.menu li:hover {
+    background: #1c1c1c;
+    color: #fff;
+}
+
+.menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.menu li.active {
+    color: #fff;
+    border-left: 2px solid #fff;
+    padding-left: 10px;
+    background: #191919;
+}
+
+.logout {
+    position: absolute;
+    bottom: 35px;
+    left: 22px;
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.logout:hover {
+    color: #fff;
+}
+
+.main {
+    margin-left: 180px;
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 57px;
+    border-bottom: 1px solid #292929;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.search {
+    width: 330px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    border: 1px solid #343434;
+    border-radius: 20px;
+    background: #191919;
+}
+
+.search input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 10px;
+}
+
+.top-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #bbb;
+}
+
+.top-icons i {
+    font-size: 15px;
+}
+
+.date {
+    border-left: 1px solid #333;
+    padding-left: 20px;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.content {
+    padding: 25px 30px;
+    width: 100%;
+}
+
+.breadcrumb {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.breadcrumb span {
+    color: white;
+}
+
+.page-title {
+    font-size: 25px;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: #87909a;
+    letter-spacing: 2px;
+    font-size: 10px;
+    margin-bottom: 24px;
+}
+
+/* DASHBOARD LAYOUT */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: minmax(250px, 0.85fr) minmax(400px, 1.65fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.left-column,
+.right-column {
+    min-width: 0;
+}
+
+.card {
+    background: #0c0d0d;
+    border: 1px solid #292d30;
+}
+
+.profile-card {
+    padding: 27px 25px;
+}
+
+.profile-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 13px;
+    border: 1px solid #a9b2bd;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #c3ccd6;
+    background: #171b20;
+}
+
+.profile-icon i {
+    font-size: 57px;
+}
+
+.vip {
+    display: table;
+    margin: 0 auto 14px;
+    padding: 4px 17px;
+    border: 1px solid #c9a74e;
+    border-radius: 20px;
+    color: #e4c36b;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.profile-card h2 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.customer-id {
+    text-align: center;
+    color: #9099a2;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.profile-divider {
+    height: 1px;
+    background: #34383b;
+    margin: 27px 0;
+}
+
+.detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.detail > i {
+    color: #aab8c7;
+    font-size: 19px;
+    margin-top: 2px;
+}
+
+.detail label {
+    display: block;
+    color: #9ca6b1;
+    font-size: 9px;
+    margin-bottom: 7px;
+}
+
+.detail p {
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 13px;
+}
+
+.stat-card {
+    padding: 19px;
+}
+
+.stat-card i {
+    color: #b4c3d3;
+    font-size: 21px;
+}
+
+.stat-card p {
+    color: #9ba7b4;
+    font-size: 9px;
+    margin: 16px 0 8px;
+}
+
+.stat-card h2 {
+    font-size: 23px;
+}
+
+.stat-card .money {
+    font-size: 18px;
+    overflow-wrap: anywhere;
+}
+
+/* RECENT ORDERS */
+
+.section-heading {
+    min-height: 52px;
+    padding: 17px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #303438;
+}
+
+.section-heading h3 {
+    font-size: 12px;
+}
+
+.section-heading a {
+    color: #c2cbd5;
+    text-decoration: none;
+    font-size: 9px;
+}
+
+.section-heading a i {
+    margin-left: 5px;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.orders-table th {
+    color: #9ba7b4;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .5px;
+    padding: 17px 10px;
+    border-bottom: 1px solid #303438;
+}
+
+.orders-table td {
+    padding: 17px 10px;
+    border-bottom: 1px solid #292d30;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.orders-table tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table th:first-child,
+.orders-table td:first-child {
+    padding-left: 20px;
+}
+
+.order-id {
+    color: #c0c8d0;
+    line-height: 1.6;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 130px;
+}
+
+.watch-icon {
+    width: 38px;
+    height: 43px;
+    flex-shrink: 0;
+    border: 1px solid #39424b;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c2d0df;
+}
+
+.watch-icon i {
+    font-size: 21px;
+}
+
+.product small {
+    display: block;
+    color: #a2adb8;
+    font-size: 8px;
+    margin-bottom: 5px;
+}
+
+.product strong {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 9px;
+    background: #242a2e;
+    border-radius: 4px;
+    color: #c6d0d8;
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.amount {
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+/* BOTTOM CARDS */
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 22px;
+}
+
+.notes-card,
+.health-card,
+.actions-card {
+    padding: 22px;
+}
+
+.notes-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.notes-title h3,
+.actions-card h3 {
+    font-size: 12px;
+}
+
+.notes-title i {
+    font-size: 17px;
+    color: #aeb9c4;
+}
+
+.note-text {
+    padding: 18px;
+    border: 1px solid #333940;
+    color: #b4bdc7;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.8;
+}
+
+.health-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.health-card p {
+    color: #aab4be;
+    font-size: 9px;
+    margin-bottom: 7px;
+}
+
+.health-card h2 {
+    font-size: 25px;
+}
+
+.health-icon {
+    width: 42px;
+    height: 42px;
+    border: 2px solid #d1d8df;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+}
+
+.actions-card h3 {
+    margin-bottom: 17px;
+}
+
+.action-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    margin-top: 8px;
+    background: transparent;
+    color: #c8d0d8;
+    border: 1px solid #343a40;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: 9px;
+}
+
+.action-btn:hover {
+    border-color: #c7ac69;
+    color: #e5c675;
+}
+
+.action-btn i {
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+    .sidebar {
+        width: 65px;
+        padding: 20px 5px;
+    }
+
+    .logo h2,
+    .logo p,
+    .menu li span:last-child,
+    .logout {
+        display: none;
+    }
+
+    .menu li {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .menu li a {
+        justify-content: center;
+    }
+
+    .main {
+        margin-left: 65px;
+    }
+
+    .content {
+        padding: 24px 18px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        max-width: none;
+    }
+
+    .bottom-grid {
+        align-items: start;
+    }
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .search {
+        width: 65%;
+    }
+
+    .top-icons {
+        gap: 12px;
+    }
+
+    .date {
+        display: none;
+    }
+
+    .content {
+        padding: 20px 12px;
+    }
+
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .orders-table {
+        min-width: 570px;
+    }
+
+    .right-column {
+        overflow: hidden;
+    }
+
+    .profile-card {
+        padding: 23px 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
+        <ul class="menu">
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
+        </ul>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
+    </aside>
+
+<!-- MAIN -->
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <strong style="font-size:14px;">Customer Details</strong>
+            <div style="font-size:8px;color:#89939d;letter-spacing:1px;margin-top:3px;">
+                LUXURY WATCH ADMINISTRATION
+            </div>
+        </div>
+
+        <div class="top-icons">
+            <div class="search">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search inventory...">
+            </div>
+            <i class="bi bi-bell"></i>
+            <i class="bi bi-envelope"></i>
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
+
+    <section class="content">
+
+        <div class="breadcrumb">
+            ADMIN &nbsp;›&nbsp; <span>CUSTOMER DETAILS</span>
+        </div>
+
+        <h1 class="page-title">Customer Details</h1>
+        <p class="subtitle">LUXURY WATCH ADMINISTRATION</p>
+
+        <div class="dashboard">
+
+            <!-- LEFT COLUMN -->
+            <div class="left-column">
+
+                <div class="card profile-card">
+
+                    <div class="profile-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <span class="vip">VIP</span>
+
+                    <h2>Alexander Brooks</h2>
+                    <p class="customer-id">WGX-88291</p>
+
+                    <div class="profile-divider"></div>
+
+                    <div class="detail">
+                        <i class="bi bi-envelope"></i>
+                        <div>
+                            <label>EMAIL ADDRESS</label>
+                            <p>a.brooks@vanguard-corp.com</p>
+                        </div>
+                    </div>
+
+                    <div class="detail">
+                        <i class="bi bi-telephone"></i>
+                        <div>
+                            <label>CONTACT NUMBER</label>
+                            <p>+1 (555) 012-9843</p>
+                        </div>
+                    </div>
+
+                    <div class="detail">
+                        <i class="bi bi-geo-alt"></i>
+                        <div>
+                            <label>PRIMARY RESIDENCE</label>
+                            <p>Upper East Side, New York, NY</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="stats">
+
+                    <div class="card stat-card">
+                        <i class="bi bi-clipboard2"></i>
+                        <p>TOTAL ORDERS</p>
+                        <h2>58</h2>
+                    </div>
+
+                    <div class="card stat-card">
+                        <i class="bi bi-wallet2"></i>
+                        <p>TOTAL SPENT</p>
+                        <h2 class="money">$18,420.75</h2>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-column">
+
+                <div class="card">
+
+                    <div class="section-heading">
+                        <h3>RECENT ORDERS</h3>
+                        <a href="{% url 'order_management' %}">VIEW ALL HISTORY <i class="bi bi-arrow-right"></i></a>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table class="orders-table">
+
+                            <thead>
+                                <tr>
+                                    <th>ORDER<br>ID</th>
+                                    <th>MODEL</th>
+                                    <th>STATUS</th>
+                                    <th style="text-align:right;padding-right:20px;">AMOUNT</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="order-id">#ORD-<br>9902</td>
+                                    <td>
+                                        <div class="product">
+                                            <div class="watch-icon">
+                                                <i class="bi bi-smartwatch"></i>
+                                            </div>
+                                            <div>
+                                                <small>ROLEX</small>
+                                                <strong>Submariner<br>Date</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge">DELIVERED</span></td>
+                                    <td class="amount">$12,450.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="order-id">#ORD-<br>9845</td>
+                                    <td>
+                                        <div class="product">
+                                            <div class="watch-icon">
+                                                <i class="bi bi-smartwatch"></i>
+                                            </div>
+                                            <div>
+                                                <small>OMEGA</small>
+                                                <strong>Speedmaster<br>Pro</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge">PROCESSING</span></td>
+                                    <td class="amount">$6,300.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="order-id">#ORD-<br>9712</td>
+                                    <td>
+                                        <div class="product">
+                                            <div class="watch-icon">
+                                                <i class="bi bi-smartwatch"></i>
+                                            </div>
+                                            <div>
+                                                <small>CARTIER</small>
+                                                <strong>Santos de<br>Cartier</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge">DELIVERED</span></td>
+                                    <td class="amount">$7,100.00</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BOTTOM RIGHT -->
+                <div class="bottom-grid">
+
+                    <div class="card notes-card">
+                        <div class="notes-title">
+                            <h3>ADMIN NOTES</h3>
+                            <i class="bi bi-journal-text"></i>
+                        </div>
+
+                        <div class="note-text">
+                            "VIP Concierge Service activated.
+                            Client prefers direct communication via
+                            WhatsApp for all Baselworld preview releases.
+                            Highly interested in vintage Patek Philippe
+                            complications. Last interaction: 12/04/2024
+                            - Excellent."
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card health-card">
+                            <div>
+                                <p>ACCOUNT HEALTH</p>
+                                <h2>96%</h2>
+                            </div>
+                            <div class="health-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                        </div>
+
+                        <div class="card actions-card">
+                            <h3>QUICK ACTIONS</h3>
+
+                            <button class="action-btn" onclick="resetPassword()">
+                                RESET PASSWORD
+                                <i class="bi bi-lock"></i>
+                            </button>
+
+                            <button class="action-btn" onclick="exportUserData()">
+                                EXPORT USER DATA
+                                <i class="bi bi-download"></i>
+                            </button>
+
+                            <button class="action-btn" onclick="deleteAccount()">
+                                DELETE ACCOUNT
+                                <i class="bi bi-person-x"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<script>
+function resetPassword() {
+    const confirmed = confirm("Reset this customer's password?");
+    if (confirmed) {
+        alert("Demo only: Connect this action to your Django backend.");
+    }
+}
+
+function exportUserData() {
+    const customer = {
+        name: "Alexander Brooks",
+        customer_id: "WGX-88291",
+        email: "a.brooks@vanguard-corp.com",
+        phone: "+1 (555) 012-9843",
+        address: "Upper East Side, New York, NY"
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(customer, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "customer-details.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function deleteAccount() {
+    const confirmed = confirm(
+        "Are you sure you want to delete this customer account?"
+    );
+
+    if (confirmed) {
+        alert("Demo only: Connect account deletion to your Django backend.");
+    }
+}
+</script>
+
+</body>
+</html>

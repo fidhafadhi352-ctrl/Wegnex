@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wegnex | Luxury Checkout</title>
+
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #090909;
+            --surface: #111111;
+            --surface-elevated: #161616;
+            --border: #222222;
+            --border-hover: #333333;
+            --gold: #D4AF37;
+            --gold-hover: #F0CC5A;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --text-primary: #FFFFFF;
+            --text-secondary: #999999;
+            --text-muted: #666666;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ================= NAVBAR ================= */
+        /* =====================================================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .checkout-page {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 36px 20px 80px;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* BREADCRUMB */
+        .breadcrumb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb-row a:hover { color: var(--gold); }
+        .breadcrumb-row span.current { color: var(--gold); font-weight: 600; }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* GRID LAYOUT */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        /* SECTION CARD */
+        .checkout-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        .section-badge {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+        }
+
+        /* ================= ADDRESS SECTION ================= */
+        .btn-add-address-header {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            text-decoration: none !important;
+            transition: all 0.2s;
+        }
+
+        .btn-add-address-header:hover {
+            background: var(--gold);
+            color: #000 !important;
+        }
+
+        .addresses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .address-card {
+            background: var(--surface-elevated);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+        }
+
+        .address-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .address-card.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.04);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+        }
+
+        .address-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .address-radio-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .custom-radio {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .address-card.selected .custom-radio {
+            border-color: var(--gold);
+        }
+
+        .custom-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: none;
+        }
+
+        .address-card.selected .custom-radio::after {
+            display: block;
+        }
+
+        .address-recipient {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .address-tag {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .tag-home { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .tag-work { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .tag-other { background: rgba(156, 163, 175, 0.15); color: #d1d5db; border: 1px solid rgba(156, 163, 175, 0.3); }
+
+        .tag-default {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            margin-left: 6px;
+        }
+
+        .address-text {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-left: 30px;
+            margin-bottom: 10px;
+        }
+
+        .address-actions-row {
+            margin-left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 11px;
+        }
+
+        .address-btn-link {
+            color: var(--gold) !important;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .address-btn-link:hover {
+            opacity: 0.8;
+            text-decoration: underline !important;
+        }
+
+        .btn-set-default {
+            color: #888888;
+        }
+
+        .btn-set-default:hover {
+            color: #ffffff;
+        }
+
+        .btn-delete-address {
+            color: #ef4444 !important;
+        }
+
+        .btn-delete-address:hover {
+            color: #f87171 !important;
+            opacity: 1;
+        }
+
+        /* NO ADDRESS STATE */
+        .no-address-box {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--surface-elevated);
+            border: 1px dashed #333;
+            border-radius: 10px;
+        }
+
+        .no-address-box i {
+            font-size: 32px;
+            color: var(--gold);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .no-address-box p {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        /* ================= PRODUCTS LIST ================= */
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .checkout-item:hover {
+            border-color: #333333;
+        }
+
+        .checkout-item.oos-item {
+            opacity: 0.6;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .item-thumb {
+            width: 72px;
+            height: 72px;
+            background: #0d0d0d;
+            border: 1px solid #222222;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-category {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .item-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .item-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .item-qty-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-weight: 600;
+            color: #ddd;
+        }
+
+        .item-pricing {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .item-unit-price {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .item-total-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* ================= RIGHT COLUMN: ORDER SUMMARY ================= */
+        .order-summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 26px;
+            position: sticky;
+            top: 90px;
+        }
+
+        .summary-heading {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        .summary-row span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .summary-row span:last-child {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .summary-row .free-shipping {
+            color: #10b981;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-row .included-tax {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .summary-divider {
+            border: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 18px 0;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 26px;
+        }
+
+        .total-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .total-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* PAYMENT OPTIONS */
+        .payment-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .payment-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .payment-option {
+            background: var(--surface-elevated);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .payment-option:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .payment-option.active {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .payment-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payment-left input[type="radio"] {
+            display: none;
+        }
+
+        .payment-radio-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .payment-option.active .payment-radio-circle {
+            border-color: var(--gold);
+        }
+
+        .payment-radio-circle::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: none;
+        }
+
+        .payment-option.active .payment-radio-circle::after {
+            display: block;
+        }
+
+        .payment-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .payment-sub {
+            font-size: 10px;
+            color: #777;
+            display: block;
+            margin-top: 1px;
+        }
+
+        .payment-icon {
+            font-size: 18px;
+            color: var(--gold);
+        }
+
+        /* PLACE ORDER BUTTON */
+        .btn-place-order {
+            width: 100%;
+            height: 52px;
+            background: var(--gold);
+            color: #000000;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+        }
+
+        .btn-place-order:hover:not(:disabled) {
+            background: var(--gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+            color: #000;
+        }
+
+        .btn-place-order:disabled {
+            background: #222222;
+            color: #666666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #777777;
+            margin-top: 16px;
+        }
+
+        .secure-badge i {
+            color: var(--gold);
+        }
+
+        /* ================= MODALS (ADD / EDIT ADDRESS) ================= */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-backdrop-custom.active {
+            display: flex;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 540px;
+            padding: 28px 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+            position: relative;
+            transform: scale(0.96);
+            transition: transform 0.25s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-backdrop-custom.active .modal-box-custom {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close-btn:hover { color: #fff; }
+
+        .modal-title-lux {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-title-lux i { color: var(--gold); }
+
+        .modal-subtitle-lux {
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 22px;
+        }
+
+        /* FORM INPUTS */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-col-full { grid-column: span 2; }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label-lux {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #bbb;
+        }
+
+        .form-input-lux {
+            height: 42px;
+            background: #0d0d0d;
+            border: 1px solid #282828;
+            border-radius: 6px;
+            padding: 0 12px;
+            font-size: 12px;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input-lux:focus {
+            border-color: var(--gold);
+        }
+
+        textarea.form-input-lux {
+            height: 70px;
+            padding: 10px 12px;
+            resize: none;
+        }
+
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .type-option-btn {
+            height: 38px;
+            background: #0d0d0d;
+            border: 1px solid #282828;
+            border-radius: 6px;
+            color: #888;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-option-btn.selected {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #bbb;
+            user-select: none;
+        }
+
+        .checkbox-row input {
+            accent-color: var(--gold);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .modal-btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn-modal-cancel {
+            flex: 1;
+            height: 44px;
+            border-radius: 6px;
+            background: #1c1c1c;
+            border: 1px solid #333333;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #282828;
+            color: #fff;
+        }
+
+        .btn-modal-save {
+            flex: 1.5;
+            height: 44px;
+            border-radius: 6px;
+            background: var(--gold);
+            border: none;
+            color: #000;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-save:hover {
+            background: var(--gold-hover);
+        }
+
+        /* TOAST */
+        .toast-notify {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #141414;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+        .toast-notify.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            .order-summary-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .checkout-page {
+                padding: 20px 14px 60px;
+            }
+            .checkout-section {
+                padding: 16px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-col-full {
+                grid-column: span 1;
+            }
+            .modal-box-custom {
+                padding: 20px 16px;
+            }
+        }
+
+        /* ================= ORDER SUCCESS POPUP MODAL ================= */
+        .success-popup-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .success-popup-backdrop.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .success-popup-card {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            background: #111111;
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            border-radius: 16px;
+            padding: 38px 30px 32px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 45px rgba(212, 175, 55, 0.18);
+            transform: scale(0.92);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .success-popup-backdrop.active .success-popup-card {
+            transform: scale(1);
+        }
+
+        .popup-gold-glow {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0) 70%);
+            pointer-events: none;
+        }
+
+        .popup-seal-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-seal-pulse {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(212, 175, 55, 0) 70%);
+            animation: popupPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes popupPulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .popup-seal-circle {
+            position: relative;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #221c0d 0%, #0d0d0d 100%);
+            border: 2px solid #D4AF37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 24px rgba(212, 175, 55, 0.45);
+        }
+
+        .popup-seal-circle i {
+            font-size: 38px;
+            color: #D4AF37;
+            font-weight: 700;
+        }
+
+        .popup-luxury-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #D4AF37;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .popup-title {
+            font-size: 23px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+        }
+
+        .popup-subtitle {
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: #a8a8a8;
+            margin-bottom: 22px;
+            padding: 0 6px;
+        }
+
+        .popup-order-pill {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #181818;
+            border: 1px solid #282828;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .popup-order-pill .pill-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popup-order-pill .pill-label {
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .popup-order-pill .pill-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .popup-order-pill .text-gold {
+            color: #D4AF37 !important;
+        }
+
+        .popup-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .btn-popup-continue {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: #ffffff;
+            border: 1.5px solid #383838;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .btn-popup-continue:hover {
+            border-color: #D4AF37;
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .btn-popup-view-order {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #D4AF37 0%, #b89628 100%);
+            color: #000000 !important;
+            border: none;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+        }
+
+        .btn-popup-view-order:hover {
+            background: linear-gradient(135deg, #f0cc5a 0%, #D4AF37 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+            color: #000000 !important;
+        }
+
+        @media (max-width: 540px) {
+            .popup-actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== COUPON BAR (IN ORDER SUMMARY) ===== */
+        .coupon-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px dashed rgba(212, 175, 55, 0.35);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 14px 0 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .coupon-bar:hover {
+            background: rgba(212, 175, 55, 0.12);
+            border-color: rgba(212, 175, 55, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .coupon-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .coupon-bar-left i {
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .coupon-bar-text {
+            font-size: 13px;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .coupon-bar-sub {
+            font-size: 10.5px;
+            color: #888888;
+            margin-top: 2px;
+        }
+
+        .coupon-bar-arrow {
+            color: var(--gold);
+            font-size: 13px;
+            transition: transform 0.2s;
+        }
+
+        .coupon-bar:hover .coupon-bar-arrow {
+            transform: translateX(3px);
+        }
+
+        /* Applied coupon row */
+        .coupon-applied-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 14px 0 16px;
+            gap: 10px;
+        }
+
+        .coupon-applied-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .coupon-applied-info i {
+            color: #10b981;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .coupon-applied-code {
+            font-size: 12.5px;
+            color: #10b981;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+        }
+
+        .coupon-applied-desc {
+            font-size: 10px;
+            color: #aaaaaa;
+            margin-top: 1px;
+        }
+
+        .coupon-remove-btn {
+            background: transparent;
+            border: none;
+            color: #888888;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coupon-remove-btn:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* ===== COUPON POPUP MODAL ===== */
+        .coupon-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 1070;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .coupon-modal-backdrop.active {
+            display: flex;
+        }
+
+        .coupon-modal-box {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+            overflow: hidden;
+        }
+
+        .coupon-modal-backdrop.active .coupon-modal-box {
+            transform: scale(1);
+        }
+
+        .coupon-modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #222222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .coupon-modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .coupon-modal-title i {
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .coupon-modal-close {
+            background: transparent;
+            border: none;
+            color: #666666;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coupon-modal-close:hover {
+            color: #ffffff;
+        }
+
+        /* Manual input row */
+        .coupon-input-row {
+            display: flex;
+            gap: 8px;
+            padding: 18px 24px 14px;
+            border-bottom: 1px solid #1e1e1e;
+        }
+
+        .coupon-modal-input {
+            flex: 1;
+            height: 42px;
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 0 14px;
+            color: #ffffff;
+            font-size: 12.5px;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .coupon-modal-input:focus {
+            border-color: var(--gold);
+        }
+
+        .coupon-modal-input::placeholder {
+            text-transform: none;
+            letter-spacing: 0;
+            color: #555555;
+        }
+
+        .coupon-apply-btn {
+            height: 42px;
+            padding: 0 20px;
+            background: var(--gold);
+            border: none;
+            color: #000000;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .coupon-apply-btn:hover {
+            background: var(--gold-hover);
+        }
+
+        .coupon-apply-btn:disabled {
+            background: #2a2a2a;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
+        /* Feedback */
+        .coupon-feedback {
+            padding: 0 24px 12px;
+            font-size: 11.5px;
+            display: none;
+        }
+
+        .coupon-feedback.show {
+            display: block;
+        }
+
+        .coupon-feedback.error {
+            color: #f87171;
+        }
+
+        .coupon-feedback.success {
+            color: #4ade80;
+        }
+
+        /* Coupon list */
+        .coupon-list-wrap {
+            overflow-y: auto;
+            padding: 16px 24px 22px;
+            flex: 1;
+        }
+
+        .coupon-list-label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            color: #666666;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .coupon-card {
+            background: #0d0d0d;
+            border: 1px solid #1f1f1f;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: border-color 0.22s, background 0.22s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coupon-card::before {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: 20%;
+            bottom: 20%;
+            width: 3px;
+            background: var(--gold);
+            border-radius: 0 3px 3px 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .coupon-card:hover {
+            border-color: rgba(212, 175, 55, 0.45);
+            background: #111111;
+        }
+
+        .coupon-card:hover::before {
+            opacity: 1;
+        }
+
+        .coupon-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .coupon-card-code {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .coupon-card-badge {
+            background: rgba(212, 175, 55, 0.12);
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .coupon-card-desc {
+            font-size: 11px;
+            color: #aaaaaa;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .coupon-card-meta {
+            font-size: 9.5px;
+            color: #666666;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .coupon-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .coupon-apply-tag {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            font-size: 9.5px;
+            color: var(--gold);
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .coupon-card:hover .coupon-apply-tag {
+            opacity: 1;
+        }
+
+        .coupon-empty {
+            text-align: center;
+            padding: 30px 0 16px;
+            color: #555555;
+            font-size: 12px;
+        }
+
+        .coupon-empty i {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #444444;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =====================================================
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
+    ===================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;position:relative;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                    {% if item_count > 0 %}
+                    <span style="position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#D4AF37;color:#000;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">{{ item_count }}</span>
+                    {% endif %}
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CHECKOUT CONTENT -->
+    <main class="checkout-page">
+
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb-row">
+            <a href="{% url 'home' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'cart' %}">Cart</a>
+            <span>/</span>
+            <span class="current">Checkout</span>
+        </div>
+
+        <h1 class="page-title">CHECKOUT</h1>
+        <p class="page-subtitle">Review your shipping destination, selected items, and place your order.</p>
+
+        <!-- DJANGO MESSAGES -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" style="background:#1a1a1a; border: 1px solid var(--gold); color: #fff; font-size: 13px;" role="alert">
+                    <i class="bi bi-info-circle me-2" style="color:var(--gold);"></i>{{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter:invert(1);" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="checkout-grid">
+
+            <!-- LEFT COLUMN: ADDRESS & ITEMS -->
+            <div class="left-col">
+
+                <!-- 1. SHIPPING ADDRESS SECTION -->
+                <section class="checkout-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>1. SHIPPING ADDRESS</span>
+                        </div>
+                        <a href="{% url 'add_address' %}?next=checkout" class="btn-add-address-header">
+                            <i class="bi bi-plus-lg"></i> ADD ADDRESS
+                        </a>
+                    </div>
+
+                    <div class="addresses-list" id="addressesContainer">
+                        {% if addresses %}
+                            {% for addr in addresses %}
+                                <div class="address-card {% if selected_address and addr.id == selected_address.id %}selected{% endif %}"
+                                     id="addrCard-{{ addr.id }}"
+                                     onclick="selectAddress({{ addr.id }})"
+                                     data-id="{{ addr.id }}"
+                                     data-fullname="{{ addr.full_name|escapejs }}"
+                                     data-phone="{{ addr.phone_number|escapejs }}"
+                                     data-street="{{ addr.street_address|escapejs }}"
+                                     data-city="{{ addr.city|escapejs }}"
+                                     data-state="{{ addr.state|escapejs }}"
+                                     data-pincode="{{ addr.pincode|escapejs }}"
+                                     data-country="{{ addr.country|escapejs }}"
+                                     data-type="{{ addr.address_type|escapejs }}"
+                                     data-isdefault="{{ addr.is_default|lower }}">
+
+                                    <div class="address-card-header">
+                                        <div class="address-radio-row">
+                                            <div class="custom-radio"></div>
+                                            <span class="address-recipient">{{ addr.full_name }}</span>
+                                            <span class="address-tag tag-{{ addr.address_type|lower }}">{{ addr.address_type }}</span>
+                                            {% if addr.is_default %}
+                                                <span class="address-tag tag-default" id="defaultBadge-{{ addr.id }}"><i class="bi bi-check-circle-fill me-1"></i>DEFAULT</span>
+                                            {% else %}
+                                                <span class="address-tag tag-default d-none" id="defaultBadge-{{ addr.id }}"><i class="bi bi-check-circle-fill me-1"></i>DEFAULT</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <p class="address-text">
+                                        {{ addr.street_address }}, {{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}<br>
+                                        <span style="color:#888;"><i class="bi bi-telephone me-1"></i>+91 {{ addr.phone_number }}</span>
+                                    </p>
+
+                                    <div class="address-actions-row" onclick="event.stopPropagation()">
+                                        <a href="{% url 'edit_address' addr.id %}?next=checkout" class="address-btn-link">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                        {% if not addr.is_default %}
+                                            <button type="button" class="address-btn-link btn-set-default" id="btnSetDefault-{{ addr.id }}" onclick="setDefaultAddress({{ addr.id }})">
+                                                <i class="bi bi-star"></i> Set as Default
+                                            </button>
+                                        {% endif %}
+                                        <button type="button" class="address-btn-link btn-delete-address" onclick="promptDeleteAddress({{ addr.id }}, '{{ addr.full_name|escapejs }}')">
+                                            <i class="bi bi-trash3"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-address-box" id="noAddressBox">
+                                <i class="bi bi-house-door"></i>
+                                <p>No shipping address saved yet.</p>
+                                <a href="{% url 'add_address' %}?next=checkout" class="btn-add-address-header">
+                                    <i class="bi bi-plus-lg"></i> ADD YOUR FIRST ADDRESS
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </section>
+
+                <!-- 2. PRODUCT SELECTION SECTION -->
+                <section class="checkout-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="bi bi-watch"></i>
+                            <span>2. YOUR SELECTION</span>
+                        </div>
+                        <span class="section-badge">{{ item_count }} {% if item_count == 1 %}ITEM{% else %}ITEMS{% endif %}</span>
+                    </div>
+
+                    <div class="items-list">
+                        {% for item in cart_items %}
+                            <div class="checkout-item {% if item.is_out_of_stock or item.is_insufficient_stock %}oos-item{% endif %}">
+                                <div class="item-thumb">
+                                    {% if item.image_url %}
+                                        <img src="{{ item.image_url }}" alt="{{ item.product.name }}">
+                                    {% else %}
+                                        <i class="bi bi-watch" style="font-size:24px; color:#555;"></i>
+                                    {% endif %}
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="item-category">{{ item.product.category.name|default:"HOROLOGY"|upper }}</div>
+                                    <div class="item-name" title="{{ item.product.name }}">{{ item.product.name }}</div>
+                                    <div class="item-meta">
+                                        {% if item.variant_label %}
+                                            <span>Edition: <strong style="color:#eee;">{{ item.variant_label }}</strong></span>
+                                            <span>•</span>
+                                        {% endif %}
+                                        <span class="item-qty-badge">Qty: {{ item.quantity }}</span>
+
+                                        {% if item.is_out_of_stock %}
+                                            <span class="badge bg-danger ms-2">OUT OF STOCK</span>
+                                        {% elif item.is_insufficient_stock %}
+                                            <span class="badge bg-warning text-dark ms-2">Only {{ item.stock }} left</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="item-pricing">
+                                    <div class="item-unit-price">₹{{ item.price|floatformat:0 }} each</div>
+                                    <div class="item-total-price">₹{{ item.item_total|floatformat:0 }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- RIGHT COLUMN: SUMMARY & PAYMENT -->
+            <div class="right-col">
+
+                <!-- ORDER SUMMARY CARD -->
+                <div class="order-summary-card">
+                    <div class="summary-heading">
+                        <span>Order Summary</span>
+                        <i class="bi bi-shield-check" style="color:var(--gold);"></i>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Items Subtotal</span>
+                        <span id="displaySubtotal">₹{{ subtotal|floatformat:0 }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span class="free-shipping"><i class="bi bi-check-circle-fill me-1"></i>FREE</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Tax (GST)</span>
+                        <span class="included-tax">Included</span>
+                    </div>
+
+                    <!-- COUPON BAR CONTAINER (MATCHING SCREENSHOT) -->
+                    <div id="couponContainer">
+                        {% if coupon_code %}
+                        <div class="coupon-applied-row" id="couponAppliedRow">
+                            <div class="coupon-applied-info">
+                                <i class="bi bi-patch-check-fill"></i>
+                                <div>
+                                    <div class="coupon-applied-code" id="appliedCodeText">{{ coupon_code }}</div>
+                                    <div class="coupon-applied-desc" id="appliedSavingText">
+                                        {% if applied_coupon and applied_coupon.description %}
+                                            {{ applied_coupon.description }} (Saving ₹{{ discount|floatformat:0 }})
+                                        {% else %}
+                                            Saving ₹{{ discount|floatformat:0 }} with this coupon
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="coupon-remove-btn" onclick="handleRemoveCoupon()" title="Remove coupon">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <div class="coupon-bar" id="couponBar" onclick="openCouponModal()">
+                            <div class="coupon-bar-left">
+                                <i class="bi bi-ticket-perforated"></i>
+                                <div>
+                                    <div class="coupon-bar-text">Have a coupon?</div>
+                                    <div class="coupon-bar-sub">View available offers &amp; apply</div>
+                                </div>
+                            </div>
+                            <i class="bi bi-chevron-right coupon-bar-arrow"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- DISCOUNT BREAKDOWN ROW -->
+                    <div class="summary-row" id="summaryDiscountRow" style="{% if not discount or discount <= 0 %}display:none;{% endif %}">
+                        <span style="color:#10b981; font-weight:600; display:flex; align-items:center; gap:5px;">
+                            <i class="bi bi-tag-fill"></i>
+                            Coupon Discount (<span id="summaryCouponCode">{{ coupon_code|default:'' }}</span>)
+                        </span>
+                        <span id="displayDiscount" style="color:#10b981; font-weight:700;">-₹{{ discount|floatformat:0 }}</span>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="total-row">
+                        <span class="total-label">Total Amount</span>
+                        <span class="total-price" id="displayTotal">₹{{ final_price|floatformat:0 }}</span>
+                    </div>
+
+                    <!-- PAYMENT METHOD SELECTION -->
+                    <div class="payment-title">Select Payment Method</div>
+
+                    <div class="payment-options-list">
+                        <!-- CASH ON DELIVERY (ACTIVE BY DEFAULT) -->
+                        <label class="payment-option active" id="payOptionCOD" onclick="selectPayment('COD')">
+                            <div class="payment-left">
+                                <div class="payment-radio-circle"></div>
+                                <div>
+                                    <span class="payment-label">Cash on Delivery</span>
+                                    <span class="payment-sub">Pay cash or UPI upon delivery</span>
+                                </div>
+                            </div>
+                            <i class="bi bi-cash-stack payment-icon"></i>
+                        </label>
+
+                        <!-- RAZORPAY (ONLINE) -->
+                        <label class="payment-option" id="payOptionRazorpay" onclick="selectPayment('RAZORPAY')">
+                            <div class="payment-left">
+                                <div class="payment-radio-circle"></div>
+                                <div>
+                                    <span class="payment-label">Online Payment</span>
+                                    <span class="payment-sub">Cards, UPI, Netbanking</span>
+                                </div>
+                            </div>
+                            <i class="bi bi-credit-card payment-icon"></i>
+                        </label>
+
+                        <!-- WALLET -->
+                        <label class="payment-option" id="payOptionWallet" onclick="selectPayment('WALLET')">
+                            <div class="payment-left">
+                                <div class="payment-radio-circle"></div>
+                                <div>
+                                    <span class="payment-label">Wegnex Wallet</span>
+                                    <span class="payment-sub">Balance: <strong id="walletBalanceDisplay" style="color:{% if wallet_sufficient %}#10b981{% else %}#ef4444{% endif %};">₹{{ wallet_balance|floatformat:2 }}</strong>
+                                        {% if not wallet_sufficient %}
+                                        <span style="color:#ef4444; font-size:10px; margin-left:4px;">(Insufficient)</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <i class="bi bi-wallet2 payment-icon"></i>
+                        </label>
+                    </div>
+
+                    <!-- Wallet insufficient funds notice (shown dynamically) -->
+                    <div id="walletInsufficientNotice" style="display:none; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:10px 14px; margin-top:10px; font-size:12px; color:#ef4444;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Insufficient wallet balance. <a href="{% url 'wallet' %}" style="color:#D4AF37; font-weight:600;">Add funds to wallet &rarr;</a>
+                    </div>
+
+                    <!-- PLACE ORDER FORM -->
+                    <form method="POST" action="{% url 'place_order' %}" id="placeOrderForm" onsubmit="return handlePlaceOrderSubmit(event)">
+                        {% csrf_token %}
+                        <input type="hidden" name="address_id" id="formAddressId" value="{{ selected_address.id|default:'' }}">
+                        <input type="hidden" name="payment_method" id="formPaymentMethod" value="COD">
+
+                        <button type="submit" class="btn-place-order" id="btnPlaceOrder" {% if has_oos or not addresses %}disabled{% endif %}>
+                            <i class="bi bi-lock-fill"></i>
+                            <span id="placeOrderBtnText">PLACE ORDER (COD)</span>
+                        </button>
+                    </form>
+
+                    <div class="secure-badge">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <span>256-Bit SSL Encrypted & Certified Secure</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ================= ADD / EDIT ADDRESS MODAL ================= -->
+    <div class="modal-backdrop-custom" id="addressModal" onclick="handleBackdropModalClick(event)">
+        <div class="modal-box-custom">
+            <button type="button" class="modal-close-btn" onclick="closeAddressModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+            <h3 class="modal-title-lux" id="modalTitle">
+                <i class="bi bi-geo-alt-fill"></i> ADD NEW ADDRESS
+            </h3>
+            <p class="modal-subtitle-lux">Fill in your delivery address for your Wegnex luxury timepiece order.</p>
+
+            <form id="addressForm" onsubmit="handleAddressSubmit(event)">
+                <input type="hidden" id="editAddressId" value="">
+
+                <div class="form-grid">
+                    <!-- FULL NAME -->
+                    <div class="form-field form-col-full">
+                        <label class="form-label-lux">Full Name *</label>
+                        <input type="text" class="form-input-lux" id="inputFullName" placeholder="e.g. Alexander Vance" required>
+                    </div>
+
+                    <!-- PHONE NUMBER -->
+                    <div class="form-field">
+                        <label class="form-label-lux">Phone Number *</label>
+                        <input type="tel" class="form-input-lux" id="inputPhone" placeholder="10-digit mobile" maxlength="10" required>
+                    </div>
+
+                    <!-- PINCODE -->
+                    <div class="form-field">
+                        <label class="form-label-lux">PIN Code *</label>
+                        <input type="text" class="form-input-lux" id="inputPincode" placeholder="6-digit PIN" maxlength="6" required>
+                    </div>
+
+                    <!-- STREET ADDRESS -->
+                    <div class="form-field form-col-full">
+                        <label class="form-label-lux">Street Address / Landmark *</label>
+                        <textarea class="form-input-lux" id="inputStreet" placeholder="House/Flat No., Building name, Street, Area" required></textarea>
+                    </div>
+
+                    <!-- CITY -->
+                    <div class="form-field">
+                        <label class="form-label-lux">City *</label>
+                        <input type="text" class="form-input-lux" id="inputCity" placeholder="City" required>
+                    </div>
+
+                    <!-- STATE -->
+                    <div class="form-field">
+                        <label class="form-label-lux">State *</label>
+                        <input type="text" class="form-input-lux" id="inputState" placeholder="State" required>
+                    </div>
+
+                    <!-- COUNTRY -->
+                    <div class="form-field form-col-full">
+                        <label class="form-label-lux">Country *</label>
+                        <input type="text" class="form-input-lux" id="inputCountry" value="India" required>
+                    </div>
+
+                    <!-- ADDRESS TYPE -->
+                    <div class="form-field form-col-full">
+                        <label class="form-label-lux">Address Type</label>
+                        <div class="type-selector">
+                            <button type="button" class="type-option-btn selected" id="typeHome" onclick="selectType('Home')">
+                                <i class="bi bi-house"></i> Home
+                            </button>
+                            <button type="button" class="type-option-btn" id="typeWork" onclick="selectType('Work')">
+                                <i class="bi bi-briefcase"></i> Work
+                            </button>
+                            <button type="button" class="type-option-btn" id="typeOther" onclick="selectType('Other')">
+                                <i class="bi bi-geo"></i> Other
+                            </button>
+                        </div>
+                        <input type="hidden" id="inputAddressType" value="Home">
+                    </div>
+
+                    <!-- SET AS DEFAULT CHECKBOX -->
+                    <div class="form-col-full mt-2">
+                        <label class="checkbox-row">
+                            <input type="checkbox" id="inputIsDefault">
+                            <span>Set this as my default shipping address</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-btn-row">
+                    <button type="button" class="btn-modal-cancel" onclick="closeAddressModal()">CANCEL</button>
+                    <button type="submit" class="btn-modal-save" id="btnSaveAddress">SAVE ADDRESS</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= DELETE ADDRESS CONFIRMATION MODAL ================= -->
+    <div class="modal-backdrop-custom" id="deleteAddressModal" onclick="handleDeleteModalBackdropClick(event)">
+        <div class="modal-box-custom text-center" style="max-width: 440px; padding: 32px 28px;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); display: inline-flex; align-items: center; justify-content: center; margin: 0 auto 18px auto;">
+                <i class="bi bi-trash3-fill" style="color: #ef4444; font-size: 24px;"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 8px;">
+                Delete Shipping Address?
+            </h3>
+            <p style="font-size: 13px; color: #999999; line-height: 1.5; margin-bottom: 24px;">
+                Are you sure you want to remove the address for <strong id="deleteAddrName" style="color:#fff;"></strong>? This address will be removed from your account.
+            </p>
+
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button type="button" class="btn-modal-cancel" style="flex: 1;" onclick="closeDeleteAddressModal()">
+                    CANCEL
+                </button>
+                <button type="button" class="btn-modal-delete" id="btnConfirmDeleteAddress" onclick="executeDeleteAddress()" style="flex: 1; background: #ef4444; color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 12px 18px; cursor: pointer; transition: background 0.2s;">
+                    DELETE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ORDER SUCCESS POPUP MODAL ================= -->
+    <div class="success-popup-backdrop" id="orderSuccessModal">
+        <div class="success-popup-card">
+            <!-- Glow background -->
+            <div class="popup-gold-glow"></div>
+
+            <!-- Animated luxury checkmark seal -->
+            <div class="popup-seal-wrapper">
+                <div class="popup-seal-pulse"></div>
+                <div class="popup-seal-circle">
+                    <i class="bi bi-check2"></i>
+                </div>
+            </div>
+
+            <div class="popup-luxury-badge">PAYMENT VERIFIED • ORDER CONFIRMED</div>
+            <h2 class="popup-title">ORDER PLACED SUCCESSFULLY!</h2>
+            <p class="popup-subtitle">
+                Thank you for your purchase! Your order has been placed successfully and our master horologists are preparing your timepiece with meticulous care.
+            </p>
+
+            <!-- Order Reference and Payment Pill -->
+            <div class="popup-order-pill">
+                <div class="pill-col">
+                    <span class="pill-label">ORDER REFERENCE</span>
+                    <span class="pill-value" id="popupOrderRef">#WGX-XXXXXXXX</span>
+                </div>
+                <div class="pill-col text-end">
+                    <span class="pill-label">PAYMENT METHOD</span>
+                    <span class="pill-value text-gold" id="popupPaymentMethod">Razorpay (Paid)</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons requested by user -->
+            <div class="popup-actions-grid">
+                <a href="{% url 'product_list' %}" class="btn-popup-continue" id="popupContinueBtn">
+                    <i class="bi bi-bag"></i> CONTINUE SHOPPING
+                </a>
+                <a href="#" class="btn-popup-view-order" id="popupViewOrderBtn">
+                    <i class="bi bi-receipt"></i> VIEW ORDER DETAILS
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= AVAILABLE COUPONS POPUP MODAL ================= -->
+    <div class="coupon-modal-backdrop" id="couponModal" onclick="handleCouponBackdropClick(event)">
+        <div class="coupon-modal-box" id="couponModalBox">
+
+            <!-- Header -->
+            <div class="coupon-modal-header">
+                <div class="coupon-modal-title">
+                    <i class="bi bi-ticket-perforated-fill"></i>
+                    Available Coupons
+                </div>
+                <button type="button" class="coupon-modal-close" onclick="closeCouponModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Manual code input -->
+            <div class="coupon-input-row">
+                <input type="text" class="coupon-modal-input" id="couponCodeInput"
+                       placeholder="ENTER COUPON CODE"
+                       autocomplete="off"
+                       maxlength="30"
+                       oninput="this.value=this.value.toUpperCase()"
+                       onkeydown="if(event.key==='Enter'){event.preventDefault(); applyFromModalInput();}">
+                <button type="button" class="coupon-apply-btn" id="btnApplyCoupon" onclick="applyFromModalInput()">APPLY</button>
+            </div>
+            <div class="coupon-feedback" id="couponFeedback"></div>
+
+            <!-- Coupon list -->
+            <div class="coupon-list-wrap">
+                <div class="coupon-list-label">Offers for you</div>
+                <div id="couponCardsList">
+                    {% if available_coupons %}
+                        {% for c in available_coupons %}
+                        <div class="coupon-card" onclick="applyCouponByCode('{{ c.code }}')">
+                            <div class="coupon-card-top">
+                                <span class="coupon-card-code">{{ c.code }}</span>
+                                <span class="coupon-card-badge">
+                                    {% if c.discount_type == 'percentage' %}
+                                        {{ c.discount_value|floatformat:0 }}% OFF
+                                    {% else %}
+                                        ₹{{ c.discount_value|floatformat:0 }} OFF
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% if c.description %}
+                                <div class="coupon-card-desc">{{ c.description }}</div>
+                            {% endif %}
+                            <div class="coupon-card-meta">
+                                {% if c.minimum_order_amount > 0 %}
+                                    <span><i class="bi bi-info-circle"></i>Min. order ₹{{ c.minimum_order_amount|floatformat:0 }}</span>
+                                {% endif %}
+                                {% if c.valid_until %}
+                                    <span><i class="bi bi-calendar3"></i>Valid till {{ c.valid_until|date:"d M Y" }}</span>
+                                {% endif %}
+                            </div>
+                            <span class="coupon-apply-tag">APPLY &rarr;</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="coupon-empty">
+                            <i class="bi bi-tag-slash"></i>
+                            No active coupons available right now.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-notify" id="checkoutToast">
+        <i class="bi bi-check-circle-fill" id="toastIcon" style="color:var(--gold); font-size:16px;"></i>
+        <span id="toastMsg">Success</span>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const CSRF_TOKEN = '{{ csrf_token }}';
+        let currentSelectedAddressId = "{{ selected_address.id|default:'' }}";
+        let currentPaymentMethod = "COD";
+        let isEditMode = false;
+        const WALLET_BALANCE = parseFloat("{{ wallet_balance|default:'0' }}") || 0;
+
+        // Toast notification
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('checkoutToast');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastMsg');
+            text.textContent = msg;
+
+            if (isError) {
+                icon.className = 'bi bi-exclamation-triangle-fill';
+                icon.style.color = '#ef4444';
+                toast.style.borderColor = '#ef4444';
+            } else {
+                icon.className = 'bi bi-check-circle-fill';
+                icon.style.color = 'var(--gold)';
+                toast.style.borderColor = 'var(--gold)';
+            }
+
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // ================= CAN PLACE ORDER VALIDATION =================
+        function checkCanPlaceOrder() {
+            const btn = document.getElementById('btnPlaceOrder');
+            if (!btn) return;
+
+            const hasAddress = Boolean(currentSelectedAddressId);
+            const hasOOS = {% if has_oos %}true{% else %}false{% endif %};
+            const notice = document.getElementById('walletInsufficientNotice');
+            const btnText = document.getElementById('placeOrderBtnText');
+
+            if (hasOOS) {
+                btn.disabled = true;
+                return;
+            }
+
+            if (!hasAddress) {
+                btn.disabled = true;
+                return;
+            }
+
+            const totalEl = document.getElementById('displayTotal') || document.getElementById('summaryTotal');
+            let currentTotal = parseFloat('{{ final_price|default:0 }}') || 0;
+            if (totalEl) {
+                const parsed = parseFloat(totalEl.textContent.replace(/[^0-9.]/g, ''));
+                if (!isNaN(parsed) && parsed > 0) currentTotal = parsed;
+            }
+
+            if (currentPaymentMethod === 'WALLET') {
+                if (WALLET_BALANCE < currentTotal) {
+                    btn.disabled = true;
+                    if (notice) notice.style.display = 'block';
+                    if (btnText) btnText.textContent = 'INSUFFICIENT WALLET BALANCE';
+                    return;
+                } else {
+                    if (notice) notice.style.display = 'none';
+                    if (btnText) btnText.textContent = `PAY FROM WALLET (₹${Math.round(currentTotal).toLocaleString('en-IN')})`;
+                    btn.disabled = false;
+                    return;
+                }
+            } else {
+                if (notice) notice.style.display = 'none';
+                if (currentPaymentMethod === 'RAZORPAY') {
+                    if (btnText) btnText.textContent = 'PAY WITH RAZORPAY';
+                } else {
+                    if (btnText) btnText.textContent = 'PLACE ORDER (COD)';
+                }
+                btn.disabled = false;
+            }
+        }
+
+        // ================= ADDRESS SELECTION =================
+        function selectAddress(addrId) {
+            currentSelectedAddressId = addrId;
+            document.getElementById('formAddressId').value = addrId;
+
+            document.querySelectorAll('.address-card').forEach(card => {
+                if (card.dataset.id == addrId) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+
+            checkCanPlaceOrder();
+        }
+
+        // ================= PAYMENT SELECTION =================
+        function selectPayment(method) {
+            currentPaymentMethod = method;
+            document.getElementById('formPaymentMethod').value = method;
+
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            if (method === 'COD') {
+                document.getElementById('payOptionCOD').classList.add('active');
+            } else if (method === 'RAZORPAY') {
+                document.getElementById('payOptionRazorpay').classList.add('active');
+            } else if (method === 'WALLET') {
+                document.getElementById('payOptionWallet').classList.add('active');
+            }
+            checkCanPlaceOrder();
+        }
+
+        // ================= SET DEFAULT ADDRESS =================
+        function setDefaultAddress(addrId) {
+            fetch(`/checkout/address/set_default/${addrId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': CSRF_TOKEN }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Update badges in UI
+                    document.querySelectorAll('[id^="defaultBadge-"]').forEach(badge => badge.classList.add('d-none'));
+                    document.querySelectorAll('[id^="btnSetDefault-"]').forEach(btn => btn.style.display = 'inline-flex');
+
+                    const targetBadge = document.getElementById(`defaultBadge-${addrId}`);
+                    if (targetBadge) targetBadge.classList.remove('d-none');
+
+                    const targetBtn = document.getElementById(`btnSetDefault-${addrId}`);
+                    if (targetBtn) targetBtn.style.display = 'none';
+
+                    selectAddress(addrId);
+                    showToast('Default address updated.');
+                } else {
+                    showToast(data.msg || 'Could not update default address.', true);
+                }
+            })
+            .catch(() => showToast('Error setting default address.', true));
+        }
+
+        // ================= MODAL OPERATIONS =================
+        function openAddAddressModal() {
+            isEditMode = false;
+            document.getElementById('editAddressId').value = '';
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-geo-alt-fill"></i> ADD NEW ADDRESS';
+            document.getElementById('addressForm').reset();
+            document.getElementById('inputCountry').value = 'India';
+            selectType('Home');
+            document.getElementById('inputIsDefault').checked = !currentSelectedAddressId;
+            document.getElementById('addressModal').classList.add('active');
+        }
+
+        function openEditAddressModal(addrId) {
+            const card = document.getElementById(`addrCard-${addrId}`);
+            if (!card) return;
+
+            isEditMode = true;
+            document.getElementById('editAddressId').value = addrId;
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-pencil-square"></i> EDIT ADDRESS';
+
+            document.getElementById('inputFullName').value = card.dataset.fullname || '';
+            document.getElementById('inputPhone').value = card.dataset.phone || '';
+            document.getElementById('inputStreet').value = card.dataset.street || '';
+            document.getElementById('inputCity').value = card.dataset.city || '';
+            document.getElementById('inputState').value = card.dataset.state || '';
+            document.getElementById('inputPincode').value = card.dataset.pincode || '';
+            document.getElementById('inputCountry').value = card.dataset.country || 'India';
+            document.getElementById('inputIsDefault').checked = card.dataset.isdefault === 'true';
+
+            selectType(card.dataset.type || 'Home');
+            document.getElementById('addressModal').classList.add('active');
+        }
+
+        function closeAddressModal() {
+            document.getElementById('addressModal').classList.remove('active');
+        }
+
+        function handleBackdropModalClick(e) {
+            if (e.target === document.getElementById('addressModal')) {
+                closeAddressModal();
+            }
+        }
+
+        // ================= DELETE ADDRESS OPERATIONS =================
+        let addressIdToDelete = null;
+
+        function promptDeleteAddress(addrId, name) {
+            addressIdToDelete = addrId;
+            document.getElementById('deleteAddrName').textContent = name || 'this address';
+            document.getElementById('deleteAddressModal').classList.add('active');
+        }
+
+        function closeDeleteAddressModal() {
+            addressIdToDelete = null;
+            document.getElementById('deleteAddressModal').classList.remove('active');
+        }
+
+        function handleDeleteModalBackdropClick(e) {
+            if (e.target === document.getElementById('deleteAddressModal')) {
+                closeDeleteAddressModal();
+            }
+        }
+
+        function executeDeleteAddress() {
+            if (!addressIdToDelete) return;
+            const btn = document.getElementById('btnConfirmDeleteAddress');
+            btn.disabled = true;
+            btn.textContent = 'DELETING...';
+
+            const addrId = addressIdToDelete;
+            fetch(`/checkout/address/delete/${addrId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF_TOKEN,
+                }
+            })
+            .then(r => r.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.textContent = 'DELETE';
+                closeDeleteAddressModal();
+
+                if (data.success) {
+                    showToast(data.msg);
+                    const card = document.getElementById(`addrCard-${addrId}`);
+                    if (card) {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            card.remove();
+
+                            if (data.remaining_count === 0) {
+                                const container = document.getElementById('addressesContainer');
+                                if (container) {
+                                    container.innerHTML = `
+                                        <div class="no-address-box" id="noAddressBox">
+                                            <i class="bi bi-house-door"></i>
+                                            <p>No shipping address saved yet.</p>
+                                            <a href="{% url 'add_address' %}?next=checkout" class="btn-add-address-header">
+                                                <i class="bi bi-plus-lg"></i> ADD YOUR FIRST ADDRESS
+                                            </a>
+                                        </div>
+                                    `;
+                                }
+                                currentSelectedAddressId = '';
+                                document.getElementById('formAddressId').value = '';
+                                checkCanPlaceOrder();
+                            } else {
+                                if (currentSelectedAddressId == addrId) {
+                                    if (data.new_default_id) {
+                                        selectAddress(data.new_default_id);
+                                        const newBadge = document.getElementById(`defaultBadge-${data.new_default_id}`);
+                                        if (newBadge) newBadge.classList.remove('d-none');
+                                        const newBtn = document.getElementById(`btnSetDefault-${data.new_default_id}`);
+                                        if (newBtn) newBtn.style.display = 'none';
+                                    }
+                                }
+                            }
+                        }, 300);
+                    }
+                } else {
+                    showToast(data.msg || 'Could not delete address.', true);
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.textContent = 'DELETE';
+                closeDeleteAddressModal();
+                showToast('Error deleting address.', true);
+            });
+        }
+
+        function selectType(type) {
+            document.getElementById('inputAddressType').value = type;
+            document.querySelectorAll('.type-option-btn').forEach(btn => btn.classList.remove('selected'));
+            const target = document.getElementById(`type${type}`);
+            if (target) target.classList.add('selected');
+        }
+
+        // ================= SUBMIT ADDRESS (ADD / EDIT) =================
+        function handleAddressSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveAddress');
+            btn.disabled = true;
+            btn.textContent = 'SAVING...';
+
+            const formData = new URLSearchParams();
+            formData.append('full_name', document.getElementById('inputFullName').value);
+            formData.append('phone_number', document.getElementById('inputPhone').value);
+            formData.append('street_address', document.getElementById('inputStreet').value);
+            formData.append('city', document.getElementById('inputCity').value);
+            formData.append('state', document.getElementById('inputState').value);
+            formData.append('pincode', document.getElementById('inputPincode').value);
+            formData.append('country', document.getElementById('inputCountry').value);
+            formData.append('address_type', document.getElementById('inputAddressType').value);
+            formData.append('is_default', document.getElementById('inputIsDefault').checked ? 'true' : 'false');
+
+            const editId = document.getElementById('editAddressId').value;
+            const url = isEditMode ? `/checkout/address/edit/${editId}/` : '/checkout/address/add/';
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': CSRF_TOKEN },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.textContent = 'SAVE ADDRESS';
+
+                if (data.success) {
+                    showToast(data.msg);
+                    closeAddressModal();
+                    // Reload page to refresh address list & select the new/updated address
+                    window.location.reload();
+                } else {
+                    showToast(data.msg || 'Please correct address fields.', true);
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.textContent = 'SAVE ADDRESS';
+                showToast('Something went wrong.', true);
+            });
+        }
+
+        // ================= ORDER SUBMISSION & RAZORPAY =================
+        function handlePlaceOrderSubmit(event) {
+            if (currentPaymentMethod === 'RAZORPAY') {
+                event.preventDefault();
+                initiateRazorpayPayment();
+                return false;
+            }
+
+            // For Cash on Delivery (COD): place order and show the Order Success Popup
+            event.preventDefault();
+            if (!currentSelectedAddressId) {
+                showToast('Please select or add a shipping address before proceeding.', true);
+                return false;
+            }
+
+            const btn = document.getElementById('btnPlaceOrder');
+            btn.disabled = true;
+            btn.innerHTML = currentPaymentMethod === 'WALLET'
+                ? '<span class="spinner-border spinner-border-sm me-2"></span> PROCESSING WALLET PAYMENT...'
+                : '<span class="spinner-border spinner-border-sm me-2"></span> PROCESSING ORDER...';
+
+            const formData = new URLSearchParams();
+            formData.append('address_id', currentSelectedAddressId);
+            formData.append('payment_method', currentPaymentMethod);
+
+            fetch('{% url "place_order" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF_TOKEN,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showOrderSuccessPopup(data.order_number, data.payment_method || (currentPaymentMethod === 'WALLET' ? 'Wegnex Wallet (Paid)' : 'Cash on Delivery'), data.order_detail_url);
+                } else {
+                    showToast(data.msg || 'Could not place order.', true);
+                    resetPlaceOrderBtn();
+                }
+            })
+            .catch(() => {
+                // Fallback to standard form submission
+                document.getElementById('placeOrderForm').submit();
+            });
+
+            return false;
+        }
+
+        function initiateRazorpayPayment() {
+            if (!currentSelectedAddressId) {
+                showToast('Please select or add a shipping address before proceeding.', true);
+                return;
+            }
+
+            const btn = document.getElementById('btnPlaceOrder');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> OPENING RAZORPAY...';
+
+            const formData = new URLSearchParams();
+            formData.append('address_id', currentSelectedAddressId);
+
+            fetch('{% url "razorpay_create_order" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF_TOKEN,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    showToast(data.msg || 'Could not initiate Razorpay payment.', true);
+                    resetPlaceOrderBtn();
+                    return;
+                }
+
+                const options = {
+                    key: data.razorpay_key_id,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: "WEGNEX LUXURY HOROLOGY",
+                    description: "Order #" + data.order_number,
+                    order_id: data.razorpay_order_id,
+                    prefill: {
+                        name: data.user_name,
+                        email: data.user_email,
+                        contact: data.user_phone
+                    },
+                    theme: {
+                        color: "#D4AF37"
+                    },
+                    handler: function (response) {
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> VERIFYING PAYMENT...';
+                        verifyRazorpayPayment(response, data.order_number);
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            showToast('Payment window closed. You can retry payment anytime.', false);
+                            resetPlaceOrderBtn();
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (resp) {
+                    console.error("Razorpay failure:", resp.error);
+                    fetch('{% url "razorpay_payment_failed" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': CSRF_TOKEN
+                        },
+                        body: JSON.stringify({
+                            order_number: data.order_number,
+                            error_code: resp.error ? resp.error.code : '',
+                            error_description: resp.error ? resp.error.description : ''
+                        })
+                    }).finally(() => {
+                        window.location.href = '/order_fail/' + data.order_number + '/';
+                    });
+                });
+
+                rzp.open();
+            })
+            .catch(err => {
+                console.error("Error creating Razorpay order:", err);
+                showToast('Something went wrong connecting to Razorpay.', true);
+                resetPlaceOrderBtn();
+            });
+        }
+
+        function verifyRazorpayPayment(response, orderNumber) {
+            fetch('{% url "razorpay_verify_payment" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': CSRF_TOKEN
+                },
+                body: JSON.stringify({
+                    order_number: orderNumber,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Show Order Success Popup with Continue Shopping & View Order Details
+                    showOrderSuccessPopup(data.order_number, data.payment_method || 'Razorpay (Paid)', data.order_detail_url);
+                } else {
+                    showToast(data.msg || 'Payment verification failed.', true);
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        resetPlaceOrderBtn();
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("Verification error:", err);
+                showToast('Error verifying payment. If amount was deducted, please check your orders.', true);
+                resetPlaceOrderBtn();
+            });
+        }
+
+        function showOrderSuccessPopup(orderNumber, paymentMethod, orderDetailUrl) {
+            const modal = document.getElementById('orderSuccessModal');
+            if (!modal) {
+                window.location.href = orderDetailUrl || ('/order_detail/' + orderNumber + '/');
+                return;
+            }
+
+            const refEl = document.getElementById('popupOrderRef');
+            if (refEl) refEl.textContent = '#' + orderNumber;
+
+            const payEl = document.getElementById('popupPaymentMethod');
+            if (payEl) payEl.textContent = paymentMethod || 'Confirmed';
+
+            const viewOrderBtn = document.getElementById('popupViewOrderBtn');
+            if (viewOrderBtn) {
+                viewOrderBtn.href = orderDetailUrl || ('/order_detail/' + orderNumber + '/');
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function resetPlaceOrderBtn() {
+            const btn = document.getElementById('btnPlaceOrder');
+            btn.disabled = false;
+            if (currentPaymentMethod === 'RAZORPAY') {
+                btn.innerHTML = '<i class="bi bi-lock-fill"></i> <span id="placeOrderBtnText">PAY WITH RAZORPAY</span>';
+            } else if (currentPaymentMethod === 'WALLET') {
+                btn.innerHTML = '<i class="bi bi-lock-fill"></i> <span id="placeOrderBtnText">PAY FROM WALLET</span>';
+            } else {
+                btn.innerHTML = '<i class="bi bi-lock-fill"></i> <span id="placeOrderBtnText">PLACE ORDER (COD)</span>';
+            }
+            checkCanPlaceOrder();
+        }
+
+        // ================= VALIDATE BEFORE ORDER SUBMIT (FOR COD) =================
+        function validateBeforeSubmit() {
+            if (!currentSelectedAddressId) {
+                showToast('Please select or add a shipping address before proceeding.', true);
+                return false;
+            }
+
+            const btn = document.getElementById('btnPlaceOrder');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> PROCESSING ORDER...';
+            return true;
+        }
+
+        // ================= COUPON MANAGEMENT (MODAL, APPLY, REMOVE) =================
+        function openCouponModal() {
+            const modal = document.getElementById('couponModal');
+            if (modal) modal.classList.add('active');
+            const input = document.getElementById('couponCodeInput');
+            if (input) input.value = '';
+            showCouponFeedback('', '');
+        }
+
+        function closeCouponModal() {
+            const modal = document.getElementById('couponModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function handleCouponBackdropClick(e) {
+            if (e.target === document.getElementById('couponModal')) {
+                closeCouponModal();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCouponModal();
+                closeAddressModal();
+                closeDeleteAddressModal();
+            }
+        });
+
+        function showCouponFeedback(msg, type) {
+            const el = document.getElementById('couponFeedback');
+            if (!el) return;
+            el.textContent = msg;
+            el.className = 'coupon-feedback' + (msg ? (' show ' + type) : '');
+        }
+
+        function applyCouponByCode(code) {
+            const input = document.getElementById('couponCodeInput');
+            if (input) input.value = code;
+            applyFromModalInput();
+        }
+
+        async function applyFromModalInput() {
+            const input = document.getElementById('couponCodeInput');
+            const code = (input ? input.value : '').trim().toUpperCase();
+            const btn = document.getElementById('btnApplyCoupon');
+
+            if (!code) {
+                showCouponFeedback('Please enter a coupon code.', 'error');
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '...';
+            }
+            showCouponFeedback('', '');
+
+            try {
+                const response = await fetch('{% url "apply_coupon" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': CSRF_TOKEN,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ coupon_code: code })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // 1. Update Breakdown
+                    const discountRow = document.getElementById('summaryDiscountRow');
+                    const displayDiscount = document.getElementById('displayDiscount');
+                    const summaryCouponCode = document.getElementById('summaryCouponCode');
+                    const displayTotal = document.getElementById('displayTotal');
+
+                    if (discountRow) discountRow.style.display = 'flex';
+                    if (displayDiscount) displayDiscount.textContent = '-' + data.discount_formatted;
+                    if (summaryCouponCode) summaryCouponCode.textContent = data.coupon_code;
+                    if (displayTotal) displayTotal.textContent = data.final_price_formatted;
+                    checkCanPlaceOrder();
+
+                    // 2. Swap Coupon Bar in Summary to Applied Pill
+                    const container = document.getElementById('couponContainer');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="coupon-applied-row" id="couponAppliedRow">
+                                <div class="coupon-applied-info">
+                                    <i class="bi bi-patch-check-fill"></i>
+                                    <div>
+                                        <div class="coupon-applied-code" id="appliedCodeText">${data.coupon_code}</div>
+                                        <div class="coupon-applied-desc" id="appliedSavingText">${data.description} (Saving ${data.discount_formatted})</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="coupon-remove-btn" onclick="handleRemoveCoupon()" title="Remove coupon">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+
+                    closeCouponModal();
+                    showToast(`Coupon '${data.coupon_code}' applied! Saved ${data.discount_formatted}`);
+                } else {
+                    showCouponFeedback(data.message || 'Could not apply coupon.', 'error');
+                }
+            } catch (err) {
+                console.error("Coupon apply error:", err);
+                showCouponFeedback('Network error. Please try again.', 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'APPLY';
+                }
+            }
+        }
+
+        async function handleRemoveCoupon() {
+            const btn = document.querySelector('.coupon-remove-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            }
+
+            try {
+                const response = await fetch('{% url "remove_coupon" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': CSRF_TOKEN,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // 1. Hide Discount row in Breakdown and restore total
+                    const discountRow = document.getElementById('summaryDiscountRow');
+                    const displayTotal = document.getElementById('displayTotal');
+
+                    if (discountRow) discountRow.style.display = 'none';
+                    if (displayTotal) displayTotal.textContent = data.final_price_formatted;
+                    checkCanPlaceOrder();
+
+                    // 2. Switch back to Coupon Bar
+                    const container = document.getElementById('couponContainer');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="coupon-bar" id="couponBar" onclick="openCouponModal()">
+                                <div class="coupon-bar-left">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                    <div>
+                                        <div class="coupon-bar-text">Have a coupon?</div>
+                                        <div class="coupon-bar-sub">View available offers &amp; apply</div>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right coupon-bar-arrow"></i>
+                            </div>
+                        `;
+                    }
+
+                    showToast('Coupon removed successfully.');
+                } else {
+                    showToast(data.message || 'Could not remove coupon.', true);
+                }
+            } catch (err) {
+                console.error("Coupon remove error:", err);
+                showToast('Network error. Could not remove coupon.', true);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkCanPlaceOrder();
+        });
+    </script>
+</body>
+</html>

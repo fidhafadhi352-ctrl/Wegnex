@@ -372,13 +372,9 @@ def logout_view(request):
 
 @never_cache
 def forgot_view(request):
-    if request.user.is_authenticated:
-        return redirect("home")
-    return render(request, "forgotpass.html")
+    return redirect("profile_forgotpass")
 
 
 @never_cache
 def resetpass_view(request):
-    if request.user.is_authenticated:
-        return redirect("home")
-    return render(request, "resetpass.html")
+    return redirect("profile_forgotpass")

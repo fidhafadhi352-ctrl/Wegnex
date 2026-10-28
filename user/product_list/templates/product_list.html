@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -649,18 +650,170 @@
             font-size: 12px;
         }
 
-        .range-slider-container {
-            padding: 4px 0;
+        .dual-range-container {
+            position: relative;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 2px;
         }
 
-        .range-slider {
+        .dual-range-track {
+            position: absolute;
             width: 100%;
-            height: 6px;
-            border-radius: 3px;
+            height: 4px;
             background: #252015;
+            border-radius: 2px;
+        }
+
+        .dual-range-highlight {
+            position: absolute;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+
+        .range-input {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            height: 4px;
+            margin: 0;
             outline: none;
-            accent-color: #d4af37;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            pointer-events: auto;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #d4af37;
+            border: 2px solid #111111;
             cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+            transition: transform 0.15s ease;
+        }
+
+        .range-input::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-input::-moz-range-thumb {
+            pointer-events: auto;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #d4af37;
+            border: 2px solid #111111;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+        }
+
+        /* ACTIVE FILTERS ROW */
+        .active-filters-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+        }
+
+        .active-filters-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #d4af37;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #181510;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            color: #e5e5e5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .filter-chip button {
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .filter-chip button:hover {
+            color: #ffffff;
+        }
+
+        .clear-all-link {
+            margin-left: auto;
+            color: #ff6b6b;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .clear-all-link:hover {
+            color: #ff9999;
+        }
+
+        .active-filter-indicator {
+            width: 7px;
+            height: 7px;
+            background: #d4af37;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 6px #d4af37;
+        }
+
+        .filter-page-link-btn {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #aaaaaa;
+            padding: 9px 15px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .filter-page-link-btn:hover {
+            border-color: #d4af37;
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateY(-1px);
         }
 
         .checkbox-grid {
@@ -898,6 +1051,62 @@
             }
         }
 
+        /* =====================================================
+           PAGINATION
+        ===================================================== */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 50px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            height: 42px;
+            padding: 0 14px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #aaaaaa;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .page-btn:hover {
+            background: rgba(212, 175, 55, 0.12);
+            border-color: #d4af37;
+            color: #d4af37;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .page-btn.active {
+            background: #d4af37;
+            border-color: #d4af37;
+            color: #0b0b0b;
+            font-weight: 700;
+            box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
+            transform: translateY(-2px);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .page-btn i {
+            font-size: 14px;
+        }
+
     </style>
 </head>
 
@@ -955,7 +1164,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#about">
+                    <a class="nav-link" href="{% url 'about' %}">
                         About
                     </a>
                 </li>
@@ -968,8 +1177,13 @@
         <!-- Icons & User Menu -->
         <div class="nav-icons">
             <i class="bi bi-search" onclick="openFilterModal()" title="Search & Filter"></i>
-            <i class="bi bi-heart" title="Wishlist"></i>
-            <i class="bi bi-cart3" title="Cart"></i>
+            <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist" id="navWishlistIcon">
+                <i class="bi bi-heart" id="navWishlistHeart"></i>
+                <span id="navWishlistCount" style="display:none;position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#d4af37;color:#000;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;"></span>
+            </a>
+            <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                <i class="bi bi-cart3"></i>
+            </a>
 
             {% if user.is_authenticated %}
                 <div class="d-flex align-items-center gap-3">
@@ -1032,6 +1246,9 @@
 
         <button type="button" class="filter-btn" id="openFilterBtn" onclick="openFilterModal()">
             <i class="bi bi-sliders"></i> FILTERS
+            {% if has_active_filters %}
+            <span class="active-filter-indicator"></span>
+            {% endif %}
         </button>
 
         <span class="product-count" id="productCountLabel">
@@ -1047,19 +1264,19 @@
 
             <select class="sort-select" id="sortSelect" onchange="handleSortChange(this.value)">
 
-                <option value="featured">
-                    FEATURED
+                <option value="featured" {% if current_sort == 'featured' %}selected{% endif %}>
+                    FEATURED (NEWEST)
                 </option>
 
-                <option value="price-low">
+                <option value="price-low" {% if current_sort == 'price-low' %}selected{% endif %}>
                     PRICE: LOW TO HIGH
                 </option>
 
-                <option value="price-high">
+                <option value="price-high" {% if current_sort == 'price-high' %}selected{% endif %}>
                     PRICE: HIGH TO LOW
                 </option>
 
-                <option value="name">
+                <option value="name" {% if current_sort == 'name' %}selected{% endif %}>
                     NAME: A TO Z
                 </option>
 
@@ -1068,6 +1285,37 @@
         </div>
 
     </div>
+
+    {% if has_active_filters %}
+    <div class="active-filters-row">
+        <span class="active-filters-label"><i class="bi bi-funnel-fill"></i> Active:</span>
+        {% if search_query %}
+            <span class="filter-chip">
+                Search: "{{ search_query }}"
+                <button type="button" onclick="removeFilter('search')" title="Remove search filter">&times;</button>
+            </span>
+        {% endif %}
+        {% for cat in selected_categories %}
+            <span class="filter-chip">
+                Category: {{ cat }}
+                <button type="button" onclick="removeFilter('category', '{{ cat }}')" title="Remove category">&times;</button>
+            </span>
+        {% endfor %}
+        {% for b in selected_brands %}
+            <span class="filter-chip">
+                Brand: {{ b }}
+                <button type="button" onclick="removeFilter('brand', '{{ b }}')" title="Remove brand">&times;</button>
+            </span>
+        {% endfor %}
+        {% if price_filtered %}
+            <span class="filter-chip">
+                Price: ₹{{ current_min_price }} – ₹{{ current_max_price }}
+                <button type="button" onclick="removePriceFilter()" title="Remove price filter">&times;</button>
+            </span>
+        {% endif %}
+        <a href="{% url 'product_list' %}" class="clear-all-link">Clear All</a>
+    </div>
+    {% endif %}
 
 
 
@@ -1088,7 +1336,7 @@
                             <span class="badge silver">FEATURED</span>
                         {% endif %}
 
-                        <div class="wishlist" onclick="event.preventDefault(); event.stopPropagation();">
+                        <div class="wishlist" onclick="event.preventDefault(); event.stopPropagation(); toggleWishlist(this, {{ product.id }});" data-product-id="{{ product.id }}" title="Add to Wishlist">
                             <i class="bi bi-heart"></i>
                         </div>
 
@@ -1112,11 +1360,11 @@
 
                         <div class="price-row">
                             <span class="price">
-                                ₹{% if first_variant %}{{ first_variant.price|floatformat:0 }}{% else %}48,999{% endif %}
+                                ₹{% if product.effective_price %}{{ product.effective_price|floatformat:0 }}{% elif first_variant %}{{ first_variant.price|floatformat:0 }}{% else %}48,999{% endif %}
                             </span>
 
-                            <span class="add-cart">
-                                VIEW DETAILS
+                            <span class="add-cart" title="View details of {{ product.name }}">
+                                VIEW <i class="bi bi-arrow-right"></i>
                             </span>
                         </div>
                     </div>
@@ -1145,21 +1393,21 @@
     {% if page_obj.has_other_pages %}
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">
+            <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}" class="page-btn">
                 <i class="bi bi-chevron-left"></i>
             </a>
         {% endif %}
 
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
-                <a href="?page={{ num }}" class="page-btn active">{{ num }}</a>
+                <a href="?page={{ num }}{% if querystring %}&{{ querystring }}{% endif %}" class="page-btn active">{{ num }}</a>
             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                <a href="?page={{ num }}{% if querystring %}&{{ querystring }}{% endif %}" class="page-btn">{{ num }}</a>
             {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="page-btn">
+            <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}" class="page-btn">
                 <i class="bi bi-chevron-right"></i>
             </a>
         {% endif %}
@@ -1273,7 +1521,7 @@
             <ul class="footer-links">
 
                 <li>
-                    <a href="#">Our History</a>
+                    <a href="{% url 'about' %}">About Wegnex</a>
                 </li>
 
                 <li>
@@ -1343,69 +1591,95 @@
             </button>
         </div>
 
-        <!-- CONTENT -->
-        <div class="filter-content">
+        <form method="GET" action="{% url 'product_list' %}" id="modalFilterForm">
+            <!-- Hidden sort input so current sort is preserved -->
+            <input type="hidden" name="sort" id="modalSortInput" value="{{ current_sort }}">
 
-            <!-- SEARCH -->
-            <div class="filter-section">
-                <div class="section-title">
-                    SEARCH
+            <!-- CONTENT -->
+            <div class="filter-content">
+
+                <!-- SEARCH -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        SEARCH
+                    </div>
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="search" id="modalSearchInput" placeholder="Search collection or brand..." value="{{ search_query }}" autocomplete="off">
+                    </div>
                 </div>
-                <div class="search-box">
-                    <i class="bi bi-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search collection..." autocomplete="off">
+
+                <!-- PRICE RANGE -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        PRICE RANGE
+                    </div>
+                    <div class="price-values">
+                        <span class="price-box" id="modalMinPriceDisplay">₹{{ current_min_price }}</span>
+                        <span class="price-dash">—</span>
+                        <span class="price-box" id="modalMaxPriceDisplay">₹{{ current_max_price }}</span>
+                    </div>
+
+                    <div class="dual-range-container">
+                        <div class="dual-range-track"></div>
+                        <div class="dual-range-highlight" id="modalRangeHighlight"></div>
+                        <input type="range" class="range-input" id="modalMinPriceInput" name="min_price"
+                               min="{{ db_min_price }}" max="{{ db_max_price }}" step="500" value="{{ current_min_price }}"
+                               oninput="handleModalRangeChange()">
+                        <input type="range" class="range-input" id="modalMaxPriceInput" name="max_price"
+                               min="{{ db_min_price }}" max="{{ db_max_price }}" step="500" value="{{ current_max_price }}"
+                               oninput="handleModalRangeChange()">
+                    </div>
                 </div>
+
+                <!-- CATEGORIES -->
+                <div class="filter-section">
+                    <div class="section-title">
+                        CATEGORIES
+                    </div>
+                    <div class="checkbox-grid">
+                        {% for cat in categories %}
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="category" value="{{ cat.name }}"
+                                   {% if cat.name in selected_categories %}checked{% endif %}>
+                            <span>{{ cat.name }}</span>
+                        </label>
+                        {% empty %}
+                        <span style="color: #666; font-size: 11px;">No categories available</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- BRANDS -->
+                {% if brands %}
+                <div class="filter-section">
+                    <div class="section-title">
+                        BRANDS
+                    </div>
+                    <div class="checkbox-grid">
+                        {% for b in brands %}
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="brand" value="{{ b }}"
+                                   {% if b in selected_brands %}checked{% endif %}>
+                            <span>{{ b }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
             </div>
 
-            <!-- PRICE RANGE -->
-            <div class="filter-section">
-                <div class="section-title">
-                    PRICE RANGE
-                </div>
-                <div class="price-values">
-                    <span class="price-box" id="minPrice">$500</span>
-                    <span class="price-dash">—</span>
-                    <span class="price-box" id="maxPrice">$50,000</span>
-                </div>
-                <div class="range-slider-container">
-                    <input type="range" class="range-slider" id="priceRange" min="500" max="50000" step="500" value="50000" oninput="updatePriceLabel(this.value)">
-                </div>
+            <!-- BUTTONS -->
+            <div class="button-area">
+                <button type="button" class="reset-btn" onclick="resetFilters()">
+                    RESET FILTERS
+                </button>
+                <button type="submit" class="apply-btn">
+                    APPLY FILTERS
+                </button>
             </div>
-
-            <!-- CATEGORIES (Case Material and Dial Color removed) -->
-            <div class="filter-section">
-                <div class="section-title">
-                    CATEGORIES
-                </div>
-                <div class="checkbox-grid">
-                    {% for cat in categories %}
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="filterCategory" value="{{ cat.name|upper }}">
-                        {{ cat.name }}
-                    </label>
-                    {% empty %}
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="filterCategory" value="AUTOMATIC">
-                        Automatic
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="filterCategory" value="HERITAGE">
-                        Heritage
-                    </label>
-                    {% endfor %}</div>
-            </div>
-
-        </div>
-
-        <!-- BUTTONS -->
-        <div class="button-area">
-            <button type="button" class="reset-btn" onclick="resetFilters()">
-                RESET FILTERS
-            </button>
-            <button type="button" class="apply-btn" onclick="applyFilters()">
-                APPLY FILTERS
-            </button>
-        </div>
+        </form>
 
     </div>
 
@@ -1423,7 +1697,8 @@
             backdrop.classList.add('show');
             document.body.style.overflow = 'hidden';
             setTimeout(() => {
-                const searchInput = document.getElementById('searchInput');
+                handleModalRangeChange();
+                const searchInput = document.getElementById('modalSearchInput');
                 if (searchInput) searchInput.focus();
             }, 100);
         }
@@ -1449,104 +1724,203 @@
         }
     });
 
-    function updatePriceLabel(value) {
-        const formatted = '$' + Number(value).toLocaleString();
-        const maxPriceEl = document.getElementById('maxPrice');
-        if (maxPriceEl) maxPriceEl.textContent = formatted;
-    }
+    function handleModalRangeChange() {
+        const minInput = document.getElementById('modalMinPriceInput');
+        const maxInput = document.getElementById('modalMaxPriceInput');
+        const highlight = document.getElementById('modalRangeHighlight');
+        const minDisplay = document.getElementById('modalMinPriceDisplay');
+        const maxDisplay = document.getElementById('modalMaxPriceDisplay');
 
-    function applyFilters() {
-        const searchInput = document.getElementById('searchInput');
-        const searchVal = (searchInput ? searchInput.value : '').trim().toLowerCase();
+        if (!minInput || !maxInput) return;
 
-        const priceRange = document.getElementById('priceRange');
-        const maxPrice = Number(priceRange ? priceRange.value : 50000) || 50000;
+        let minVal = parseInt(minInput.value);
+        let maxVal = parseInt(maxInput.value);
 
-        const selectedCategories = [];
-        document.querySelectorAll('input[name="filterCategory"]:checked').forEach(cb => {
-            selectedCategories.push(cb.value.toUpperCase());
-        });
-
-        const cards = document.querySelectorAll('.product-card');
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-            const cat = (card.getAttribute('data-category') || card.querySelector('.category')?.textContent || '').trim().toUpperCase();
-            const name = (card.getAttribute('data-name') || card.querySelector('.product-name')?.textContent || '').trim().toLowerCase();
-            const priceText = (card.getAttribute('data-price') || card.querySelector('.price')?.textContent || '').replace(/[^0-9]/g, '');
-            const price = Number(priceText) || 0;
-
-            const matchesSearch = !searchVal || name.includes(searchVal) || cat.toLowerCase().includes(searchVal);
-            const matchesPrice = price <= maxPrice;
-            const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(cat);
-
-            if (matchesSearch && matchesPrice && matchesCategory) {
-                card.style.display = '';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        const countLabel = document.getElementById('productCountLabel');
-        if (countLabel) {
-            countLabel.textContent = `${visibleCount} TIMEPIECE${visibleCount === 1 ? '' : 'S'} FOUND`;
+        if (minVal > maxVal) {
+            const temp = minVal;
+            minVal = maxVal;
+            maxVal = temp;
+            minInput.value = minVal;
+            maxInput.value = maxVal;
         }
 
-        closeFilterModal();
+        const minBound = parseInt(minInput.min);
+        const maxBound = parseInt(minInput.max);
+        const span = (maxBound - minBound) || 1;
+
+        const leftPct = ((minVal - minBound) / span) * 100;
+        const rightPct = ((maxVal - minBound) / span) * 100;
+
+        if (highlight) {
+            highlight.style.left = leftPct + '%';
+            highlight.style.width = (rightPct - leftPct) + '%';
+        }
+
+        if (minDisplay) minDisplay.textContent = '₹' + minVal.toLocaleString('en-IN');
+        if (maxDisplay) maxDisplay.textContent = '₹' + maxVal.toLocaleString('en-IN');
     }
 
     function resetFilters() {
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) searchInput.value = '';
-
-        const priceRange = document.getElementById('priceRange');
-        if (priceRange) {
-            priceRange.value = 50000;
-            updatePriceLabel(50000);
-        }
-
-        document.querySelectorAll('input[name="filterCategory"]').forEach(cb => {
-            cb.checked = false;
-        });
-
-        const cards = document.querySelectorAll('.product-card');
-        cards.forEach(card => {
-            card.style.display = '';
-        });
-
-        const countLabel = document.getElementById('productCountLabel');
-        if (countLabel) {
-            countLabel.textContent = `${cards.length} TIMEPIECES FOUND`;
-        }
-
-        closeFilterModal();
+        window.location.href = "{% url 'product_list' %}";
     }
 
-    function handleSortChange(sortType) {
-        const grid = document.querySelector('.product-grid');
-        if (!grid) return;
+    function removeFilter(key, val) {
+        const url = new URL(window.location.href);
+        if (val) {
+            const values = url.searchParams.getAll(key).filter(v => v !== val);
+            url.searchParams.delete(key);
+            values.forEach(v => url.searchParams.append(key, v));
+        } else {
+            url.searchParams.delete(key);
+        }
+        url.searchParams.delete('page');
+        window.location.href = url.pathname + (url.search ? url.search : '');
+    }
 
-        const cards = Array.from(grid.querySelectorAll('.product-card'));
+    function removePriceFilter() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('min_price');
+        url.searchParams.delete('max_price');
+        url.searchParams.delete('page');
+        window.location.href = url.pathname + (url.search ? url.search : '');
+    }
 
-        cards.sort((a, b) => {
-            const priceA = Number((a.getAttribute('data-price') || a.querySelector('.price')?.textContent || '').replace(/[^0-9]/g, '')) || 0;
-            const priceB = Number((b.getAttribute('data-price') || b.querySelector('.price')?.textContent || '').replace(/[^0-9]/g, '')) || 0;
-            const nameA = (a.getAttribute('data-name') || a.querySelector('.product-name')?.textContent || '').trim().toLowerCase();
-            const nameB = (b.getAttribute('data-name') || b.querySelector('.product-name')?.textContent || '').trim().toLowerCase();
+    function handleSortChange(sortVal) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', sortVal);
+        url.searchParams.delete('page');
+        window.location.href = url.pathname + (url.search ? url.search : '');
+    }
 
-            if (sortType === 'price-low') {
-                return priceA - priceB;
-            } else if (sortType === 'price-high') {
-                return priceB - priceA;
-            } else if (sortType === 'name') {
-                return nameA.localeCompare(nameB);
+    // Modal form submit cleanup
+    const modalForm = document.getElementById('modalFilterForm');
+    if (modalForm) {
+        modalForm.addEventListener('submit', function(e) {
+            const searchInput = document.getElementById('modalSearchInput');
+            if (searchInput && !searchInput.value.trim()) {
+                searchInput.disabled = true;
             }
-            return 0;
-        });
 
-        cards.forEach(card => grid.appendChild(card));
+            const minInput = document.getElementById('modalMinPriceInput');
+            const maxInput = document.getElementById('modalMaxPriceInput');
+            if (minInput && maxInput) {
+                const minBound = parseInt(minInput.min);
+                const maxBound = parseInt(minInput.max);
+                if (parseInt(minInput.value) <= minBound && parseInt(maxInput.value) >= maxBound) {
+                    minInput.disabled = true;
+                    maxInput.disabled = true;
+                }
+            }
+        });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        handleModalRangeChange();
+    });
+
+    // =====================================================
+    // WISHLIST SYSTEM
+    // =====================================================
+    const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]')
+        ? document.querySelector('[name=csrfmiddlewaretoken]').value
+        : (document.cookie.match(/csrftoken=([^;]+)/) || ['',''])[1];
+
+    let wishlisted = new Set();
+
+    function initWishlistState() {
+        fetch("{% url 'wishlist_status' %}")
+            .then(r => r.json())
+            .then(data => {
+                wishlisted = new Set(data.product_ids || []);
+                updateAllWishlistButtons();
+                updateNavWishlistBadge(data.count || 0);
+            }).catch(() => {});
+    }
+
+    function updateAllWishlistButtons() {
+        document.querySelectorAll('.wishlist[data-product-id]').forEach(btn => {
+            const pid = parseInt(btn.dataset.productId);
+            const icon = btn.querySelector('i');
+            if (wishlisted.has(pid)) {
+                icon.className = 'bi bi-heart-fill';
+                icon.style.color = '#d4af37';
+                btn.style.color = '#d4af37';
+                btn.style.borderColor = '#d4af37';
+            } else {
+                icon.className = 'bi bi-heart';
+                icon.style.color = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }
+        });
+    }
+
+    function updateNavWishlistBadge(count) {
+        const badge = document.getElementById('navWishlistCount');
+        const heartIcon = document.getElementById('navWishlistHeart');
+        if (!badge) return;
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+            if (heartIcon) heartIcon.className = 'bi bi-heart-fill';
+        } else {
+            badge.style.display = 'none';
+            if (heartIcon) heartIcon.className = 'bi bi-heart';
+        }
+    }
+
+    function toggleWishlist(btn, productId) {
+        {% if not user.is_authenticated %}
+        window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+        return;
+        {% endif %}
+
+        fetch(`/wishlist/toggle/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': CSRF_TOKEN,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                if (data.in_wishlist) {
+                    wishlisted.add(productId);
+                } else {
+                    wishlisted.delete(productId);
+                }
+                updateAllWishlistButtons();
+                updateNavWishlistBadge(data.count);
+                showWishlistToast(data.msg, data.in_wishlist);
+            }
+        }).catch(() => {});
+    }
+
+    function showWishlistToast(msg, added) {
+        let toast = document.getElementById('wishlistToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'wishlistToast';
+            toast.style.cssText = `
+                position:fixed;bottom:28px;right:28px;background:#121212;border:1px solid #d4af37;
+                color:#fff;padding:13px 20px;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,0.8);
+                display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;
+                z-index:99999;opacity:0;transform:translateY(16px);transition:all 0.3s ease;pointer-events:none;
+            `;
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<i class="bi ${added ? 'bi-heart-fill' : 'bi-heart'}" style="color:#d4af37;font-size:16px;"></i> <span>${msg}</span>`;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(16px)';
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', initWishlistState);
 </script>
 
 </body>

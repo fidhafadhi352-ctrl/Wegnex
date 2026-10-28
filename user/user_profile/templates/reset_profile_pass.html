@@ -1,383 +1,491 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="description" content="Set a new secure password for your WEGNEX account.">
     <title>WEGNEX | Set New Password</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        :root {
+            --gold:        #D4AF37;
+            --gold-light:  #F0CC5A;
+            --gold-glow:   rgba(212, 175, 55, 0.18);
+            --bg-deep:     #070707;
+            --bg-card:     #111111;
+            --bg-input:    #181818;
+            --border:      #242424;
+            --text-main:   #FFFFFF;
+            --text-muted:  #888888;
+            --error-bg:    #1f0d0d;
+            --error-brd:   #5c2020;
+            --error-clr:   #ff8585;
+            --success-bg:  #0d1f12;
+            --success-brd: #205c2a;
+            --success-clr: #7ee88a;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-deep);
             font-family: 'Poppins', sans-serif;
-            background: #111;
-            color: white;
-            min-height: 100vh;
+            color: var(--text-main);
+            overflow: hidden;
         }
 
+        /* ── Page Layout: Exact 50% / 50% split ──────────── */
         .page {
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 50% 50%;
-        }
-
-        /* ================= LEFT ================= */
-
-        .left-section {
-            position: relative;
+            display: flex;
+            width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background: #111;
         }
 
-        .watch-image {
+        /* ── Left Hero: Spans up to screen center (50%) ───── */
+        .hero {
+            width: 50%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 48px;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
-
             object-fit: cover;
             object-position: center;
-
             display: block;
         }
 
-        .image-overlay {
+        .hero-overlay {
             position: absolute;
             inset: 0;
-
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.05),
-                rgba(0,0,0,0.15) 45%,
-                rgba(0,0,0,0.80) 100%
-            );
+            background:
+                linear-gradient(to left,  rgba(7,7,7,0.98) 0%, rgba(7,7,7,0.52) 48%, rgba(7,7,7,0.12) 100%),
+                linear-gradient(to top,   rgba(7,7,7,0.72) 0%, rgba(7,7,7,0.0)  55%);
         }
 
-        .left-content {
-            position: absolute;
-
-            left: 45px;
-            bottom: 95px;
-
-            z-index: 2;
-
-            max-width: 390px;
+        .hero-brand {
+            position: relative;
+            z-index: 3;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            color: #e1b52c;
-
-            font-size: 16px;
-            font-weight: 400;
-
-            margin-bottom: 12px;
-        }
-
-        .brand::before {
-            content: "";
-
-            width: 22px;
-            height: 1px;
-
-            background: #d8ad24;
-        }
-
-        .left-content h1 {
-            font-size: 45px;
-            line-height: 1.08;
-
-            font-weight: 600;
-
-            letter-spacing: -1.5px;
-
-            margin-bottom: 20px;
-        }
-
-        .left-content p {
-            color: #aaa;
-
-            font-size: 12px;
-            line-height: 1.8;
-
-            font-weight: 300;
-
-            max-width: 350px;
-        }
-
-        /* ================= RIGHT ================= */
-
-        .right-section {
-            min-height: 100vh;
-
-            background: #111;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 40px;
-        }
-
-        .password-box {
-            width: 325px;
-        }
-
-        .security-title {
-            color: #d5ad26;
-
-            font-size: 8px;
-
-            font-weight: 600;
-
-            letter-spacing: 2px;
-
+        .brand-wordmark {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
             margin-bottom: 8px;
         }
 
-        .password-box h2 {
-            font-size: 23px;
-
-            font-weight: 400;
-
-            margin-bottom: 6px;
+        .brand-watch-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            border: 1px solid rgba(212,175,55,0.25);
+            background: rgba(212,175,55,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .description {
-            color: #aaa;
-
-            font-size: 11px;
-
-            line-height: 1.6;
-
-            margin-bottom: 35px;
+        .brand-watch-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(700%) hue-rotate(5deg) brightness(95%);
         }
 
-        /* ================= INPUT ================= */
-
-        .form-group {
-            margin-bottom: 22px;
+        .hero-copy {
+            position: relative;
+            z-index: 3;
+            max-width: 330px;
         }
 
-        .form-group label {
-            display: block;
-
-            color: #888;
-
-            font-size: 7px;
-
-            font-weight: 500;
-
-            letter-spacing: 1.4px;
-
-            margin-bottom: 7px;
+        .hero-headline {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -1.2px;
+            margin-bottom: 12px;
         }
 
-        .input-wrapper {
+        .hero-headline .gold {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            font-size: 11.5px;
+            line-height: 1.8;
+            color: #9c9c9c;
+            margin-bottom: 16px;
+        }
+
+        .gold-rule {
+            width: 36px;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold), transparent);
+            border-radius: 2px;
+        }
+
+        /* ── Right Form Panel: Exact 50% ─────────────────── */
+        .form-panel {
+            width: 50%;
+            height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            overflow-y: auto;
+        }
+
+        .form-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        .form-panel::-webkit-scrollbar-thumb {
+            background: #252525;
+            border-radius: 4px;
+        }
+
+        /* ── Card ── */
+        .reset-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            border: 1px solid rgba(212,175,55,0.12);
+            border-radius: 18px;
+            padding: 26px 26px 22px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 20px 50px rgba(0,0,0,0.6);
             position: relative;
         }
 
-        .input-wrapper input {
-            width: 100%;
-            height: 37px;
-
-            background: #000;
-
-            border: none;
-            border-bottom: 1px solid #444;
-
-            outline: none;
-
-            color: white;
-
-            padding: 0 40px 0 10px;
-
-            font-family: 'Poppins', sans-serif;
-
-            font-size: 10px;
-        }
-
-        .input-wrapper input:focus {
-            border-bottom-color: #d8ad27;
-        }
-
-        .eye-button {
+        .card-accent {
             position: absolute;
-
-            right: 7px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            border: none;
-            background: transparent;
-
-            color: #777;
-
-            cursor: pointer;
-
-            font-size: 14px;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            border-radius: 0 0 2px 2px;
         }
 
-        .eye-button:hover {
-            color: #d8ad27;
+        /* ── Card Header ── */
+        .card-header-area {
+            margin-bottom: 16px;
         }
 
-        /* ================= PASSWORD RULES ================= */
-
-        .password-rules {
-            background: #171717;
-
-            border: 1px solid #242424;
-
-            border-radius: 3px;
-
-            padding: 13px 15px;
-
-            margin-top: 28px;
-            margin-bottom: 40px;
+        .card-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 8px;
         }
 
-        .rule {
+        .card-logo-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
             display: flex;
             align-items: center;
-
-            gap: 9px;
-
-            color: #858585;
-
-            font-size: 8px;
-
-            line-height: 2.25;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--gold);
         }
 
-        .rule i {
-            color: #777;
-            font-size: 9px;
+        .card-logo-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            color: var(--gold);
         }
 
-        /* ================= BUTTON ================= */
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+        }
 
-        .update-btn {
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── Messages ── */
+        .message-list {
+            list-style: none;
+            margin-bottom: 14px;
+        }
+
+        .message-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: var(--error-bg);
+            border: 1px solid var(--error-brd);
+            color: var(--error-clr);
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .message-list li::before {
+            content: '\F33A';
+            font-family: 'bootstrap-icons';
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .message-list li.success {
+            background: var(--success-bg);
+            border-color: var(--success-brd);
+            color: var(--success-clr);
+        }
+
+        .message-list li.success::before {
+            content: '\F26A';
+        }
+
+        /* ── Form Fields ── */
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #b0b0b0;
+            margin-bottom: 4px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            font-size: 13px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .field-input {
             width: 100%;
             height: 40px;
-
-            border: none;
-
-            background: linear-gradient(
-                to right,
-                #e8c23b,
-                #d19e08
-            );
-
-            color: #111;
-
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
             font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            padding: 0 38px 0 33px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-            font-size: 8px;
+        .field-input::placeholder {
+            color: #404040;
+        }
 
-            font-weight: 600;
+        .field-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px var(--gold-glow);
+        }
 
-            letter-spacing: 0.8px;
+        .field-wrap:focus-within .field-icon {
+            color: var(--gold);
+        }
 
+        /* Password reveal eye */
+        .pw-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #555;
             cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: color 0.2s;
         }
 
-        .update-btn:hover {
-            background: linear-gradient(
-                to right,
-                #f1ce4d,
-                #dfae16
-            );
+        .pw-toggle:hover {
+            color: var(--gold);
         }
 
-        /* ================= BACK ================= */
+        /* ── Password Requirements Checklist ── */
+        .pw-requirements {
+            background: #141414;
+            border: 1px solid #1f1f1f;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+        }
 
-        .back-login {
-            display: block;
+        .pw-req-title {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #777;
+            margin-bottom: 6px;
+        }
 
+        .pw-req-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 10px;
+        }
+
+        .pw-req-item {
+            font-size: 10px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+        }
+
+        .pw-req-item i {
+            font-size: 10px;
+            transition: color 0.2s;
+        }
+
+        .pw-req-item.valid {
+            color: var(--success-clr);
+        }
+
+        .pw-req-item.valid i {
+            color: var(--success-clr);
+        }
+
+        /* ── Submit Button ── */
+        .btn-submit {
+            width: 100%;
+            height: 40px;
+            background: var(--gold);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+        }
+
+        /* ── Footer Links ── */
+        .card-footer-links {
             text-align: center;
+            margin-top: 14px;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-            margin-top: 18px;
-
-            color: #ccc;
-
+        .card-footer-links a {
+            color: var(--gold);
             text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
 
+        .card-footer-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .card-legal {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
             font-size: 8px;
-
-            letter-spacing: 1px;
+            color: #383838;
+            letter-spacing: 0.5px;
         }
 
-        .back-login:hover {
-            color: #d8ad27;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 900px) {
-
+        /* ── Responsive ── */
+        @media (max-width: 960px) {
+            html, body {
+                height: auto;
+                overflow: auto;
+            }
             .page {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
             }
-
-            .left-section {
-                height: 500px;
+            .hero {
+                display: none;
             }
-
-            .right-section {
-                min-height: 550px;
-            }
-
-            .left-content {
-                left: 30px;
-                bottom: 45px;
-            }
-        }
-
-        @media (max-width: 500px) {
-
-            .left-section {
-                height: 430px;
-            }
-
-            .left-content {
-                left: 25px;
-                bottom: 35px;
-            }
-
-            .left-content h1 {
-                font-size: 35px;
-            }
-
-            .password-box {
+            .form-panel {
                 width: 100%;
+                height: auto;
+                min-height: 100vh;
+                padding: 24px 16px;
+            }
+            .reset-card {
+                max-width: 440px;
+                margin: auto;
+                padding: 24px 20px;
             }
         }
-
     </style>
 </head>
 
@@ -385,215 +493,237 @@
 
 <div class="page">
 
-    <!-- ================= LEFT SIDE ================= -->
-
-    <section class="left-section">
-
-        <!-- WATCH IMAGE -->
+    <!-- LEFT: HERO -->
+    <div class="hero">
 
         <img
-            src="{% static 'images/change-password-watch.jpg' %}"
-            alt="WEGNEX Luxury Watch"
-            class="watch-image"
+            class="hero-img"
+            src="{% static 'images/watch.jpg' %}"
+            alt="Luxury Wegnex Watch"
         >
 
-        <!-- Dark overlay -->
+        <div class="hero-overlay"></div>
 
-        <div class="image-overlay"></div>
-
-
-        <!-- Text over image -->
-
-        <div class="left-content">
-
-            <div class="brand">
-                WEGNEX HOROLOGY
+        <div class="hero-brand">
+            <span class="brand-wordmark">WEGNEX</span>
+            <div class="brand-watch-icon">
+                <img src="{% static 'images/watch-logo.png' %}" alt="Wegnex Logo">
             </div>
-
-            <h1>
-                SECURE YOUR<br>
-                ACCESS.
-            </h1>
-
-            <p>
-                Create a new secure password for your Wegnex
-                account and continue exploring our exclusive luxury
-                watch collection.
-            </p>
-
         </div>
 
-    </section>
+        <div class="hero-copy">
+            <h1 class="hero-headline">
+                Luxury Watches<br>
+                That Define<br>
+                <span class="gold">Your Style.</span>
+            </h1>
 
-
-    <!-- ================= RIGHT SIDE ================= -->
-
-    <section class="right-section">
-
-        <div class="password-box">
-
-            <div class="security-title">
-                SECURITY PROTOCOL V3.0
-            </div>
-
-            <h2>
-                SET NEW PASSWORD
-            </h2>
-
-            <p class="description">
-                Create a strong password to protect your Wegnex
-                account and luxury purchases.
+            <p class="hero-desc">
+                Experience timeless craftsmanship with premium watches
+                designed for every occasion. Discover elegance, precision,
+                and unmatched quality — only at Wegnex.
             </p>
 
+            <div class="gold-rule"></div>
+        </div>
 
-            <!-- FORM -->
+    </div>
 
-            <form method="POST">
+    <!-- RIGHT: FORM PANEL -->
+    <div class="form-panel">
 
+        <div class="reset-card">
+            <div class="card-accent"></div>
+
+            <!-- Header -->
+            <div class="card-header-area">
+                <div class="card-logo">
+                    <div class="card-logo-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <span class="card-logo-text">WEGNEX</span>
+                </div>
+                <h1 class="card-title">Set New Password</h1>
+                <p class="card-subtitle">Create a secure new password for your WEGNEX account.</p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                <ul class="message-list">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- Form -->
+            <form method="POST" action="{% url 'resetprofilepass' %}" id="resetPassForm">
                 {% csrf_token %}
 
-
-                <!-- NEW PASSWORD -->
-
-                <div class="form-group">
-
-                    <label for="new_password">
-                        NEW PASSWORD
-                    </label>
-
-                    <div class="input-wrapper">
-
+                <!-- New Password -->
+                <div class="field">
+                    <label class="field-label" for="new_password">New Password</label>
+                    <div class="field-wrap">
                         <input
                             type="password"
                             id="new_password"
                             name="new_password"
+                            class="field-input"
+                            placeholder="Enter new password"
+                            autocomplete="new-password"
                             required
                         >
-
+                        <i class="bi bi-lock field-icon"></i>
                         <button
                             type="button"
-                            class="eye-button"
-                            onclick="togglePassword('new_password', this)"
+                            class="pw-toggle"
+                            id="pw-toggle-new"
+                            aria-label="Toggle password visibility"
                         >
-                            <i class="bi bi-eye"></i>
+                            <i class="bi bi-eye" id="pw-icon-new"></i>
                         </button>
-
                     </div>
-
                 </div>
 
-
-                <!-- CONFIRM PASSWORD -->
-
-                <div class="form-group">
-
-                    <label for="confirm_password">
-                        CONFIRM NEW PASSWORD
-                    </label>
-
-                    <div class="input-wrapper">
-
+                <!-- Confirm Password -->
+                <div class="field">
+                    <label class="field-label" for="confirm_password">Confirm New Password</label>
+                    <div class="field-wrap">
                         <input
                             type="password"
                             id="confirm_password"
                             name="confirm_password"
+                            class="field-input"
+                            placeholder="Re-enter new password"
+                            autocomplete="new-password"
                             required
                         >
-
+                        <i class="bi bi-lock-fill field-icon"></i>
                         <button
                             type="button"
-                            class="eye-button"
-                            onclick="togglePassword('confirm_password', this)"
+                            class="pw-toggle"
+                            id="pw-toggle-confirm"
+                            aria-label="Toggle password visibility"
                         >
-                            <i class="bi bi-eye"></i>
+                            <i class="bi bi-eye" id="pw-icon-confirm"></i>
                         </button>
-
                     </div>
-
                 </div>
 
-
-                <!-- PASSWORD RULES -->
-
-                <div class="password-rules">
-
-                    <div class="rule">
-                        <i class="bi bi-circle"></i>
-                        <span>Minimum 8 characters</span>
-                    </div>
-
-                    <div class="rule">
-                        <i class="bi bi-circle"></i>
-                        <span>Include uppercase &amp; lowercase</span>
-                    </div>
-
-                    <div class="rule">
-                        <i class="bi bi-circle"></i>
-                        <span>Include at least one number</span>
-                    </div>
-
-                    <div class="rule">
-                        <i class="bi bi-circle"></i>
-                        <span>Include special character (@#$%)</span>
-                    </div>
-
+                <!-- Requirements Checklist -->
+                <div class="pw-requirements">
+                    <div class="pw-req-title">Password Requirements</div>
+                    <ul class="pw-req-list">
+                        <li class="pw-req-item" id="req-len">
+                            <i class="bi bi-circle"></i>
+                            <span>At least 8 chars</span>
+                        </li>
+                        <li class="pw-req-item" id="req-upper">
+                            <i class="bi bi-circle"></i>
+                            <span>Uppercase letter</span>
+                        </li>
+                        <li class="pw-req-item" id="req-lower">
+                            <i class="bi bi-circle"></i>
+                            <span>Lowercase letter</span>
+                        </li>
+                        <li class="pw-req-item" id="req-num">
+                            <i class="bi bi-circle"></i>
+                            <span>At least 1 number</span>
+                        </li>
+                    </ul>
                 </div>
 
-
-                <!-- UPDATE PASSWORD -->
-
-                <button
-                    type="submit"
-                    class="update-btn"
-                >
-                    UPDATE PASSWORD
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle"></i>
+                    Reset Password
                 </button>
 
             </form>
 
+            <!-- Links -->
+            <div class="card-footer-links">
+                <div>
+                    Remember your password?
+                    <a href="{% url 'login' %}">Sign In</a>
+                </div>
+            </div>
 
-            <!-- BACK TO LOGIN -->
-
-            <a
-                href="{% url 'login' %}"
-                class="back-login"
-            >
-                <i class="bi bi-arrow-left"></i>
-                BACK TO LOGIN
-            </a>
+            <!-- Legal -->
+            <div class="card-legal">
+                <span>© 2026 WEGNEX</span>
+                <span>Privacy Policy · Terms of Service</span>
+            </div>
 
         </div>
 
-    </section>
+    </div>
 
 </div>
 
-
 <script>
-
-    function togglePassword(inputId, button) {
-
-        const input = document.getElementById(inputId);
-        const icon = button.querySelector("i");
-
-        if (input.type === "password") {
-
-            input.type = "text";
-
-            icon.classList.remove("bi-eye");
-            icon.classList.add("bi-eye-slash");
-
-        } else {
-
-            input.type = "password";
-
-            icon.classList.remove("bi-eye-slash");
-            icon.classList.add("bi-eye");
-
+    // Password visibility toggles
+    function setupToggle(btnId, iconId, inputId) {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', function () {
+                const input = document.getElementById(inputId);
+                const icon  = document.getElementById(iconId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
         }
-
     }
 
+    setupToggle('pw-toggle-new', 'pw-icon-new', 'new_password');
+    setupToggle('pw-toggle-confirm', 'pw-icon-confirm', 'confirm_password');
+
+    // Real-time password requirement validator
+    const newPassInput = document.getElementById('new_password');
+    const reqLen = document.getElementById('req-len');
+    const reqUpper = document.getElementById('req-upper');
+    const reqLower = document.getElementById('req-lower');
+    const reqNum = document.getElementById('req-num');
+
+    function updateReq(elem, isValid) {
+        const icon = elem.querySelector('i');
+        if (isValid) {
+            elem.classList.add('valid');
+            icon.classList.remove('bi-circle');
+            icon.classList.add('bi-check-circle-fill');
+        } else {
+            elem.classList.remove('valid');
+            icon.classList.remove('bi-check-circle-fill');
+            icon.classList.add('bi-circle');
+        }
+    }
+
+    if (newPassInput) {
+        newPassInput.addEventListener('input', function () {
+            const val = this.value;
+            updateReq(reqLen, val.length >= 8);
+            updateReq(reqUpper, /[A-Z]/.test(val));
+            updateReq(reqLower, /[a-z]/.test(val));
+            updateReq(reqNum, /[0-9]/.test(val));
+        });
+    }
+
+    // Auto-dismiss messages after 5 seconds
+    (function () {
+        setTimeout(function () {
+            var msgList = document.querySelector('.message-list');
+            if (msgList) {
+                msgList.style.transition = 'opacity 0.4s ease';
+                msgList.style.opacity = '0';
+                setTimeout(function () { msgList.remove(); }, 400);
+            }
+        }, 5000);
+    })();
 </script>
 
 </body>

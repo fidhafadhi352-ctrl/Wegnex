@@ -1,0 +1,1475 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WEGNEX | Review Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #111111;
+            --sidebar: #171717;
+            --panel: #191919;
+            --panel-light: #202020;
+            --border: #2b2b2b;
+            --gold: #e6b900;
+            --text: #f5f5f5;
+            --muted: #999999;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 12px;
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* LAYOUT */
+
+        .app {
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 180px;
+            height: 100vh;
+            background: #111111;
+            border-right: 1px solid #292929;
+            padding: 30px 10px;
+            z-index: 100;
+        }
+
+        .logo {
+            padding-left: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo h2 {
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #f5f5f5;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu li {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 3px;
+            color: #858585;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .menu li span:first-child {
+            width: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .menu li:hover {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .menu li.active {
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 10px;
+            background: #191919;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 35px;
+            left: 22px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .logout:hover {
+            color: #fff;
+        }
+
+        /* MAIN AREA */
+
+        .main {
+            margin-left: 180px;
+            min-height: 100vh;
+        }
+
+        /* TOP NAVIGATION */
+
+        .topbar {
+            height: 65px;
+            background: #151515;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .topbar-left a {
+            color: #999;
+            font-size: 9px;
+            white-space: nowrap;
+        }
+
+        .topbar-left a.active {
+            color: white;
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .topbar-right button {
+            border: 0;
+            background: none;
+            color: #ddd;
+            font-size: 13px;
+        }
+
+        .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #444;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 24px 25px 35px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+
+        .page-heading h1 {
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+        }
+
+        .page-heading p {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            min-height: 95px;
+            padding: 16px 15px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            border-radius: 8px;
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+            margin-bottom: 13px;
+        }
+
+        .stat-label {
+            color: #c5c5c5;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stat-change {
+            font-size: 8px;
+            color: #38d77c;
+            background: #103321;
+            padding: 4px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .stat-value .star {
+            color: var(--gold);
+            font-size: 17px;
+        }
+
+        /* REVIEW TABLE CONTAINER */
+
+        .review-panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow: visible;
+        }
+
+        .toolbar {
+            min-height: 53px;
+            padding: 10px 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            width: min(320px, 45%);
+            height: 35px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0 11px;
+            background: #242424;
+            border: 1px solid #303030;
+            border-radius: 4px;
+        }
+
+        .search-box i {
+            color: #bbb;
+            font-size: 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 9px;
+        }
+
+        .search-box input::placeholder {
+            color: #858585;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-group select {
+            max-width: 125px;
+            height: 35px;
+            padding: 0 8px;
+            color: #ddd;
+            background: #242424;
+            border: 1px solid #303030;
+            border-radius: 4px;
+            font-size: 9px;
+            outline: none;
+        }
+
+        /* TABLE */
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .reviews-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .reviews-table thead {
+            background: #202020;
+        }
+
+        .reviews-table th {
+            text-align: left;
+            padding: 13px 10px;
+            font-size: 8px;
+            font-weight: 500;
+            color: #c7c7c7;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .reviews-table td {
+            padding: 12px 10px;
+            border-top: 1px solid var(--border);
+            vertical-align: middle;
+            color: #c7c7c7;
+            font-size: 9px;
+        }
+
+        .reviews-table tbody tr {
+            transition: background .2s;
+        }
+
+        .reviews-table tbody tr:hover {
+            background: #202020;
+        }
+
+        .reviews-table th:nth-child(1) { width: 7%; }
+        .reviews-table th:nth-child(2) { width: 15%; }
+        .reviews-table th:nth-child(3) { width: 14%; }
+        .reviews-table th:nth-child(4) { width: 12%; }
+        .reviews-table th:nth-child(5) { width: 29%; }
+        .reviews-table th:nth-child(6) { width: 8%; }
+        .reviews-table th:nth-child(7) { width: 10%; }
+        .reviews-table th:nth-child(8) { width: 5%; }
+
+        /* PRODUCT */
+
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .product-image {
+            width: 30px;
+            height: 36px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #292929;
+            border-radius: 3px;
+        }
+
+        .product-name {
+            color: #eee;
+            font-size: 9px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .customer-name {
+            line-height: 1.7;
+            color: #ccc;
+            overflow-wrap: anywhere;
+        }
+
+        /* STAR RATING */
+
+        .rating {
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .review-text {
+            color: #ccc;
+            line-height: 1.7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .date {
+            font-size: 8px;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        /* STATUS BADGES */
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge.approved {
+            background: #f0f0f0;
+            color: #222;
+        }
+
+        .badge.pending {
+            background: #443800;
+            color: #f2d21b;
+        }
+
+        .badge.rejected {
+            background: #480d0d;
+            color: #ff7474;
+        }
+
+        /* ACTIONS */
+
+        .action-cell {
+            position: relative;
+            text-align: center;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            color: #bbb;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        .action-btn:hover {
+            background: #303030;
+            color: white;
+        }
+
+        .action-menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 5px;
+            z-index: 20;
+            min-width: 125px;
+            padding: 5px;
+            background: #252525;
+            border: 1px solid #393939;
+            border-radius: 5px;
+            box-shadow: 0 8px 20px #0008;
+            text-align: left;
+        }
+
+        .action-menu.open {
+            display: block;
+        }
+
+        .action-menu button {
+            width: 100%;
+            padding: 9px;
+            border: none;
+            border-radius: 3px;
+            text-align: left;
+            background: transparent;
+            color: #ddd;
+            font-size: 10px;
+        }
+
+        .action-menu button:hover {
+            background: #353535;
+        }
+
+        .action-menu button.reject {
+            color: #ff8585;
+        }
+
+        /* TABLE FOOTER */
+
+        .table-footer {
+            min-height: 49px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .results-info {
+            color: #aaa;
+            font-size: 8px;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination button {
+            min-width: 27px;
+            height: 28px;
+            padding: 0 7px;
+            border: 1px solid #303030;
+            background: #1c1c1c;
+            color: #ddd;
+            border-radius: 4px;
+            font-size: 9px;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: #777;
+        }
+
+        .pagination button.active {
+            background: white;
+            border-color: white;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .pagination button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 10px;
+            color: #888;
+        }
+
+        /* RESPONSIVE */
+
+        @media (min-width: 1500px) {
+            .content {
+                padding: 35px;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .content {
+                padding: 20px 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .reviews-table {
+                min-width: 850px;
+                table-layout: auto;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar { width: 65px; }
+            .logo h2, .logo p, .menu li span:last-child, .logout { display: none; }
+            .main { margin-left: 65px !important; }
+            .menu li { justify-content: center; padding: 0; }
+            .menu li a { justify-content: center; }
+
+            .topbar {
+                height: 58px;
+                padding: 0 12px;
+            }
+
+            .topbar-left {
+                gap: 12px;
+            }
+
+            .topbar-left a {
+                font-size: 8px;
+            }
+
+            .topbar-left a:nth-child(n+3) {
+                display: none;
+            }
+
+            .topbar-right {
+                gap: 10px;
+            }
+
+            .content {
+                padding: 18px 12px;
+            }
+
+            .page-heading h1 {
+                font-size: 25px;
+            }
+
+            .stats-grid {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px 10px;
+            }
+
+            .stat-value {
+                font-size: 19px;
+            }
+
+            .toolbar {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group select {
+                flex: 1;
+                max-width: none;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stat-label {
+                font-size: 7px;
+                letter-spacing: .5px;
+            }
+
+            .stat-value {
+                font-size: 17px;
+            }
+
+            .topbar-left {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>HOROLOGY</h2>
+            <p>Management Suite</p>
+        </div>
+
+        <ul class="menu">
+            <li>
+                <a href="{% url 'admin_dashboard' %}">
+                    <span>▦</span>
+                    <span>DASHBOARD</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'admin_product_list' %}">
+                    <span>♧</span>
+                    <span>PRODUCTS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'category_management' %}">
+                    <span>♢</span>
+                    <span>CATEGORIES</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
+            </li>
+        </ul>
+
+        <a href="{% url 'admin_logout' %}" class="logout">⇥ &nbsp; LOGOUT</a>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOP NAVIGATION -->
+
+        <header class="topbar">
+
+            <nav class="topbar-left">
+                <a href="{% url 'review_management' %}" class="active">Review Curator</a>
+                <a href="javascript:void(0)" onclick="alert('Review Moderation Guidelines:\n1. Ensure genuine customer purchases.\n2. No offensive or abusive language.\n3. Verify ratings and product feedback.')">Guidelines</a>
+                <a href="{% url 'sales_report' %}">Analytics</a>
+                <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            </nav>
+
+            <div class="topbar-right">
+
+                <button type="button" aria-label="Notifications">
+                    <i class="bi bi-bell"></i>
+                </button>
+
+                <button type="button" aria-label="Help">
+                    <i class="bi bi-question-circle"></i>
+                </button>
+
+                <img
+                    class="avatar"
+                    src="https://placehold.co/60x60/333333/ffffff?text=A"
+                    alt="Admin profile"
+                >
+
+            </div>
+
+        </header>
+
+        <!-- PAGE CONTENT -->
+
+        <section class="content">
+
+            <div class="page-heading">
+                <h1>Review Management</h1>
+                <p>Customer feedback &amp; review moderation</p>
+            </div>
+
+            <!-- STATISTICS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Total Reviews</span>
+                        <span class="stat-change">+5.8%</span>
+                    </div>
+
+                    <div class="stat-value">18,942</div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Average Rating</span>
+                    </div>
+
+                    <div class="stat-value">
+                        4.9 <span class="star">★</span>
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Pending Moderation</span>
+                    </div>
+
+                    <div class="stat-value" id="pendingCount">94</div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">Rejection Rate</span>
+                    </div>
+
+                    <div class="stat-value">1.3%</div>
+
+                </div>
+
+            </div>
+
+            <!-- REVIEWS PANEL -->
+
+            <section class="review-panel">
+
+                <!-- SEARCH AND FILTERS -->
+
+                <div class="toolbar">
+
+                    <label class="search-box">
+                        <i class="bi bi-search"></i>
+
+                        <input
+                            type="search"
+                            id="searchInput"
+                            placeholder="Search customer, watch or SKU..."
+                            aria-label="Search reviews"
+                        >
+                    </label>
+
+                    <div class="filter-group">
+
+                        <select id="ratingFilter" aria-label="Filter by rating">
+                            <option value="all">All Ratings</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+
+                        <select id="statusFilter" aria-label="Filter by status">
+                            <option value="all">All Status</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- REVIEWS TABLE -->
+
+                <div class="table-scroll">
+
+                    <table class="reviews-table">
+
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Watch</th>
+                                <th>Customer</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="reviewsBody">
+
+                            <tr data-rating="5" data-status="Approved">
+
+                                <td></td>
+
+                                <td>
+                                    <div class="product-cell">
+                                        <img
+                                            class="product-image"
+                                            src="https://placehold.co/60x70/252525/d4af37?text=R"
+                                            alt="Rolex watch"
+                                        >
+                                        <span class="product-name">
+                                            Rolex Submariner Date
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        James Anderson
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rating">★★★★★</span>
+                                </td>
+
+                                <td>
+                                    <div class="review-text">
+                                        Exceptional craftsmanship and precision. Truly amazing quality.
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="date">Oct 12,<br>2023</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge approved">Approved</span>
+                                </td>
+
+                                <td class="action-cell">
+                                    <button class="action-btn" type="button"
+                                            aria-label="Review actions">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <button type="button" data-action="Approved">Approve</button>
+                                        <button type="button" data-action="Pending">Set Pending</button>
+                                        <button type="button" class="reject" data-action="Rejected">Reject</button>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr data-rating="4" data-status="Pending">
+
+                                <td></td>
+
+                                <td>
+                                    <div class="product-cell">
+                                        <img
+                                            class="product-image"
+                                            src="https://placehold.co/60x70/252525/d4af37?text=O"
+                                            alt="Omega watch"
+                                        >
+                                        <span class="product-name">
+                                            Omega Speedmaster Moonwatch
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        Sophia Carter
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rating">★★★★☆</span>
+                                </td>
+
+                                <td>
+                                    <div class="review-text">
+                                        The history behind this watch is incredible. Great design.
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="date">Oct 11,<br>2023</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge pending">Pending</span>
+                                </td>
+
+                                <td class="action-cell">
+                                    <button class="action-btn" type="button"
+                                            aria-label="Review actions">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <button type="button" data-action="Approved">Approve</button>
+                                        <button type="button" data-action="Pending">Set Pending</button>
+                                        <button type="button" class="reject" data-action="Rejected">Reject</button>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr data-rating="5" data-status="Approved">
+
+                                <td></td>
+
+                                <td>
+                                    <div class="product-cell">
+                                        <img
+                                            class="product-image"
+                                            src="https://placehold.co/60x70/252525/d4af37?text=T"
+                                            alt="TAG Heuer watch"
+                                        >
+                                        <span class="product-name">
+                                            TAG Heuer Carrera
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        Michael Lee
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rating">★★★★★</span>
+                                </td>
+
+                                <td>
+                                    <div class="review-text">
+                                        Perfect weight and balance. Fast delivery from WEGNEX.
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="date">Oct 10,<br>2023</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge approved">Approved</span>
+                                </td>
+
+                                <td class="action-cell">
+                                    <button class="action-btn" type="button"
+                                            aria-label="Review actions">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <button type="button" data-action="Approved">Approve</button>
+                                        <button type="button" data-action="Pending">Set Pending</button>
+                                        <button type="button" class="reject" data-action="Rejected">Reject</button>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr data-rating="4" data-status="Rejected">
+
+                                <td></td>
+
+                                <td>
+                                    <div class="product-cell">
+                                        <img
+                                            class="product-image"
+                                            src="https://placehold.co/60x70/252525/d4af37?text=T"
+                                            alt="Tissot watch"
+                                        >
+                                        <span class="product-name">
+                                            Tissot PRX Powermatic 80
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        Daniel Brooks
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rating">★★★★☆</span>
+                                </td>
+
+                                <td>
+                                    <div class="review-text">
+                                        Review contains inappropriate content detected during moderation.
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="date">Oct 09,<br>2023</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge rejected">Rejected</span>
+                                </td>
+
+                                <td class="action-cell">
+                                    <button class="action-btn" type="button"
+                                            aria-label="Review actions">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <button type="button" data-action="Approved">Approve</button>
+                                        <button type="button" data-action="Pending">Set Pending</button>
+                                        <button type="button" class="reject" data-action="Rejected">Reject</button>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr data-rating="4" data-status="Approved">
+
+                                <td></td>
+
+                                <td>
+                                    <div class="product-cell">
+                                        <img
+                                            class="product-image"
+                                            src="https://placehold.co/60x70/252525/d4af37?text=S"
+                                            alt="Seiko watch"
+                                        >
+                                        <span class="product-name">
+                                            Seiko Prospex Diver
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="customer-name">
+                                        Emma Wilson
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rating">★★★★☆</span>
+                                </td>
+
+                                <td>
+                                    <div class="review-text">
+                                        Solid build quality. A bit large for my wrist but still excellent.
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="date">Oct 08,<br>2023</span>
+                                </td>
+
+                                <td>
+                                    <span class="badge approved">Approved</span>
+                                </td>
+
+                                <td class="action-cell">
+                                    <button class="action-btn" type="button"
+                                            aria-label="Review actions">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <button type="button" data-action="Approved">Approve</button>
+                                        <button type="button" data-action="Pending">Set Pending</button>
+                                        <button type="button" class="reject" data-action="Rejected">Reject</button>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                    <div class="empty-state" id="emptyState" hidden>
+                        No reviews found matching your search.
+                    </div>
+
+                </div>
+
+                <!-- PAGINATION -->
+
+                <div class="table-footer">
+
+                    <p class="results-info" id="resultsInfo">
+                        Showing 1 to 5 of 18,942 reviews
+                    </p>
+
+                    <div class="pagination">
+
+                        <button type="button" id="prevBtn" disabled>
+                            Previous
+                        </button>
+
+                        <button type="button" class="active page-number" data-page="1">
+                            1
+                        </button>
+
+                        <button type="button" class="page-number" data-page="2">
+                            2
+                        </button>
+
+                        <button type="button" class="page-number" data-page="3">
+                            3
+                        </button>
+
+                        <button type="button" id="nextBtn">
+                            Next
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const ratingFilter = document.getElementById('ratingFilter');
+    const statusFilter = document.getElementById('statusFilter');
+
+    const rows = Array.from(
+        document.querySelectorAll('#reviewsBody tr')
+    );
+
+    const emptyState = document.getElementById('emptyState');
+    const resultsInfo = document.getElementById('resultsInfo');
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let currentPage = 1;
+    const pageSize = 5;
+
+    function getFilteredRows() {
+        const query = searchInput.value.trim().toLowerCase();
+        const selectedRating = ratingFilter.value;
+        const selectedStatus = statusFilter.value;
+
+        return rows.filter(row => {
+            const text = row.innerText.toLowerCase();
+            const rating = row.dataset.rating;
+            const status = row.dataset.status;
+
+            const matchesSearch = text.includes(query);
+            const matchesRating =
+                selectedRating === 'all' || rating === selectedRating;
+            const matchesStatus =
+                selectedStatus === 'all' || status === selectedStatus;
+
+            return matchesSearch && matchesRating && matchesStatus;
+        });
+    }
+
+    function renderReviews() {
+        const filteredRows = getFilteredRows();
+
+        const totalPages = Math.max(
+            1,
+            Math.ceil(filteredRows.length / pageSize)
+        );
+
+        currentPage = Math.min(currentPage, totalPages);
+
+        const startIndex = (currentPage - 1) * pageSize;
+        const visibleRows = filteredRows.slice(
+            startIndex,
+            startIndex + pageSize
+        );
+
+        rows.forEach(row => {
+            row.style.display = 'none';
+        });
+
+        visibleRows.forEach(row => {
+            row.style.display = '';
+        });
+
+        emptyState.hidden = filteredRows.length !== 0;
+
+        if (filteredRows.length === 0) {
+            resultsInfo.textContent = 'No reviews found';
+        } else {
+            resultsInfo.textContent =
+                `Showing ${startIndex + 1} to ${
+                    Math.min(startIndex + pageSize, filteredRows.length)
+                } of ${filteredRows.length} reviews`;
+        }
+
+        document.querySelectorAll('.page-number').forEach(button => {
+            const page = Number(button.dataset.page);
+
+            button.classList.toggle('active', page === currentPage);
+            button.style.display = page <= totalPages ? '' : 'none';
+        });
+
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    }
+
+    searchInput.addEventListener('input', () => {
+        currentPage = 1;
+        renderReviews();
+    });
+
+    ratingFilter.addEventListener('change', () => {
+        currentPage = 1;
+        renderReviews();
+    });
+
+    statusFilter.addEventListener('change', () => {
+        currentPage = 1;
+        renderReviews();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderReviews();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        const totalPages = Math.max(
+            1,
+            Math.ceil(getFilteredRows().length / pageSize)
+        );
+
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderReviews();
+        }
+    });
+
+    document.querySelectorAll('.page-number').forEach(button => {
+        button.addEventListener('click', () => {
+            currentPage = Number(button.dataset.page);
+            renderReviews();
+        });
+    });
+
+    /* ACTION MENU */
+
+    document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', event => {
+            event.stopPropagation();
+
+            const menu = button.nextElementSibling;
+            const wasOpen = menu.classList.contains('open');
+
+            document.querySelectorAll('.action-menu').forEach(item => {
+                item.classList.remove('open');
+            });
+
+            if (!wasOpen) {
+                menu.classList.add('open');
+            }
+        });
+    });
+
+    document.querySelectorAll('.action-menu button').forEach(button => {
+        button.addEventListener('click', () => {
+            const row = button.closest('tr');
+            const newStatus = button.dataset.action;
+
+            row.dataset.status = newStatus;
+
+            const badge = row.querySelector('.badge');
+            badge.textContent = newStatus;
+            badge.className = 'badge ' + newStatus.toLowerCase();
+
+            button.closest('.action-menu').classList.remove('open');
+
+            renderReviews();
+            updatePendingCount();
+        });
+    });
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.action-menu').forEach(menu => {
+            menu.classList.remove('open');
+        });
+    });
+
+    function updatePendingCount() {
+        const pending = rows.filter(
+            row => row.dataset.status === 'Pending'
+        ).length;
+
+        document.getElementById('pendingCount').textContent = pending;
+    }
+
+    renderReviews();
+</script>
+
+</body>
+</html>

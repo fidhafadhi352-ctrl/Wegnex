@@ -40,55 +40,69 @@
         }
 
         /* =====================================================
-           NAVBAR (Matching Screenshot)
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
         ===================================================== */
         .navbar {
-            background: #090909;
-            min-height: 74px;
-            padding: 0 45px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
         }
 
-        .logo {
-            color: #D4AF37 !important;
-            font-size: 25px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-decoration: none;
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
         .navbar-nav {
-            gap: 32px;
+            gap: 28px !important;
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.75) !important;
-            font-size: 11.5px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.25s;
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
             color: #D4AF37 !important;
         }
 
         .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 22px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
         }
 
         .nav-icons i {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 17px;
-            cursor: pointer;
-            transition: color 0.2s;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
         }
 
         .nav-icons i:hover {
-            color: #D4AF37;
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
         }
 
         /* =====================================================
@@ -411,49 +425,7 @@
         }
 
         /* Quantity & Actions Row */
-        .action-controls-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-        }
 
-        .qty-box {
-            display: flex;
-            align-items: center;
-            height: 44px;
-            background: #111111;
-            border: 1px solid #222222;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .qty-btn {
-            background: transparent;
-            border: none;
-            color: #888888;
-            width: 36px;
-            height: 100%;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .qty-btn:hover {
-            color: #D4AF37;
-            background: #181818;
-        }
-
-        .qty-value {
-            width: 36px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: #ffffff;
-        }
 
         .btn-icon-action {
             width: 44px;
@@ -483,42 +455,19 @@
 
         /* CTA Buttons Row */
         .cta-buttons-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            align-items: center;
             gap: 16px;
             margin-bottom: 24px;
         }
 
-        .btn-buy-now {
+        .btn-add-cart {
+            flex: 1;
             height: 48px;
             background: #D4AF37;
             color: #000000;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            border-radius: 6px;
             border: none;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-buy-now:hover {
-            background: #F0CC5A;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
-            color: #000;
-        }
-
-        .btn-add-cart {
-            height: 48px;
-            background: #0f0f0f;
-            color: #D4AF37;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             letter-spacing: 1.5px;
             border-radius: 6px;
@@ -532,13 +481,13 @@
         }
 
         .btn-add-cart:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: #D4AF37;
-            color: #F0CC5A;
+            background: #F0CC5A;
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+            color: #000;
         }
 
-        .btn-buy-now:disabled, .btn-buy-now.disabled {
+        .btn-add-cart:disabled, .btn-add-cart.disabled {
             background: #222222 !important;
             color: #666666 !important;
             cursor: not-allowed !important;
@@ -547,12 +496,21 @@
             border: 1px solid #333333 !important;
         }
 
-        .btn-add-cart:disabled, .btn-add-cart.disabled {
-            background: #141414 !important;
-            color: #555555 !important;
-            border-color: #242424 !important;
-            cursor: not-allowed !important;
-            transform: none !important;
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin {
+            display: inline-block;
+            animation: spinSlow 0.85s linear infinite;
+        }
+
+        .btn-wishlist-action {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
         .qty-btn:disabled {
@@ -1096,12 +1054,12 @@
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- ================= NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL) ================= -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <!-- Brand -->
-            <a class="logo" href="{% url 'home' %}">
-                Wegnex
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
             </a>
 
             <!-- Mobile Toggler -->
@@ -1113,37 +1071,58 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">HOME</a>
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'product_list' %}">PRODUCT</a>
+                        <a class="nav-link active" href="{% url 'product_list' %}">
+                            Products
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'category' %}">CATEGORY</a>
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#about">ABOUT</a>
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
                     </li>
                 </ul>
             </div>
 
             <!-- Icons -->
             <div class="nav-icons">
-                <i class="bi bi-search" title="Search"></i>
-                <i class="bi bi-heart" title="Wishlist"></i>
-                <i class="bi bi-bag" title="Cart"></i>
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist" id="navWishlistIcon">
+                    <i class="bi bi-heart" id="navWishlistHeart"></i>
+                    <span id="navWishlistCount" style="display:none;position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#d4af37;color:#000;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;"></span>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;position:relative;" title="Cart" id="navCartLink">
+                    <i class="bi bi-cart3"></i>
+                    <span id="navCartBadge" style="display:{% if cart_count and cart_count > 0 %}flex{% else %}none{% endif %};position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#d4af37;color:#000;border-radius:50%;font-size:9px;font-weight:700;align-items:center;justify-content:center;">{% if cart_count and cart_count > 0 %}{{ cart_count }}{% endif %}</span>
+                </a>
 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
-                        {% if profile.profile_picture %}
-                            <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
-                        {% else %}
-                            <i class="bi bi-person" style="font-size: 18px;"></i>
-                        {% endif %}
-                    </a>
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
                 {% else %}
-                    <a href="{% url 'login' %}?next={% url 'product_detail' product.id %}" title="Sign In">
-                        <i class="bi bi-person"></i>
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
                     </a>
                 {% endif %}
             </div>
@@ -1292,30 +1271,21 @@
                     </div>
                 {% endif %}
 
-                <!-- QUANTITY & ACTION CONTROLS -->
-                <div class="action-controls-row">
-                    <div class="qty-box">
-                        <button type="button" class="qty-btn" id="qtyMinusBtn" onclick="adjustQty(-1)" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>-</button>
-                        <span class="qty-value" id="qtyDisplay">{% if default_variant and default_variant.stock <= 0 %}0{% else %}1{% endif %}</span>
-                        <button type="button" class="qty-btn" id="qtyPlusBtn" onclick="adjustQty(1)" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>+</button>
-                    </div>
-
-                    <button type="button" class="btn-icon-action" id="wishlistBtn" onclick="toggleWishlist(this)" title="Save to Wishlist">
-                        <i class="bi bi-heart"></i>
-                    </button>
-
-                    <button type="button" class="btn-icon-action" onclick="shareProduct()" title="Share Timepiece">
-                        <i class="bi bi-share"></i>
-                    </button>
-                </div>
-
                 <!-- CTA BUTTONS -->
                 <div class="cta-buttons-row">
-                    <button type="button" class="btn-buy-now {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}" id="btnBuyNow" onclick="buyNow()" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>
-                        {% if default_variant and default_variant.stock <= 0 %}OUT OF STOCK{% else %}BUY NOW{% endif %}
-                    </button>
-                    <button type="button" class="btn-add-cart {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}" id="btnAddToCart" onclick="addToCart()" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>
-                        {% if default_variant and default_variant.stock <= 0 %}UNAVAILABLE{% else %}ADD TO CART{% endif %}
+                    <form id="addToCartForm" method="POST" action="{% url 'add_to_cart' product.id %}" onsubmit="event.preventDefault(); addToCart(); return false;" style="flex:1; display:flex;">
+                        {% csrf_token %}
+                        <input type="hidden" name="variant_id" id="formVariantId" value="{% if default_variant %}{{ default_variant.id }}{% endif %}">
+                        <input type="hidden" name="quantity" id="formQuantity" value="1">
+                        <button type="button" onclick="addToCart()" class="btn-add-cart {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}" id="btnAddToCart" {% if default_variant and default_variant.stock <= 0 %}disabled{% endif %}>
+                            <i class="bi bi-bag"></i> {% if default_variant and default_variant.stock <= 0 %}UNAVAILABLE{% else %}ADD TO CART{% endif %}
+                        </button>
+                    </form>
+                    <button type="button" class="btn-icon-action btn-wishlist-action" id="wishlistBtn"
+                        onclick="toggleWishlist(this)"
+                        data-product-id="{{ product.id }}"
+                        title="Save to Wishlist">
+                        <i class="bi bi-heart" id="wishlistIcon"></i>
                     </button>
                 </div>
 
@@ -1370,6 +1340,169 @@
         </div>
     </section>
 
+    <!-- ================= CUSTOMER REVIEWS ================= -->
+    <section style="background:#080808; padding: 70px 0 60px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div style="max-width:1100px; margin:0 auto; padding: 0 40px;">
+
+            <!-- Section Header -->
+            <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:40px; flex-wrap:wrap; gap:16px;">
+                <div>
+                    <div style="font-size:10px; letter-spacing:4px; color:#D4AF37; font-weight:600; margin-bottom:8px;">VERIFIED BUYERS</div>
+                    <h2 style="font-size:24px; font-weight:700; letter-spacing:2px; color:#fff; margin:0;">CUSTOMER REVIEWS</h2>
+                </div>
+                {% if review_count > 0 %}
+                <div style="display:flex; align-items:center; gap:14px; background:rgba(212,175,55,0.07); border:1px solid rgba(212,175,55,0.2); border-radius:8px; padding:14px 22px;">
+                    <div style="font-size:38px; font-weight:700; color:#D4AF37; line-height:1;">{{ avg_rating }}</div>
+                    <div>
+                        <div style="display:flex; gap:3px; margin-bottom:4px;">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avg_rating %}
+                                    <i class="bi bi-star-fill" style="color:#D4AF37; font-size:14px;"></i>
+                                {% else %}
+                                    <i class="bi bi-star" style="color:#555; font-size:14px;"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div style="font-size:11px; color:#888; letter-spacing:1px;">{{ review_count }} REVIEW{{ review_count|pluralize }}</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Django Messages (review flash messages) -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="padding:12px 18px; border-radius:6px; font-size:12px; margin-bottom:20px; display:flex; align-items:center; gap:10px;
+                        background: {% if message.tags == 'success' %}rgba(34,197,94,0.1){% elif message.tags == 'error' %}rgba(239,68,68,0.1){% else %}rgba(212,175,55,0.1){% endif %};
+                        border: 1px solid {% if message.tags == 'success' %}rgba(34,197,94,0.3){% elif message.tags == 'error' %}rgba(239,68,68,0.3){% else %}rgba(212,175,55,0.3){% endif %};
+                        color: {% if message.tags == 'success' %}#4ade80{% elif message.tags == 'error' %}#f87171{% else %}#D4AF37{% endif %};">
+                        <i class="bi bi-{% if message.tags == 'success' %}check-circle-fill{% elif message.tags == 'error' %}exclamation-triangle-fill{% else %}info-circle-fill{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Existing Reviews -->
+            {% if reviews %}
+                <div style="display:flex; flex-direction:column; gap:18px; margin-bottom:50px;">
+                    {% for review in reviews %}
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:22px 26px; transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(212,175,55,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+                        <div style="display:flex; align-items:flex-start; gap:16px;">
+                            <!-- Avatar -->
+                            <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#D4AF37,#8b6914); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#000; flex-shrink:0;">
+                                {{ review.user.get_full_name|default:review.user.username|first|upper }}
+                            </div>
+                            <!-- Content -->
+                            <div style="flex:1; min-width:0;">
+                                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:6px;">
+                                    <span style="font-size:13px; font-weight:600; color:#fff;">
+                                        {{ review.user.get_full_name|default:review.user.username }}
+                                    </span>
+                                    <!-- Stars -->
+                                    <div style="display:flex; gap:2px;">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="bi bi-star-fill" style="color:#D4AF37; font-size:11px;"></i>
+                                            {% else %}
+                                                <i class="bi bi-star" style="color:#444; font-size:11px;"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <span style="font-size:10px; color:#555; letter-spacing:1px; margin-left:auto;">
+                                        {{ review.created_at|date:"d M Y" }}
+                                    </span>
+                                </div>
+                                <p style="font-size:13px; color:#bbb; line-height:1.7; margin:0;">{{ review.comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="text-align:center; padding:50px 20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; margin-bottom:50px;">
+                    <i class="bi bi-chat-square-heart" style="font-size:36px; color:#333; display:block; margin-bottom:12px;"></i>
+                    <p style="color:#555; font-size:13px; margin:0;">No reviews yet. Be the first to share your experience.</p>
+                </div>
+            {% endif %}
+
+            <!-- Write a Review Form -->
+            {% if user.is_authenticated and can_review and not already_reviewed %}
+            <div style="background:linear-gradient(145deg, #111, #0d0d0d); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:32px 34px;">
+                <div style="font-size:11px; letter-spacing:3px; color:#D4AF37; font-weight:600; margin-bottom:6px;">VERIFIED PURCHASE</div>
+                <h3 style="font-size:17px; font-weight:700; color:#fff; margin:0 0 24px;">Write Your Review</h3>
+
+                <form method="POST" action="{% url 'submit_review' product.id %}" id="reviewForm">
+                    {% csrf_token %}
+
+                    <!-- Star Rating Picker -->
+                    <div style="margin-bottom:22px;">
+                        <label style="display:block; font-size:11px; letter-spacing:2px; color:#777; margin-bottom:10px; font-weight:600;">YOUR RATING</label>
+                        <div style="display:flex; gap:6px;" id="starPicker">
+                            {% for i in "12345" %}
+                            <i class="bi bi-star review-star"
+                               data-val="{{ forloop.counter }}"
+                               style="font-size:26px; color:#333; cursor:pointer; transition:color .15s, transform .15s;"
+                               onclick="setRating({{ forloop.counter }})"
+                               onmouseover="hoverRating({{ forloop.counter }})"
+                               onmouseout="resetHover()">
+                            </i>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="rating" id="ratingInput" value="5">
+                    </div>
+
+                    <!-- Comment -->
+                    <div style="margin-bottom:22px;">
+                        <label style="display:block; font-size:11px; letter-spacing:2px; color:#777; margin-bottom:10px; font-weight:600;">YOUR EXPERIENCE</label>
+                        <textarea name="comment" id="reviewComment" rows="4" placeholder="Share your honest experience with this timepiece…" required
+                            style="width:100%; background:#1a1a1a; border:1px solid #333; border-radius:6px; color:#eee; font-family:'Poppins',sans-serif; font-size:12px; padding:14px 16px; resize:vertical; outline:none; transition:border-color .2s;"
+                            onfocus="this.style.borderColor='rgba(212,175,55,0.5)'"
+                            onblur="this.style.borderColor='#333'"
+                        ></textarea>
+                    </div>
+
+                    <button type="submit"
+                        style="background:linear-gradient(135deg,#D4AF37,#b8960c); color:#000; border:none; border-radius:5px; padding:12px 32px; font-size:11px; font-weight:700; letter-spacing:2px; cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:8px;"
+                        onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(212,175,55,0.35)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        <i class="bi bi-send-fill"></i> SUBMIT REVIEW
+                    </button>
+                </form>
+            </div>
+
+            {% elif user.is_authenticated and already_reviewed %}
+            <div style="background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.15); border-radius:10px; padding:20px 26px; display:flex; align-items:center; gap:14px;">
+                <i class="bi bi-patch-check-fill" style="color:#D4AF37; font-size:22px; flex-shrink:0;"></i>
+                <div>
+                    <div style="font-size:13px; color:#D4AF37; font-weight:600; margin-bottom:2px;">Review Submitted</div>
+                    <div style="font-size:12px; color:#777;">Thank you for sharing your experience! You have reviewed this timepiece.</div>
+                </div>
+            </div>
+
+            {% elif user.is_authenticated and not can_review %}
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:20px 26px; display:flex; align-items:center; gap:14px;">
+                <i class="bi bi-lock" style="color:#555; font-size:22px; flex-shrink:0;"></i>
+                <div>
+                    <div style="font-size:13px; color:#888; font-weight:600; margin-bottom:2px;">Purchase Required</div>
+                    <div style="font-size:12px; color:#555;">Only customers who have received this watch can leave a review.</div>
+                </div>
+            </div>
+
+            {% else %}
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:20px 26px; display:flex; align-items:center; gap:14px;">
+                <i class="bi bi-person-lock" style="color:#555; font-size:22px; flex-shrink:0;"></i>
+                <div>
+                    <div style="font-size:13px; color:#888; font-weight:600; margin-bottom:2px;">Sign In to Review</div>
+                    <div style="font-size:12px; color:#555;">
+                        <a href="{% url 'login' %}?next={% url 'product_detail' product.id %}" style="color:#D4AF37; text-decoration:none;">Log in</a> to share your experience after delivery.
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="footer-grid">
@@ -1412,7 +1545,7 @@
             <div>
                 <div class="footer-col-title">COMPANY</div>
                 <ul class="footer-list">
-                    <li><a href="{% url 'home' %}#about">Our Story</a></li>
+                    <li><a href="{% url 'about' %}">Our Story</a></li>
                     <li><a href="#">Boutique Locator</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Terms of Service</a></li>
@@ -1496,6 +1629,7 @@
         // STATE & INITIALIZATION
         // =====================================================
         const variantsData = {{ variants_json|safe }};
+        let selectedVariantId = {% if default_variant %}{{ default_variant.id }}{% else %}null{% endif %};
         let currentStock = {% if default_variant %}{{ default_variant.stock }}{% else %}0{% endif %};
         let currentQty = currentStock > 0 ? 1 : 0;
 
@@ -1725,11 +1859,7 @@
         function updateStockUI() {
             const badge = document.getElementById('stockBadge');
             const alertBox = document.getElementById('stockAlertBox');
-            const buyBtn = document.getElementById('btnBuyNow');
             const cartBtn = document.getElementById('btnAddToCart');
-            const qtyDisplay = document.getElementById('qtyDisplay');
-            const qtyMinus = document.getElementById('qtyMinusBtn');
-            const qtyPlus = document.getElementById('qtyPlusBtn');
 
             if (currentStock <= 0) {
                 if (badge) {
@@ -1740,20 +1870,11 @@
                     badge.style.background = '';
                 }
                 if (alertBox) alertBox.style.display = 'flex';
-                if (buyBtn) {
-                    buyBtn.disabled = true;
-                    buyBtn.classList.add('disabled');
-                    buyBtn.textContent = 'OUT OF STOCK';
-                }
                 if (cartBtn) {
                     cartBtn.disabled = true;
                     cartBtn.classList.add('disabled');
-                    cartBtn.textContent = 'UNAVAILABLE';
+                    cartBtn.innerHTML = '<i class="bi bi-bag"></i> UNAVAILABLE';
                 }
-                if (qtyMinus) qtyMinus.disabled = true;
-                if (qtyPlus) qtyPlus.disabled = true;
-                currentQty = 0;
-                if (qtyDisplay) qtyDisplay.textContent = '0';
             } else {
                 if (badge) {
                     if (currentStock <= 5) {
@@ -1771,21 +1892,11 @@
                     }
                 }
                 if (alertBox) alertBox.style.display = 'none';
-                if (buyBtn) {
-                    buyBtn.disabled = false;
-                    buyBtn.classList.remove('disabled');
-                    buyBtn.textContent = 'BUY NOW';
-                }
                 if (cartBtn) {
                     cartBtn.disabled = false;
                     cartBtn.classList.remove('disabled');
-                    cartBtn.textContent = 'ADD TO CART';
+                    cartBtn.innerHTML = '<i class="bi bi-bag"></i> ADD TO CART';
                 }
-                if (qtyMinus) qtyMinus.disabled = false;
-                if (qtyPlus) qtyPlus.disabled = false;
-                if (currentQty < 1) currentQty = 1;
-                if (currentQty > currentStock) currentQty = currentStock;
-                if (qtyDisplay) qtyDisplay.textContent = currentQty;
             }
         }
 
@@ -1795,6 +1906,9 @@
             dotEl.classList.add('active');
 
             const variantId = dotEl.dataset.variantId;
+            selectedVariantId = variantId;
+            const formVarInput = document.getElementById('formVariantId');
+            if (formVarInput) formVarInput.value = variantId;
             const variant = variantsData.find(v => v.id == variantId);
 
             const colorName = dotEl.dataset.colorName;
@@ -1883,68 +1997,203 @@
             }
         }
 
-        // Quantity control with strict stock validation
-        function adjustQty(amount) {
-            if (currentStock <= 0) return;
-            const newQty = currentQty + amount;
-            if (newQty < 1) return;
-            if (newQty > currentStock) {
-                showToast(`Maximum available stock reached (${currentStock} units).`, true);
-                return;
-            }
-            currentQty = newQty;
-            document.getElementById('qtyDisplay').textContent = currentQty;
+
+
+        // =====================================================
+        // WISHLIST SYSTEM (DB-BACKED)
+        // =====================================================
+        const CSRF_TOKEN = '{{ csrf_token }}';
+
+        const PRODUCT_ID = {{ product.id }};
+        let isWishlisted = false;
+
+        function initWishlistState() {
+            fetch('/wishlist/status/')
+                .then(r => r.json())
+                .then(data => {
+                    const ids = new Set(data.product_ids || []);
+                    isWishlisted = ids.has(PRODUCT_ID);
+                    setWishlistUI(isWishlisted);
+                    updateNavWishlistBadge(data.count || 0);
+                }).catch(() => {});
         }
 
-        // Wishlist Toggle
-        function toggleWishlist(btn) {
-            const icon = btn.querySelector('i');
-            if (btn.classList.contains('liked')) {
-                btn.classList.remove('liked');
-                icon.className = 'bi bi-heart';
-                showToast("Removed from wishlist.");
-            } else {
+        function setWishlistUI(active) {
+            const btn = document.getElementById('wishlistBtn');
+            const icon = document.getElementById('wishlistIcon');
+            if (!btn || !icon) return;
+            if (active) {
                 btn.classList.add('liked');
                 icon.className = 'bi bi-heart-fill';
-                showToast("Saved to your wishlist.");
-            }
-        }
-
-        // Share product
-        function shareProduct() {
-            if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    url: window.location.href,
-                }).catch(() => {});
+                icon.style.color = '#d4af37';
             } else {
-                navigator.clipboard.writeText(window.location.href);
-                showToast("Product link copied to clipboard!");
+                btn.classList.remove('liked');
+                icon.className = 'bi bi-heart';
+                icon.style.color = '';
             }
         }
 
-        // Add to Cart with stock validation
+        function updateNavWishlistBadge(count) {
+            const badge = document.getElementById('navWishlistCount');
+            const heartIcon = document.getElementById('navWishlistHeart');
+            if (!badge) return;
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+                if (heartIcon) heartIcon.className = 'bi bi-heart-fill';
+            } else {
+                badge.style.display = 'none';
+                if (heartIcon) heartIcon.className = 'bi bi-heart';
+            }
+        }
+
+        function toggleWishlist(btn) {
+            {% if not user.is_authenticated %}
+            window.location.href = "{% url 'login' %}?next={% url 'product_detail' product.id %}";
+            return;
+            {% endif %}
+
+            fetch(`/wishlist/toggle/${PRODUCT_ID}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF_TOKEN,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    isWishlisted = data.in_wishlist;
+                    setWishlistUI(isWishlisted);
+                    updateNavWishlistBadge(data.count);
+                    showToast(data.msg);
+                }
+            }).catch(() => showToast('Something went wrong.', true));
+        }
+
+        document.addEventListener('DOMContentLoaded', initWishlistState);
+
+        // Add to Cart — adds to cart without navigating away from the product details page
         function addToCart() {
+            {% if not user.is_authenticated %}
+            window.location.href = "{% url 'login' %}?next={% url 'product_detail' product.id %}";
+            return;
+            {% endif %}
+
             if (currentStock <= 0) {
                 showToast("This edition is currently out of stock.", true);
                 return;
             }
-            showToast(`Added ${currentQty} piece(s) of {{ product.name|escapejs }} to your cart.`);
+
+            const btn = document.getElementById('btnAddToCart');
+            const originalBtnHtml = '<i class="bi bi-bag"></i> ADD TO CART';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> ADDING...';
+            }
+
+            const body = new URLSearchParams();
+            body.append('quantity', 1);
+            if (selectedVariantId) {
+                body.append('variant_id', selectedVariantId);
+            }
+
+            fetch('{% url "add_to_cart" product.id %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF_TOKEN,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: body,
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.msg || 'Added to cart successfully!');
+                    updateNavCartBadge(data.cart_count);
+
+                    // Automatically remove/deselect from wishlist UI
+                    isWishlisted = false;
+                    setWishlistUI(false);
+                    if (typeof data.wishlist_count !== 'undefined') {
+                        updateNavWishlistBadge(data.wishlist_count);
+                    }
+
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-check2"></i> ADDED TO CART';
+                        setTimeout(() => {
+                            btn.innerHTML = originalBtnHtml;
+                        }, 2000);
+                    }
+                } else {
+                    showToast(data.msg || 'Could not add to cart.', true);
+                    if (btn) {
+                        btn.disabled = currentStock <= 0;
+                        btn.innerHTML = currentStock <= 0 ? '<i class="bi bi-bag"></i> UNAVAILABLE' : originalBtnHtml;
+                    }
+                }
+            })
+            .catch((err) => {
+                console.error('AJAX add to cart failed:', err);
+                if (btn) {
+                    btn.disabled = currentStock <= 0;
+                    btn.innerHTML = currentStock <= 0 ? '<i class="bi bi-bag"></i> UNAVAILABLE' : originalBtnHtml;
+                }
+                showToast('Could not add to cart. Please try again.', true);
+            });
         }
 
-        // Buy Now with stock validation
-        function buyNow() {
-            if (currentStock <= 0) {
-                showToast("This edition is currently out of stock.", true);
-                return;
+        function updateNavCartBadge(count) {
+            // Update cart badge in nav if present
+            let badge = document.getElementById('navCartBadge');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
             }
-            showToast(`Proceeding to checkout with ${currentQty} piece(s) of {{ product.name|escapejs }}.`);
         }
 
         // Initialize UI state
         document.addEventListener('DOMContentLoaded', () => {
             updateStockUI();
+            const form = document.getElementById('addToCartForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    addToCart();
+                });
+            }
         });
+    </script>
+
+    <!-- ===== REVIEW STAR PICKER ===== -->
+    <script>
+    (function(){
+        var selected = 5;
+        var stars = document.querySelectorAll('.review-star');
+
+        function paintStars(upTo, className) {
+            stars.forEach(function(s, idx) {
+                s.className = 'bi review-star ' + (idx < upTo ? 'bi-star-fill' : 'bi-star');
+                s.style.color  = idx < upTo ? '#D4AF37' : '#333';
+                s.style.transform = idx < upTo ? 'scale(1.15)' : 'scale(1)';
+            });
+        }
+
+        window.setRating = function(val) {
+            selected = val;
+            var inp = document.getElementById('ratingInput');
+            if (inp) inp.value = val;
+            paintStars(val);
+        };
+
+        window.hoverRating = function(val) { paintStars(val); };
+        window.resetHover  = function()    { paintStars(selected); };
+
+        // Initial state — 5 stars selected
+        if (stars.length) { setRating(5); }
+    })();
     </script>
 </body>
 </html>

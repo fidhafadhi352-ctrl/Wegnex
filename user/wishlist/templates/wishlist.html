@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEGNEX | Wishlist</title>
+    <meta name="description" content="Your Wegnex wishlist — saved luxury timepieces.">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    {% csrf_token %}
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #090909;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; }
+
+        /* =====================================================
+           NAVBAR (IDENTICAL TO PRODUCT_LIST)
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo, .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* ===== SIDEBAR (exact copy of profile) ===== */
+        .sidebar {
+            width: 265px;
+            padding: 40px 0 0 52px;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            background: #0b0b0b;
+            flex-shrink: 0;
+        }
+
+        .account-title {
+            color: #D4AF37;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .account-subtitle {
+            color: #777777;
+            font-size: 11px;
+            margin-bottom: 24px;
+        }
+
+        .side-link {
+            width: 200px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 14px;
+            color: #bdb5a5;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            transition: all 0.25s;
+        }
+
+        .side-link i { font-size: 17px; }
+
+        .side-link:hover {
+            color: #D4AF37;
+            background: rgba(212,175,55,0.05);
+        }
+
+        .side-link.active {
+            background: rgba(212,175,55,0.12);
+            color: #D4AF37;
+            border-right: 3px solid #D4AF37;
+            font-weight: 600;
+        }
+
+        .logout-side-link {
+            color: #ff7575 !important;
+            margin-top: 20px;
+        }
+
+        .logout-side-link:hover {
+            background: rgba(255,117,117,0.1) !important;
+            color: #ff9e9e !important;
+        }
+
+        /* ===== WISHLIST CONTENT ===== */
+        .wishlist-content {
+            flex: 1;
+            padding: 40px 55px;
+            background: #090909;
+            min-width: 0;
+        }
+
+        .page-header {
+            margin-bottom: 34px;
+        }
+
+        .page-title-label {
+            color: #D4AF37;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .page-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            color: #777;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-wishlist {
+            text-align: center;
+            padding: 70px 20px;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 12px;
+            max-width: 480px;
+        }
+
+        .empty-wishlist i {
+            color: #D4AF37;
+            font-size: 48px;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .empty-wishlist h3 {
+            color: #ddd;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-wishlist p {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 24px;
+        }
+
+        .empty-wishlist a {
+            display: inline-block;
+            padding: 11px 28px;
+            background: #D4AF37;
+            color: #111;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .empty-wishlist a:hover {
+            background: #F0CC5A;
+            transform: translateY(-1px);
+        }
+
+        /* ===== WISHLIST GRID ===== */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            max-width: 900px;
+        }
+
+        /* ===== PRODUCT CARD ===== */
+        .wl-card {
+            background: #121212;
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.25s, transform 0.25s, opacity 0.35s;
+        }
+
+        .wl-card:hover {
+            border-color: rgba(212,175,55,0.35);
+            transform: translateY(-3px);
+        }
+
+        .wl-card.removing {
+            opacity: 0;
+            transform: scale(0.93);
+        }
+
+        /* Image */
+        .wl-card-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            position: relative;
+            overflow: hidden;
+            background: #0d0d0d;
+        }
+
+        .wl-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .wl-card:hover .wl-card-img img {
+            transform: scale(1.05);
+        }
+
+        /* Remove / Heart button */
+        .wl-remove-btn {
+            position: absolute;
+            top: 11px;
+            right: 11px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(9,9,9,0.85);
+            color: #D4AF37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.2s, color 0.2s, transform 0.15s;
+        }
+
+        .wl-remove-btn:hover {
+            background: rgba(212,175,55,0.9);
+            color: #111;
+            transform: scale(1.12);
+        }
+
+        /* Card body */
+        .wl-card-body {
+            padding: 15px 17px 17px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wl-product-name {
+            color: #e0e0e0;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            min-height: 36px;
+        }
+
+        .wl-product-cat {
+            color: #666;
+            font-size: 9px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .wl-product-price {
+            color: #D4AF37;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        /* Move to Cart */
+        .wl-cart-btn {
+            width: 100%;
+            height: 38px;
+            margin-top: 12px;
+            border: none;
+            background: #D4AF37;
+            color: #111;
+            font-family: 'Poppins', sans-serif;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+
+        .wl-cart-btn:hover {
+            background: #F0CC5A;
+            transform: translateY(-1px);
+        }
+
+        .wl-cart-btn:disabled {
+            background: #252525;
+            color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== LOGOUT MODAL (same as profile) ===== */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212,175,55,0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+        }
+
+        .modal-backdrop-custom.active { display: flex; }
+        .modal-backdrop-custom.active .modal-box-custom { transform: scale(1); }
+
+        .modal-icon-badge {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: rgba(255,117,117,0.1);
+            border: 1px solid rgba(255,117,117,0.25);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            color: #ff7575; font-size: 24px;
+        }
+
+        .modal-title-custom { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .modal-desc-custom { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 24px; }
+        .modal-actions { display: flex; gap: 12px; }
+
+        .btn-modal-cancel {
+            flex: 1; height: 42px; border-radius: 8px;
+            background: #202020; border: 1px solid #303030;
+            color: #bbb; font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover { background: #282828; color: #fff; }
+
+        .btn-modal-confirm {
+            flex: 1; height: 42px; border-radius: 8px;
+            background: #b52a2a; border: none;
+            color: #fff; font-size: 12px; font-weight: 600;
+            text-decoration: none; display: flex;
+            align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-confirm:hover { background: #d63636; color: #fff; }
+
+        /* ===== TOAST ===== */
+        .wl-toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: #141414;
+            border: 1px solid #D4AF37;
+            color: #fff;
+            padding: 13px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.8);
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13px; font-weight: 500;
+            z-index: 99999;
+            opacity: 0; transform: translateY(16px);
+            transition: all 0.3s ease; pointer-events: none;
+        }
+
+        .wl-toast.show { opacity: 1; transform: translateY(0); }
+        .wl-toast i { color: #D4AF37; font-size: 17px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 991px) {
+            .navbar { padding: 0 25px; }
+            .navbar-nav { gap: 8px; margin-top: 15px; }
+            .sidebar { width: 200px; padding-left: 20px; }
+            .side-link { width: 170px; }
+            .wishlist-content { padding: 30px 25px; }
+            .wishlist-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 767px) {
+            .main-container { flex-direction: column; }
+            .sidebar {
+                width: 100%; padding: 15px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                display: flex; overflow-x: auto; gap: 10px;
+            }
+            .account-title, .account-subtitle { display: none; }
+            .side-link { width: auto; margin-bottom: 0; white-space: nowrap; }
+            .logout-side-link { margin-top: 0; }
+            .wishlist-content { padding: 25px 20px; }
+            .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        }
+
+        @media (max-width: 480px) {
+            .wishlist-grid { grid-template-columns: 1fr; }
+            .page-title { font-size: 22px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL) ===== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:#D4AF37;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart-fill" style="color:#D4AF37;"></i>
+                    {% if wishlist_count > 0 %}
+                        <span style="position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#D4AF37;color:#000;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;" id="navBadge">{{ wishlist_count }}</span>
+                    {% else %}
+                        <span style="display:none;position:absolute;top:-7px;right:-8px;width:16px;height:16px;background:#D4AF37;color:#000;border-radius:50%;font-size:9px;font-weight:700;align-items:center;justify-content:center;" id="navBadge">0</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-container">
+
+        <!-- ===== SIDEBAR (identical to profile) ===== -->
+        <aside class="sidebar">
+            <div class="account-title">ACCOUNT</div>
+            <div class="account-subtitle">Manage your account</div>
+
+            <a href="{% url 'profile' %}" class="side-link">
+                <i class="bi bi-person-fill"></i>
+                <span>PROFILE</span>
+            </a>
+
+            <a href="{% url 'address' %}" class="side-link">
+                <i class="bi bi-geo-alt"></i>
+                <span>ADDRESS</span>
+            </a>
+
+            <a href="{% url 'order' %}" class="side-link">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                <span>MY ORDERS</span>
+            </a>
+
+            <a href="{% url 'wishlist' %}" class="side-link active">
+                <i class="bi bi-heart-fill"></i>
+                <span>WISHLIST</span>
+            </a>
+
+            <a href="{% url 'wallet' %}" class="side-link">
+                <i class="bi bi-wallet2"></i>
+                <span>WALLET</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openLogoutModal()" class="side-link logout-side-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>LOGOUT</span>
+            </a>
+        </aside>
+
+
+        <!-- ===== WISHLIST CONTENT ===== -->
+        <main class="wishlist-content">
+
+            <div class="page-header">
+                <div class="page-title-label">ACCOUNT</div>
+                <h1 class="page-title">My Wishlist</h1>
+                <p class="page-subtitle" id="pageSubtitle">
+                    {% if wishlist_count > 0 %}
+                        {{ wishlist_count }} saved timepiece{{ wishlist_count|pluralize }} — ready for purchase.
+                    {% else %}
+                        Save your favourite Wegnex luxury watches here.
+                    {% endif %}
+                </p>
+            </div>
+
+
+            {% if wishlist_items %}
+            <div class="wishlist-grid" id="wishlistGrid">
+
+                {% for entry in wishlist_items %}
+                {% with product=entry.product %}
+                <div class="wl-card" id="wishcard-{{ product.id }}">
+
+                    <div class="wl-card-img">
+                        <!-- Remove Button -->
+                        <button type="button" class="wl-remove-btn"
+                                onclick="removeFromWishlist({{ product.id }})"
+                                title="Remove from Wishlist">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+
+                        <!-- Product Image -->
+                        <a href="{% url 'product_detail' product.id %}">
+                            {% if entry.image_url %}
+                                <img src="{{ entry.image_url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=600&q=80"
+                                     alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="wl-card-body">
+                        <a href="{% url 'product_detail' product.id %}" style="color:inherit;">
+                            <div class="wl-product-name">{{ product.name }}</div>
+                        </a>
+                        <div class="wl-product-cat">{{ product.category.name|default:"HOROLOGY"|upper }}</div>
+                        <div class="wl-product-price">
+                            {% if entry.price %}₹{{ entry.price|floatformat:0 }}{% else %}—{% endif %}
+                        </div>
+                        <button type="button" class="wl-cart-btn"
+                                id="cart-btn-{{ product.id }}"
+                                onclick="moveToCart({{ product.id }}, this)">
+                            <i class="bi bi-cart3"></i> MOVE TO CART
+                        </button>
+                    </div>
+
+                </div>
+                {% endwith %}
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+            <div class="empty-wishlist" id="emptyWishlist">
+                <i class="bi bi-heart"></i>
+                <h3>Your wishlist is empty</h3>
+                <p>Browse our luxury timepieces and save your favourites here.</p>
+                <a href="{% url 'product_list' %}">EXPLORE COLLECTION</a>
+            </div>
+            {% endif %}
+
+        </main>
+    </div>
+
+
+    <!-- ===== LOGOUT MODAL (identical to profile) ===== -->
+    <div class="modal-backdrop-custom" id="logoutModal" onclick="handleBackdropClick(event)">
+        <div class="modal-box-custom">
+            <div class="modal-icon-badge">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 class="modal-title-custom">Confirm Sign Out</h3>
+            <p class="modal-desc-custom">
+                Are you sure you want to log out of your WEGNEX account?
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">
+                    No, Cancel
+                </button>
+                <a href="{% url 'logout' %}" class="btn-modal-confirm">
+                    Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== TOAST ===== -->
+    <div class="wl-toast" id="wlToast">
+        <i class="bi bi-check2-circle" id="wlToastIcon"></i>
+        <span id="wlToastMsg">Done!</span>
+    </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const CSRF = '{{ csrf_token }}';
+
+        /* ========== TOAST ========== */
+        function showToast(msg, isError) {
+            const toast = document.getElementById('wlToast');
+            const icon  = document.getElementById('wlToastIcon');
+            const span  = document.getElementById('wlToastMsg');
+            span.textContent = msg;
+            icon.className = isError ? 'bi bi-exclamation-triangle' : 'bi bi-check2-circle';
+            toast.style.borderColor = isError ? 'rgba(239,68,68,.7)' : '#D4AF37';
+            toast.classList.add('show');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        /* ========== BADGE + SUBTITLE ========== */
+        function updateMeta(count) {
+            // Nav badge
+            const badge = document.getElementById('navBadge');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
+            }
+            // Subtitle
+            const sub = document.getElementById('pageSubtitle');
+            if (sub) {
+                sub.textContent = count > 0
+                    ? `${count} saved timepiece${count > 1 ? 's' : ''} — ready for purchase.`
+                    : 'Save your favourite Wegnex luxury watches here.';
+            }
+        }
+
+        /* ========== EMPTY STATE CHECK ========== */
+        function checkEmpty() {
+            const grid = document.getElementById('wishlistGrid');
+            if (!grid) return;
+            if (grid.querySelectorAll('.wl-card').length === 0) {
+                grid.style.display = 'none';
+                if (!document.getElementById('emptyWishlist')) {
+                    const el = document.createElement('div');
+                    el.id = 'emptyWishlist';
+                    el.className = 'empty-wishlist';
+                    el.innerHTML = `
+                        <i class="bi bi-heart"></i>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Browse our luxury timepieces and save your favourites here.</p>
+                        <a href="{% url 'product_list' %}">EXPLORE COLLECTION</a>
+                    `;
+                    grid.parentNode.insertBefore(el, grid.nextSibling);
+                }
+            }
+        }
+
+        /* ========== REMOVE ========== */
+        function removeFromWishlist(productId) {
+            const card = document.getElementById('wishcard-' + productId);
+            if (card) card.classList.add('removing');
+
+            fetch('/wishlist/remove/' + productId + '/', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': CSRF }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    setTimeout(() => {
+                        if (card) card.remove();
+                        checkEmpty();
+                        updateMeta(data.count);
+                        showToast('Removed from wishlist.');
+                    }, 350);
+                }
+            })
+            .catch(() => {
+                if (card) card.classList.remove('removing');
+                showToast('Something went wrong.', true);
+            });
+        }
+
+        /* ========== MOVE TO CART ========== */
+        function moveToCart(productId, btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> MOVING...';
+
+            fetch('/wishlist/move-to-cart/' + productId + '/', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': CSRF }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    const card = document.getElementById('wishcard-' + productId);
+                    if (card) {
+                        card.classList.add('removing');
+                        setTimeout(() => {
+                            card.remove();
+                            checkEmpty();
+                            updateMeta(data.wishlist_count);
+                        }, 350);
+                    }
+                    showToast(data.msg);
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-cart3"></i> MOVE TO CART';
+                    showToast(data.msg || 'Could not add to cart.', true);
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-cart3"></i> MOVE TO CART';
+                showToast('Something went wrong.', true);
+            });
+        }
+
+        /* ========== LOGOUT MODAL ========== */
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleBackdropClick(event) {
+            if (event.target === document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLogoutModal();
+        });
+    </script>
+
+</body>
+</html>

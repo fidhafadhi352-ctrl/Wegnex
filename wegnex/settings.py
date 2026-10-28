@@ -42,8 +42,19 @@ INSTALLED_APPS = [
     'user.address_page',
     'user.product_list',
     'user.category',
+    'user.cart',
+    'user.wishlist',
+    'user.checkout',
+    'user.order',
+    'user.wallet',
+    'user.about',
     'admin_panel.category_management',
     'admin_panel.product_management',
+    'admin_panel.user_management',
+    'admin_panel.order_management',
+    'admin_panel.offer',
+    'admin_panel.coupon',
+    'admin_panel.review_management',
 
     'allauth',
     'allauth.account',
@@ -156,3 +167,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+from decouple import config
+
+RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET")

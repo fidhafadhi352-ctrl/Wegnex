@@ -222,7 +222,65 @@ def changepass_view(request):
 
 @never_cache
 def forgotpass_view(request):
-    return render(request, "forgot_profile_pass.html")
+    default_email = request.user.email if request.user.is_authenticated else ""
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip().lower()
+
+        if not email:
+            messages.error(request, "Please enter your registered email address.")
+            return render(request, "forgot_profile_pass.html", {"default_email": default_email})
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, "Please enter a valid email address.")
+            return render(request, "forgot_profile_pass.html", {"default_email": email})
+
+        user = User.objects.filter(email__iexact=email, is_active=True).first()
+        if not user:
+            messages.error(request, "No active account found with this email address.")
+            return render(request, "forgot_profile_pass.html", {"default_email": email})
+
+        otp_code = str(random.randint(100000, 999999))
+        OTP.objects.filter(user=user, is_used=False).delete()
+        OTP.objects.create(
+            user=user,
+            code=otp_code,
+            is_used=False,
+            expired_at=timezone.now() + timedelta(minutes=5)
+        )
+
+        try:
+            send_mail(
+                subject="WEGNEX - Password Reset Code",
+                message=f"""Hello {user.first_name or user.username},
+
+You requested to reset your WEGNEX account password.
+Your 6-digit verification code is: {otp_code}
+
+This code is valid for 5 minutes.
+If you did not request this, please ignore this email.
+
+Regards,
+WEGNEX Team
+""",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Error sending password reset email: {e}")
+            messages.error(request, f"Failed to send reset code: {e}")
+            return render(request, "forgot_profile_pass.html", {"default_email": email})
+
+        request.session["reset_pass_user_id"] = user.id
+        request.session["reset_pass_email"] = email
+
+        messages.success(request, f"A 6-digit reset code has been sent to {email}.")
+        return redirect("verify_reset_otp")
+
+    return render(request, "forgot_profile_pass.html", {"default_email": default_email})
 
 
 @never_cache
@@ -330,7 +388,164 @@ WEGNEX Team
 
 
 @never_cache
+def verify_reset_otp_view(request):
+    user_id = request.session.get("reset_pass_user_id")
+    email = request.session.get("reset_pass_email", "")
+
+    if not user_id:
+        messages.error(request, "Session expired. Please start the reset process again.")
+        return redirect("profile_forgotpass")
+
+    try:
+        user = User.objects.get(id=user_id, is_active=True)
+    except User.DoesNotExist:
+        messages.error(request, "User not found. Please try again.")
+        return redirect("profile_forgotpass")
+
+    if request.method == "POST":
+        otp1 = request.POST.get("otp1", "").strip()
+        otp2 = request.POST.get("otp2", "").strip()
+        otp3 = request.POST.get("otp3", "").strip()
+        otp4 = request.POST.get("otp4", "").strip()
+        otp5 = request.POST.get("otp5", "").strip()
+        otp6 = request.POST.get("otp6", "").strip()
+
+        entered_otp = otp1 + otp2 + otp3 + otp4 + otp5 + otp6
+
+        if len(entered_otp) != 6 or not entered_otp.isdigit():
+            messages.error(request, "Please enter the complete 6-digit reset code.")
+            return render(request, "verify_reset_otp.html", {"email": email})
+
+        otp = OTP.objects.filter(
+            user=user,
+            code=entered_otp,
+            is_used=False
+        ).order_by("-created_at").first()
+
+        if not otp:
+            messages.error(request, "Invalid code. Please check and try again.")
+            return render(request, "verify_reset_otp.html", {"email": email})
+
+        if timezone.now() > otp.expired_at:
+            messages.error(request, "Code has expired. Please request a new one.")
+            return render(request, "verify_reset_otp.html", {"email": email})
+
+        otp.is_used = True
+        otp.save()
+
+        
+        request.session["reset_pass_verified"] = True
+
+        return redirect("resetprofilepass")
+
+    return render(request, "verify_reset_otp.html", {"email": email})
+
+
+@never_cache
+def resend_reset_otp(request):
+    user_id = request.session.get("reset_pass_user_id")
+    email = request.session.get("reset_pass_email", "")
+
+    if not user_id or not email:
+        messages.error(request, "Session expired. Please start the reset process again.")
+        return redirect("profile_forgotpass")
+
+    try:
+        user = User.objects.get(id=user_id, is_active=True)
+    except User.DoesNotExist:
+        return redirect("profile_forgotpass")
+
+    otp_code = str(random.randint(100000, 999999))
+    OTP.objects.filter(user=user, is_used=False).delete()
+    OTP.objects.create(
+        user=user,
+        code=otp_code,
+        is_used=False,
+        expired_at=timezone.now() + timedelta(minutes=5)
+    )
+
+    try:
+        send_mail(
+            subject="WEGNEX - Resend Password Reset Code",
+            message=f"""Hello {user.first_name or user.username},
+
+Your new 6-digit password reset code is: {otp_code}
+
+This code is valid for 5 minutes.
+
+Regards,
+WEGNEX Team
+""",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        messages.success(request, f"A new reset code has been sent to {email}.")
+    except Exception as e:
+        print(f"Error resending reset OTP: {e}")
+        messages.error(request, "Failed to resend reset code. Please try again.")
+
+    return redirect("verify_reset_otp")
+
+
+@never_cache
 def resetprofilepass_view(request):
+    if not request.session.get("reset_pass_verified"):
+        messages.error(request, "Please verify your identity first.")
+        return redirect("profile_forgotpass")
+
+    user_id = request.session.get("reset_pass_user_id")
+    if not user_id:
+        messages.error(request, "Session expired. Please start the reset process again.")
+        return redirect("profile_forgotpass")
+
+    try:
+        user = User.objects.get(id=user_id, is_active=True)
+    except User.DoesNotExist:
+        messages.error(request, "User not found. Please try again.")
+        return redirect("profile_forgotpass")
+
+    if request.method == "POST":
+        new_password = request.POST.get("new_password", "")
+        confirm_password = request.POST.get("confirm_password", "")
+
+        if not new_password:
+            messages.error(request, "New password is required.")
+            return render(request, "reset_profile_pass.html")
+
+        if len(new_password) < 8:
+            messages.error(request, "Password must contain at least 8 characters.")
+            return render(request, "reset_profile_pass.html")
+
+        if not re.search(r"[A-Z]", new_password):
+            messages.error(request, "Password must contain at least one uppercase letter.")
+            return render(request, "reset_profile_pass.html")
+
+        if not re.search(r"[a-z]", new_password):
+            messages.error(request, "Password must contain at least one lowercase letter.")
+            return render(request, "reset_profile_pass.html")
+
+        if not re.search(r"[0-9]", new_password):
+            messages.error(request, "Password must contain at least one number.")
+            return render(request, "reset_profile_pass.html")
+
+        if not confirm_password:
+            messages.error(request, "Please confirm your new password.")
+            return render(request, "reset_profile_pass.html")
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return render(request, "reset_profile_pass.html")
+
+        user.set_password(new_password)
+        user.save()
+
+        for key in ["reset_pass_verified", "reset_pass_user_id", "reset_pass_email"]:
+            request.session.pop(key, None)
+
+        messages.success(request, "Your password has been reset successfully! Please sign in.")
+        return redirect("login")
+
     return render(request, "reset_profile_pass.html")
 
 

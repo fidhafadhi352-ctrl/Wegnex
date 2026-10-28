@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title>Wegnex | My Wallet</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        /* =========================
+           GLOBAL STYLES
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #090909;
+            --card: #171717;
+            --card-light: #202020;
+            --border: #292929;
+            --gold: #e3bd32;
+            --gold-dark: #c8a52d;
+            --text: #f3f0e9;
+            --muted: #aaa49a;
+            --green: #00d878;
+            --red: #ef7373;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            min-height: 100vh;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           NAVBAR (EXACT HOMEPAGE / PRODUCTS NAVBAR)
+        ===================================================== */
+        .navbar {
+            background: #0b0b0b !important;
+            min-height: 76px !important;
+            padding: 0 45px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        }
+
+        .navbar .logo,
+        .navbar-brand.logo {
+            color: #ffffff !important;
+            font-size: 27px !important;
+            font-weight: 700 !important;
+            letter-spacing: 2px !important;
+            text-decoration: none !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .navbar-nav {
+            gap: 28px !important;
+        }
+
+        .nav-link {
+            color: #a5a5a5 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            transition: 0.3s !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-link:hover {
+            color: #D4AF37 !important;
+        }
+
+        .nav-link.active {
+            color: #D4AF37 !important;
+        }
+
+        .nav-icons {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+        }
+
+        .nav-icons i {
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            transition: 0.3s !important;
+        }
+
+        .nav-icons i:hover {
+            color: #D4AF37 !important;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 12px 20px !important;
+            }
+            .navbar-nav {
+                gap: 14px !important;
+                padding: 16px 0 !important;
+            }
+        }
+
+
+        /* ================= MAIN LAYOUT ================= */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 265px;
+            padding: 40px 0 0 52px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0b0b0b;
+            flex-shrink: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .account-title {
+            color: #D4AF37;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .account-subtitle {
+            color: #777777;
+            font-size: 11px;
+            margin-bottom: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .side-link {
+            width: 200px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 14px;
+            color: #bdb5a5;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            transition: all 0.25s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .side-link i {
+            font-size: 17px;
+        }
+
+        .side-link:hover {
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .side-link.active {
+            background: rgba(212, 175, 55, 0.12);
+            color: #D4AF37;
+            border-right: 3px solid #D4AF37;
+            font-weight: 600;
+        }
+
+        .logout-side-link {
+            color: #ff7575 !important;
+            margin-top: 20px;
+        }
+
+        .logout-side-link:hover {
+            background: rgba(255, 117, 117, 0.1) !important;
+            color: #ff9e9e !important;
+        }
+
+        /* ================= LOGOUT POPUP MODAL ================= */
+        .modal-backdrop-custom {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-box-custom {
+            background: #141414;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.25s ease-out;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-backdrop-custom.active {
+            display: flex;
+        }
+
+        .modal-backdrop-custom.active .modal-box-custom {
+            transform: scale(1);
+        }
+
+        .modal-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 117, 117, 0.1);
+            border: 1px solid rgba(255, 117, 117, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #ff7575;
+            font-size: 24px;
+        }
+
+        .modal-title-custom {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-desc-custom {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-modal-cancel {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #202020;
+            border: 1px solid #303030;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #282828;
+            color: #fff;
+        }
+
+        .btn-modal-confirm {
+            flex: 1;
+            height: 42px;
+            border-radius: 8px;
+            background: #b52a2a;
+            border: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-modal-confirm:hover {
+            background: #d63636;
+            color: #fff;
+        }
+
+        /* =========================
+           WALLET CONTENT
+        ========================= */
+
+        .wallet-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px 55px;
+            background: #090909;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 21px;
+            font-weight: 500;
+            letter-spacing: .3px;
+            margin-bottom: 7px;
+        }
+
+        .page-subtitle {
+            color: #c3bbad;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 570px;
+        }
+
+
+        /* =========================
+           WALLET BALANCE CARD
+        ========================= */
+
+        .balance-card {
+            position: relative;
+            overflow: hidden;
+            width: min(100%, 362px);
+            min-height: 190px;
+            padding: 26px;
+            background: var(--card);
+            border: 1px solid #222;
+            box-shadow: 0 8px 25px #0003;
+        }
+
+        .balance-card::after {
+            content: "◉";
+            position: absolute;
+            right: -17px;
+            bottom: -35px;
+            font-size: 145px;
+            line-height: 1;
+            color: #202020;
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .balance-label {
+            position: relative;
+            z-index: 1;
+            color: #d5ccbb;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.6px;
+        }
+
+        .balance-amount {
+            position: relative;
+            z-index: 1;
+            font-size: 31px;
+            font-weight: 600;
+            letter-spacing: -.5px;
+            color: var(--gold);
+            margin-top: 1px;
+            overflow-wrap: anywhere;
+        }
+
+        .add-money-btn {
+            position: relative;
+            z-index: 1;
+            height: 32px;
+            min-width: 111px;
+            padding: 0 20px;
+            margin-top: 17px;
+
+            background: var(--gold);
+            color: #111;
+            border: 1px solid var(--gold);
+
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: .2s;
+        }
+
+        .add-money-btn:hover {
+            background: #f5d65e;
+            box-shadow: 0 0 15px #e3bd3230;
+        }
+
+        .last-updated {
+            position: relative;
+            z-index: 1;
+            color: #c7bdac;
+            font-size: 10px;
+            margin-top: 32px;
+        }
+
+
+        /* =========================
+           TRANSACTION HISTORY
+        ========================= */
+
+        .transaction-section {
+            margin-top: 31px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .transaction-card {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid #202020;
+            overflow: hidden;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .transaction-table thead {
+            background: #202020;
+        }
+
+        .transaction-table th {
+            height: 34px;
+            padding: 10px 15px;
+            text-align: left;
+            color: #d0c6b5;
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .transaction-table th:nth-child(1) {
+            width: 42%;
+        }
+
+        .transaction-table th:nth-child(2) {
+            width: 17%;
+        }
+
+        .transaction-table th:nth-child(3) {
+            width: 20%;
+        }
+
+        .transaction-table th:nth-child(4) {
+            width: 21%;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .transaction-table td {
+            padding: 13px 15px;
+            height: 53px;
+            border-top: 1px solid #222;
+            vertical-align: middle;
+            font-size: 10px;
+        }
+
+        .transaction-table tbody tr {
+            transition: background .2s;
+        }
+
+        .transaction-table tbody tr:hover {
+            background: #1d1d1d;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .transaction-icon {
+            width: 24px;
+            height: 25px;
+            flex-shrink: 0;
+
+            background: #090909;
+            color: var(--gold);
+            border-radius: 7px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 15px;
+        }
+
+        .transaction-details {
+            min-width: 0;
+        }
+
+        .transaction-name {
+            font-size: 11px;
+            font-weight: 400;
+            color: #f0ede7;
+            margin-bottom: 4px;
+            overflow-wrap: anywhere;
+        }
+
+        .transaction-reference {
+            font-size: 8px;
+            color: #a59d90;
+            overflow-wrap: anywhere;
+        }
+
+        .transaction-type {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 37px;
+            height: 16px;
+            padding: 0 8px;
+
+            border-radius: 20px;
+            font-size: 7px;
+            font-weight: 600;
+        }
+
+        .debit {
+            color: #cfc8bc;
+            background: #252523;
+        }
+
+        .credit {
+            color: var(--green);
+            background: #103022;
+        }
+
+        .transaction-date {
+            color: #c9c0b2;
+            white-space: nowrap;
+            font-size: 9px;
+        }
+
+        .transaction-amount {
+            text-align: right;
+            padding-right: 20px !important;
+            white-space: nowrap;
+            font-size: 11px !important;
+            font-weight: 600;
+        }
+
+        .amount-credit {
+            color: var(--green);
+        }
+
+        .amount-debit {
+            color: #e3e0dc;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            display: none;
+            padding: 35px 15px;
+            color: #999;
+            text-align: center;
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           ADD MONEY MODAL
+        ========================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+            background: #000b;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 390px;
+            padding: 25px;
+            background: #181818;
+            border: 1px solid #333;
+            box-shadow: 0 20px 60px #0008;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 9px;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            color: #ccc;
+            font-size: 23px;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+        }
+
+        .modal-description {
+            color: #a9a093;
+            font-size: 10px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            color: #c9c0b2;
+            font-size: 9px;
+            letter-spacing: 1px;
+            margin-bottom: 9px;
+        }
+
+        .amount-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 44px;
+            padding: 0 13px;
+            border: 1px solid #393939;
+            background: #101010;
+            margin-bottom: 13px;
+        }
+
+        .currency-symbol {
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .amount-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .quick-amount-btn {
+            height: 32px;
+            border: 1px solid #383838;
+            background: #202020;
+            color: #ddd;
+            font-size: 10px;
+        }
+
+        .quick-amount-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .modal-error {
+            display: none;
+            color: #ff7d7d;
+            font-size: 10px;
+            margin-bottom: 12px;
+        }
+
+        .modal-error.show {
+            display: block;
+        }
+
+        .modal-submit {
+            width: 100%;
+            height: 39px;
+            border: none;
+            background: var(--gold);
+            color: #111;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .modal-submit:hover {
+            background: #f3d65d;
+        }
+
+        .secure-note {
+            text-align: center;
+            margin-top: 14px;
+            color: #777;
+            font-size: 8px;
+        }
+
+
+        /* =========================
+           RESPONSIVE DESKTOP
+        ========================= */
+
+        @media (min-width: 1200px) {
+            .page-title {
+                font-size: 22px;
+            }
+
+            .page-subtitle {
+                font-size: 11px;
+            }
+
+            .balance-card {
+                width: min(100%, 362px);
+            }
+
+            .transaction-table th {
+                height: 35px;
+                font-size: 8px;
+            }
+
+            .transaction-table td {
+                height: 53px;
+            }
+        }
+
+
+        /* =========================
+           TABLET & INTERMEDIATE
+        ========================= */
+
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 0 25px !important;
+            }
+            .sidebar {
+                width: 200px;
+                padding-left: 20px;
+            }
+            .side-link {
+                width: 170px;
+            }
+            .wallet-content {
+                padding: 30px 25px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .balance-card {
+                width: min(100%, 362px);
+            }
+
+            .transaction-table {
+                min-width: 530px;
+            }
+
+            .transaction-card {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 15px 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            .account-title, .account-subtitle {
+                display: none;
+            }
+            .side-link {
+                width: auto;
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+            .logout-side-link {
+                margin-top: 0;
+            }
+            .wallet-content {
+                padding: 25px 16px 40px;
+            }
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+            .page-title {
+                font-size: 21px;
+            }
+
+            .page-subtitle {
+                font-size: 10px;
+            }
+
+            .balance-card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .transaction-section {
+                margin-top: 27px;
+            }
+
+            .transaction-card {
+                overflow-x: auto;
+            }
+
+            .transaction-table {
+                min-width: 530px;
+            }
+
+            .section-title {
+                font-size: 17px;
+            }
+        }
+
+        /* =========================
+           WALLET RESULT POPUPS (SUCCESS & FAILED)
+        ========================= */
+
+        .wallet-popup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .wallet-popup-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .wallet-popup-card {
+            position: relative;
+            width: 100%;
+            max-width: 470px;
+            background: #111111;
+            border-radius: 14px;
+            padding: 34px 30px 28px;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95);
+            animation: popupScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popupScaleIn {
+            from {
+                transform: scale(0.92);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .wallet-popup-card.success-card {
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.09) 0%, #111111 65%);
+        }
+
+        .wallet-popup-card.failed-card {
+            border: 1px solid rgba(220, 38, 38, 0.28);
+            background: radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.09) 0%, #111111 65%);
+        }
+
+        .wallet-popup-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .wallet-popup-close:hover {
+            color: #ffffff;
+        }
+
+        .popup-icon-wrapper {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .popup-icon-wrapper.success-icon-wrapper {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1.5px solid #d4af37;
+        }
+
+        .popup-check-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .popup-icon-wrapper.failed-icon-wrapper {
+            background: #b91c1c;
+            border: none;
+        }
+
+        .popup-fail-icon {
+            width: 24px;
+            height: 24px;
+            stroke: #ffffff;
+        }
+
+        .popup-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .popup-desc {
+            color: #888888;
+            font-size: 11.5px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+
+        .popup-divider {
+            height: 1px;
+            background: #222222;
+            margin: 18px 0;
+        }
+
+        /* Success details list */
+        .popup-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            text-align: left;
+        }
+
+        .popup-detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .popup-detail-row .detail-label {
+            color: #777777;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .popup-detail-row .detail-value {
+            font-weight: 600;
+        }
+
+        .popup-detail-row .detail-value.gold-text {
+            color: var(--gold, #d4af37);
+            font-size: 14px;
+        }
+
+        .popup-detail-row .detail-value.white-text {
+            color: #eeeeee;
+            font-size: 13px;
+        }
+
+        .popup-detail-row .detail-value.gray-text {
+            color: #cccccc;
+            font-size: 12px;
+        }
+
+        .status-pill {
+            padding: 3px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .status-pill.status-success {
+            background: rgba(34, 197, 94, 0.12);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        /* Failed inner box */
+        .popup-inner-box {
+            background: #161616;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            text-align: left;
+        }
+
+        .inner-box-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .inner-box-row .inner-label {
+            color: #777777;
+            font-size: 11.5px;
+        }
+
+        .inner-box-row .inner-value {
+            font-weight: 600;
+        }
+
+        .inner-box-row .inner-value.white-text {
+            color: #eeeeee;
+            font-size: 13px;
+        }
+
+        .inner-box-row .inner-value.gray-text {
+            color: #cccccc;
+            font-size: 12px;
+        }
+
+        .inner-box-row .inner-value.red-text {
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        /* Buttons */
+        .popup-btn-primary {
+            width: 100%;
+            height: 44px;
+            background: var(--gold, #d4af37);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: filter 0.2s ease, transform 0.1s ease;
+        }
+
+        .popup-btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .popup-btn-primary:active {
+            transform: scale(0.99);
+        }
+
+        .popup-btn-secondary {
+            width: 100%;
+            height: 44px;
+            background: transparent;
+            border: 1px solid #3a3220;
+            color: var(--gold, #d4af37);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .popup-btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.08);
+            border-color: var(--gold, #d4af37);
+        }
+
+        .popup-btn-link {
+            display: inline-block;
+            background: transparent;
+            border: none;
+            color: var(--gold, #d4af37);
+            font-family: inherit;
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-decoration: underline;
+            margin-top: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .popup-btn-link:hover {
+            color: #f3d778;
+        }
+
+        .popup-footer-meta {
+            margin-top: 18px;
+            font-size: 10px;
+            color: #555555;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <!-- =====================================================
+         NAVBAR (HOMEPAGE / PRODUCTS IDENTICAL)
+    ===================================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand logo" href="{% url 'home' %}">
+                WEGNEX
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse justify-content-center"
+                 id="navbarMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">
+                            Category
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Icons & User Menu -->
+            <div class="nav-icons">
+                <a href="{% url 'product_list' %}" style="color:inherit;" title="Search & Filter">
+                    <i class="bi bi-search"></i>
+                </a>
+                <a href="{% url 'wishlist' %}" style="color:inherit;position:relative;" title="Wishlist">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <a href="{% url 'cart' %}" style="color:inherit;" title="Cart">
+                    <i class="bi bi-cart3"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{% url 'profile' %}" id="homeProfileLink" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile" style="color: #D4AF37;">
+                            {% if profile and profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% elif user.profile and user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid #D4AF37;">
+                            {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                            {% endif %}
+                            <span style="font-size: 13px; font-weight: 600; color: #fff;">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" id="homeLoginLink" class="text-decoration-none" title="Sign In" style="color: #fff; transition: color 0.2s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#fff'">
+                        <i class="bi bi-person" style="font-size: 20px;"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- ================= MAIN ================= -->
+    <div class="main-container">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="sidebar">
+            <div class="account-title">ACCOUNT</div>
+            <div class="account-subtitle">Manage your account</div>
+
+            <a href="{% url 'profile' %}" class="side-link">
+                <i class="bi bi-person-fill"></i>
+                <span>PROFILE</span>
+            </a>
+
+            <a href="{% url 'address' %}" class="side-link">
+                <i class="bi bi-geo-alt"></i>
+                <span>ADDRESS</span>
+            </a>
+
+            <a href="{% url 'order' %}" class="side-link">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                <span>MY ORDERS</span>
+            </a>
+
+            <a href="{% url 'wishlist' %}" class="side-link">
+                <i class="bi bi-heart"></i>
+                <span>WISHLIST</span>
+            </a>
+
+            <a href="{% url 'wallet' %}" class="side-link active">
+                <i class="bi bi-wallet2"></i>
+                <span>WALLET</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openLogoutModal()" class="side-link logout-side-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>LOGOUT</span>
+            </a>
+        </aside>
+
+
+
+        <!-- WALLET CONTENT -->
+
+        <section class="wallet-content">
+
+
+            <h1 class="page-title">
+                WEGNEX WALLET
+            </h1>
+
+            <p class="page-subtitle">
+                Manage your wallet balance, refunds, cashback rewards,
+                and transaction history securely.
+            </p>
+
+
+
+            <!-- BALANCE CARD -->
+
+            <section class="balance-card">
+
+
+                <p class="balance-label">
+                    AVAILABLE BALANCE
+                </p>
+
+
+                <h2 class="balance-amount" id="walletBalance">
+                    ₹{{ wallet_balance|default:"0.00"|floatformat:2 }}
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="add-money-btn"
+                    id="openAddMoney"
+                >
+                    + &nbsp; ADD MONEY
+                </button>
+
+
+                <p class="last-updated" id="lastUpdated">
+                    ◷ &nbsp; Last Updated: {{ wallet.updated_at|date:"M d, Y • h:i A"|default:"Today" }}
+                </p>
+
+
+            </section>
+
+
+
+            <!-- TRANSACTION HISTORY -->
+
+            <section class="transaction-section">
+
+
+                <h2 class="section-title">
+                    Transaction History
+                </h2>
+
+
+                <div class="transaction-card">
+
+
+                    <table class="transaction-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>TRANSACTION</th>
+
+                                <th>TRANSACTION TYPE</th>
+
+                                <th>DATE</th>
+
+                                <th>AMOUNT</th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody id="transactionBody">
+
+                            {% if transactions %}
+                                {% for txn in transactions %}
+                                <tr
+                                    data-type="{{ txn.transaction_type|lower }}"
+                                    data-search="{{ txn.description|lower }} {{ txn.reference|lower }} {{ txn.source|lower }}"
+                                >
+                                    <td>
+                                        <div class="transaction-info">
+                                            <div class="transaction-icon">
+                                                {% if txn.transaction_type == 'CREDIT' %}➕{% else %}➖{% endif %}
+                                            </div>
+                                            <div class="transaction-details">
+                                                <p class="transaction-name">{{ txn.description }}</p>
+                                                <p class="transaction-reference">
+                                                    {% if txn.order %}
+                                                        <a href="{% url 'order_view_detail' txn.order.order_number %}" style="color:var(--gold);text-decoration:underline;">Order #{{ txn.order.order_number }}</a>
+                                                        {% if txn.reference and txn.reference != txn.order.order_number %} &bull; Ref: {{ txn.reference }}{% endif %}
+                                                    {% elif txn.reference %}
+                                                        Ref: {{ txn.reference }}
+                                                    {% else %}
+                                                        {{ txn.get_source_display }}
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="transaction-type {% if txn.transaction_type == 'CREDIT' %}credit{% else %}debit{% endif %}">
+                                            {{ txn.transaction_type }}
+                                        </span>
+                                    </td>
+                                    <td class="transaction-date">{{ txn.created_at|date:"M d, Y" }}</td>
+                                    <td class="transaction-amount {% if txn.transaction_type == 'CREDIT' %}amount-credit{% else %}amount-debit{% endif %}">
+                                        {% if txn.transaction_type == 'CREDIT' %}+{% else %}-{% endif %}₹{{ txn.amount|floatformat:2 }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr id="noTxnRow"><td colspan="4" style="text-align:center;padding:24px;color:#666;">No transactions yet.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+
+
+                    <div class="empty-state" id="emptyState">
+                        No transactions found.
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         ADD MONEY MODAL
+    ========================= -->
+
+    <div class="modal-overlay" id="addMoneyModal">
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+
+            <div class="modal-header">
+
+                <h2 class="modal-title" id="modalTitle">
+                    Add Money
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeModal"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <p class="modal-description">
+                Enter the amount you want to add to your Wegnex wallet.
+            </p>
+
+
+            <form id="addMoneyForm">
+                {% csrf_token %}
+
+
+                <label for="amount" class="form-label">
+                    ENTER AMOUNT
+                </label>
+
+
+                <div class="amount-input-wrapper">
+
+                    <span class="currency-symbol">
+                        ₹
+                    </span>
+
+                    <input
+                        type="number"
+                        class="amount-input"
+                        id="amount"
+                        name="amount"
+                        placeholder="0.00"
+                        min="1"
+                        max="100000"
+                        step="1"
+                        required
+                    >
+
+                </div>
+
+
+
+                <div class="quick-amounts">
+
+                    <button
+                        type="button"
+                        class="quick-amount-btn"
+                        data-amount="500"
+                    >
+                        ₹500
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-amount-btn"
+                        data-amount="1000"
+                    >
+                        ₹1,000
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-amount-btn"
+                        data-amount="5000"
+                    >
+                        ₹5,000
+                    </button>
+
+                </div>
+
+
+                <p class="modal-error" id="amountError"></p>
+
+
+                <button type="submit" class="modal-submit">
+                    CONTINUE TO PAYMENT
+                </button>
+
+
+            </form>
+
+
+            <p class="secure-note">
+                Secure payment processing
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         WALLET SUCCESS POPUP
+    ========================= -->
+
+    <div class="wallet-popup-overlay" id="walletSuccessModal">
+        <div class="wallet-popup-card success-card" role="dialog" aria-modal="true">
+            <button type="button" class="wallet-popup-close" onclick="closeWalletSuccessModal()" aria-label="Close">×</button>
+
+            <div class="popup-icon-wrapper success-icon-wrapper">
+                <svg class="popup-check-icon" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#d4af37" />
+                    <path d="M8 12.5L10.5 15L16 9.5" stroke="#121212" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <h3 class="popup-title">MONEY ADDED SUCCESSFULLY</h3>
+            <p class="popup-desc">
+                Your wallet has been successfully recharged. The amount has been securely added to your Wegnex Wallet and is now available for luxury watch purchases, exclusive collections, and future orders.
+            </p>
+
+            <div class="popup-divider"></div>
+
+            <div class="popup-details-list">
+                <div class="popup-detail-row">
+                    <span class="detail-label">AMOUNT ADDED</span>
+                    <span class="detail-value gold-text" id="successAmount">₹10,000.00</span>
+                </div>
+                <div class="popup-detail-row">
+                    <span class="detail-label">UPDATED WALLET BALANCE</span>
+                    <span class="detail-value white-text" id="successBalance">₹58,999.00</span>
+                </div>
+                <div class="popup-detail-row">
+                    <span class="detail-label">PAYMENT METHOD</span>
+                    <span class="detail-value gray-text" id="successMethod">Razorpay</span>
+                </div>
+                <div class="popup-detail-row">
+                    <span class="detail-label">TRANSACTION STATUS</span>
+                    <span class="status-pill status-success" id="successStatus">SUCCESS</span>
+                </div>
+            </div>
+
+            <div class="popup-divider"></div>
+
+            <button type="button" class="popup-btn-primary" onclick="closeWalletSuccessModal()">
+                GO TO WALLET
+            </button>
+
+            <button type="button" class="popup-btn-link" onclick="viewTransactionDetails()">
+                VIEW TRANSACTION DETAILS
+            </button>
+
+            <div class="popup-footer-meta">
+                <div>Transaction ID: <span id="successTxnId">TXN-WGX-987654321</span></div>
+                <div>Processed On: <span id="successDate">26 June 2026 • 02:45 PM</span></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- =========================
+         WALLET FAILED POPUP
+    ========================= -->
+
+    <div class="wallet-popup-overlay" id="walletFailedModal">
+        <div class="wallet-popup-card failed-card" role="dialog" aria-modal="true">
+            <button type="button" class="wallet-popup-close" onclick="closeWalletFailedModal()" aria-label="Close">×</button>
+
+            <div class="popup-icon-wrapper failed-icon-wrapper">
+                <svg class="popup-fail-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="17" y1="7" x2="7" y2="17"></line>
+                    <line x1="7" y1="7" x2="17" y2="17"></line>
+                </svg>
+            </div>
+
+            <h3 class="popup-title">TRANSACTION FAILED</h3>
+            <p class="popup-desc" id="failedDesc">
+                We couldn't add money to your Wegnex Wallet. The payment could not be completed. Please verify your payment details, check your internet connection, or try another payment method. If your bank account was charged, the amount will be automatically refunded according to your bank's processing time.
+            </p>
+
+            <div class="popup-inner-box">
+                <div class="inner-box-row">
+                    <span class="inner-label">Amount</span>
+                    <span class="inner-value white-text" id="failedAmount">₹10,000.00</span>
+                </div>
+                <div class="inner-box-row">
+                    <span class="inner-label">Payment Method</span>
+                    <span class="inner-value gray-text" id="failedMethod">Razorpay</span>
+                </div>
+                <div class="inner-box-row">
+                    <span class="inner-label">Transaction ID</span>
+                    <span class="inner-value gray-text" id="failedTxnId">TXN-WGX-9854721</span>
+                </div>
+                <div class="inner-box-row">
+                    <span class="inner-label">Transaction Status</span>
+                    <span class="inner-value red-text" id="failedStatus">FAILED</span>
+                </div>
+            </div>
+
+            <button type="button" class="popup-btn-primary" onclick="retryAddMoney()">
+                TRY AGAIN
+            </button>
+
+            <button type="button" class="popup-btn-secondary" onclick="closeWalletFailedModal()">
+                GO BACK
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* =========================
+           WALLET BALANCE
+        ========================= */
+
+        let walletBalance = {{ wallet_balance|default:"0.00" }};
+
+
+        function formatCurrency(amount) {
+
+            return new Intl.NumberFormat("en-IN", {
+
+                style: "currency",
+
+                currency: "INR",
+
+                minimumFractionDigits: 2,
+
+                maximumFractionDigits: 2
+
+            }).format(amount);
+
+        }
+
+
+        function updateWalletBalance() {
+
+            document.getElementById("walletBalance").textContent =
+                formatCurrency(walletBalance);
+
+        }
+
+
+
+        /* =========================
+           OPEN / CLOSE MODAL
+        ========================= */
+
+        const modal = document.getElementById("addMoneyModal");
+
+        const amountInput = document.getElementById("amount");
+
+
+        document.getElementById("openAddMoney")
+            .addEventListener("click", function() {
+
+                modal.classList.add("show");
+
+                document.body.style.overflow = "hidden";
+
+                amountInput.focus();
+
+            });
+
+
+        function closeAddMoneyModal() {
+
+            modal.classList.remove("show");
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        document.getElementById("closeModal")
+            .addEventListener("click", closeAddMoneyModal);
+
+
+        modal.addEventListener("click", function(event) {
+
+            if (event.target === modal) {
+
+                closeAddMoneyModal();
+
+            }
+
+        });
+
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                closeAddMoneyModal();
+                closeWalletSuccessModal();
+                closeWalletFailedModal();
+            }
+        });
+
+        // Overlay click listeners for result popups
+        document.getElementById("walletSuccessModal").addEventListener("click", function(event) {
+            if (event.target === this) closeWalletSuccessModal();
+        });
+        document.getElementById("walletFailedModal").addEventListener("click", function(event) {
+            if (event.target === this) closeWalletFailedModal();
+        });
+
+
+
+        /* =========================
+           QUICK AMOUNT BUTTONS
+        ========================= */
+
+        document.querySelectorAll(".quick-amount-btn")
+            .forEach(button => {
+
+                button.addEventListener("click", function() {
+
+                    amountInput.value = this.dataset.amount;
+
+                    document.getElementById("amountError")
+                        .classList.remove("show");
+
+                });
+
+            });
+
+
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getCsrfToken() {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            if (meta && meta.content && meta.content.length > 10) return meta.content;
+            const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
+            if (input && input.value) return input.value;
+            const cookie = getCookie('csrftoken');
+            if (cookie) return cookie;
+            return '{{ csrf_token }}';
+        }
+
+        /* =========================
+           POPUP CONTROLLER FUNCTIONS
+        ========================= */
+
+        function formatDateTime(dateObj) {
+            if (!dateObj) dateObj = new Date();
+            const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+            const d = dateObj.getDate();
+            const m = months[dateObj.getMonth()];
+            const y = dateObj.getFullYear();
+            let hours = dateObj.getHours();
+            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            const strHours = String(hours).padStart(2, '0');
+            return `${d} ${m} ${y} • ${strHours}:${minutes} ${ampm}`;
+        }
+
+        function showWalletSuccessPopup(data) {
+            document.getElementById('successAmount').textContent = data.formatted_amount || ('₹' + Number(data.amount).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+            document.getElementById('successBalance').textContent = data.formatted_balance || ('₹' + Number(data.new_balance).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+            document.getElementById('successMethod').textContent = data.payment_method || 'Razorpay';
+            document.getElementById('successStatus').textContent = 'SUCCESS';
+            document.getElementById('successTxnId').textContent = data.reference || data.payment_id || ('TXN-WGX-' + Math.floor(1000000 + Math.random() * 9000000));
+            document.getElementById('successDate').textContent = data.date || formatDateTime(new Date());
+
+            const successModal = document.getElementById('walletSuccessModal');
+            successModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWalletSuccessModal() {
+            const successModal = document.getElementById('walletSuccessModal');
+            successModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function viewTransactionDetails() {
+            closeWalletSuccessModal();
+            const txnSection = document.querySelector('.transaction-section');
+            if (txnSection) {
+                txnSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function showWalletFailedPopup(data) {
+            document.getElementById('failedAmount').textContent = data.formatted_amount || ('₹' + Number(data.amount || 0).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+            document.getElementById('failedMethod').textContent = data.payment_method || 'Razorpay';
+            document.getElementById('failedTxnId').textContent = data.reference || data.payment_id || ('TXN-WGX-' + Math.floor(1000000 + Math.random() * 9000000));
+            document.getElementById('failedStatus').textContent = 'FAILED';
+
+            if (data.description) {
+                document.getElementById('failedDesc').textContent = data.description;
+            } else {
+                document.getElementById('failedDesc').textContent = "We couldn't add money to your Wegnex Wallet. The payment could not be completed. Please verify your payment details, check your internet connection, or try another payment method. If your bank account was charged, the amount will be automatically refunded according to your bank's processing time.";
+            }
+
+            const failedModal = document.getElementById('walletFailedModal');
+            failedModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWalletFailedModal() {
+            const failedModal = document.getElementById('walletFailedModal');
+            failedModal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function retryAddMoney() {
+            closeWalletFailedModal();
+            modal.classList.add("show");
+            document.body.style.overflow = "hidden";
+            if (amountInput) amountInput.focus();
+        }
+
+        const RAZORPAY_KEY = "{{ razorpay_key_id|default:'' }}";
+        const CREATE_ORDER_URL = "{% url 'wallet_create_order' %}";
+        const VERIFY_URL = "{% url 'wallet_verify_payment' %}";
+
+        /* =========================
+           ADD MONEY FORM — RAZORPAY
+        ========================= */
+
+        const addMoneyForm = document.getElementById("addMoneyForm");
+        if (addMoneyForm) {
+            addMoneyForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const amountVal = amountInput.value.trim();
+                const amount = Number(amountVal);
+                const error = document.getElementById("amountError");
+                error.textContent = '';
+                error.classList.remove("show");
+
+                if (!amountVal || !Number.isFinite(amount) || amount < 1) {
+                    error.textContent = "Please enter an amount of at least ₹1.";
+                    error.classList.add("show");
+                    return;
+                }
+                if (amount > 100000) {
+                    error.textContent = "Maximum recharge amount is ₹1,00,000 per transaction.";
+                    error.classList.add("show");
+                    return;
+                }
+
+                const submitBtn = this.querySelector('.modal-submit');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.textContent = 'CONNECTING TO RAZORPAY...';
+                submitBtn.disabled = true;
+
+                const csrfToken = getCsrfToken();
+                const formData = new FormData();
+                formData.append('amount', amount);
+                formData.append('csrfmiddlewaretoken', csrfToken);
+
+                fetch(CREATE_ORDER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData,
+                })
+                .then(async response => {
+                    const data = await response.json().catch(() => null);
+                    if (!response.ok) {
+                        const msg = (data && data.msg) ? data.msg : 'Server error (' + response.status + ')';
+                        throw new Error(msg);
+                    }
+                    return data;
+                })
+                .then(data => {
+                    if (!data || !data.success) {
+                        error.textContent = (data && data.msg) || 'Could not initiate Razorpay order.';
+                        error.classList.add('show');
+                        submitBtn.textContent = originalBtnText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+
+                    // Check if Razorpay SDK loaded
+                    if (typeof Razorpay === 'undefined') {
+                        error.textContent = 'Razorpay SDK failed to load. Please check your internet connection.';
+                        error.classList.add('show');
+                        submitBtn.textContent = originalBtnText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+
+                    // Step 2: Open Razorpay checkout modal
+                    const options = {
+                        key: data.razorpay_key_id || RAZORPAY_KEY,
+                        amount: data.amount,
+                        currency: data.currency || 'INR',
+                        order_id: data.razorpay_order_id,
+                        name: 'Wegnex Luxury Horology',
+                        description: 'Wallet Recharge - ₹' + data.amount_inr,
+                        image: '',
+                        theme: { color: '#D4AF37' },
+                        prefill: {
+                            name: data.user_name || '',
+                            email: data.user_email || '',
+                            contact: data.user_phone || ''
+                        },
+                        handler: function(response) {
+                            submitBtn.textContent = 'VERIFYING PAYMENT...';
+                            submitBtn.disabled = true;
+
+                            // Step 3: Verify payment on backend
+                            const vToken = getCsrfToken();
+                            const vForm = new FormData();
+                            vForm.append('csrfmiddlewaretoken', vToken);
+                            vForm.append('razorpay_payment_id', response.razorpay_payment_id);
+                            vForm.append('razorpay_order_id', response.razorpay_order_id);
+                            vForm.append('razorpay_signature', response.razorpay_signature);
+                            vForm.append('amount', data.amount_inr);
+
+                            fetch(VERIFY_URL, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': vToken
+                                },
+                                body: vForm
+                            })
+                            .then(async r => {
+                                const vData = await r.json().catch(() => null);
+                                if (!r.ok) {
+                                    throw new Error((vData && vData.msg) || 'Verification failed on server.');
+                                }
+                                return vData;
+                            })
+                            .then(vData => {
+                                if (vData && vData.success) {
+                                    // Update balance
+                                    walletBalance = vData.new_balance;
+                                    updateWalletBalance();
+
+                                    // Prepend new transaction row to table
+                                    if (vData.transaction) {
+                                        const t = vData.transaction;
+                                        const tbody = document.getElementById('transactionBody');
+                                        const noRow = document.getElementById('noTxnRow');
+                                        if (noRow) noRow.remove();
+                                        const tr = document.createElement('tr');
+                                        tr.dataset.type = 'credit';
+                                        tr.dataset.search = (t.description + ' ' + (t.reference || '')).toLowerCase();
+                                        tr.innerHTML = `
+                                            <td>
+                                                <div class="transaction-info">
+                                                    <div class="transaction-icon">➕</div>
+                                                    <div class="transaction-details">
+                                                        <p class="transaction-name">${t.description}</p>
+                                                        <p class="transaction-reference">Ref: ${t.reference}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="transaction-type credit">CREDIT</span></td>
+                                            <td class="transaction-date">${t.date}</td>
+                                            <td class="transaction-amount amount-credit">${t.formatted_amount}</td>
+                                        `;
+                                        tbody.insertBefore(tr, tbody.firstChild);
+                                    }
+
+                                    // Close modal and reset
+                                    closeAddMoneyModal();
+                                    amountInput.value = '';
+
+                                    // Show Success Popup (matching UI)
+                                    showWalletSuccessPopup({
+                                        amount: data.amount_inr,
+                                        formatted_amount: vData.formatted_amount || ('₹' + Number(data.amount_inr).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})),
+                                        new_balance: vData.new_balance,
+                                        formatted_balance: vData.formatted_balance,
+                                        payment_method: 'Razorpay',
+                                        reference: response.razorpay_payment_id || (vData.transaction ? vData.transaction.reference : ''),
+                                        date: vData.date || (vData.transaction ? vData.transaction.date : null)
+                                    });
+                                } else {
+                                    closeAddMoneyModal();
+                                    showWalletFailedPopup({
+                                        amount: data.amount_inr,
+                                        formatted_amount: '₹' + Number(data.amount_inr).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                                        payment_method: 'Razorpay',
+                                        reference: response.razorpay_payment_id || ('TXN-WGX-' + Math.floor(1000000 + Math.random() * 9000000)),
+                                        description: (vData && vData.msg) || null
+                                    });
+                                }
+                                submitBtn.textContent = originalBtnText;
+                                submitBtn.disabled = false;
+                            })
+                            .catch(err => {
+                                console.error('Verification error:', err);
+                                closeAddMoneyModal();
+                                showWalletFailedPopup({
+                                    amount: data.amount_inr,
+                                    formatted_amount: '₹' + Number(data.amount_inr).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                                    payment_method: 'Razorpay',
+                                    reference: response.razorpay_payment_id || ('TXN-WGX-' + Math.floor(1000000 + Math.random() * 9000000)),
+                                    description: err.message || null
+                                });
+                                submitBtn.textContent = originalBtnText;
+                                submitBtn.disabled = false;
+                            });
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                submitBtn.textContent = originalBtnText;
+                                submitBtn.disabled = false;
+                            }
+                        }
+                    };
+
+                    const rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function(resp) {
+                        console.error('Razorpay payment failed:', resp.error);
+                        closeAddMoneyModal();
+                        const payId = (resp.error && resp.error.metadata && resp.error.metadata.payment_id) 
+                            ? resp.error.metadata.payment_id 
+                            : ('TXN-WGX-' + Math.floor(1000000 + Math.random() * 9000000));
+                        const desc = (resp.error && resp.error.description) ? resp.error.description : null;
+                        showWalletFailedPopup({
+                            amount: data.amount_inr,
+                            formatted_amount: '₹' + Number(data.amount_inr).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                            payment_method: 'Razorpay',
+                            reference: payId,
+                            description: desc
+                        });
+                        submitBtn.textContent = originalBtnText;
+                        submitBtn.disabled = false;
+                    });
+                    rzp.open();
+                })
+                .catch(err => {
+                    console.error('Order creation error:', err);
+                    closeAddMoneyModal();
+                    showWalletFailedPopup({
+                        amount: amount,
+                        formatted_amount: '₹' + Number(amount).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                        payment_method: 'Razorpay',
+                        description: err.message || null
+                    });
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
+                });
+            });
+        }
+
+
+
+        /* =========================
+           SEARCH TRANSACTIONS
+        ========================= */
+
+        const transactionSearch = document.createElement("input");
+
+        transactionSearch.type = "search";
+
+        transactionSearch.placeholder = "Search transactions...";
+
+        transactionSearch.setAttribute(
+            "aria-label",
+            "Search wallet transactions"
+        );
+
+        transactionSearch.style.cssText = `
+            width: 100%;
+            max-width: 250px;
+            height: 32px;
+            padding: 0 10px;
+            margin-bottom: 12px;
+            background: #171717;
+            color: #eee;
+            border: 1px solid #292929;
+            outline: none;
+            font-family: inherit;
+            font-size: 10px;
+        `;
+
+
+        document.querySelector(".transaction-section")
+            .insertBefore(
+                transactionSearch,
+                document.querySelector(".transaction-card")
+            );
+
+
+        transactionSearch.addEventListener("input", function() {
+
+            const query = this.value.toLowerCase().trim();
+
+            const rows = document.querySelectorAll(
+                "#transactionBody tr"
+            );
+
+            let visibleCount = 0;
+
+
+            rows.forEach(row => {
+
+                const searchableText = (
+
+                    row.dataset.search + " " + row.innerText
+
+                ).toLowerCase();
+
+
+                const matches = searchableText.includes(query);
+
+                row.style.display = matches ? "" : "none";
+
+                if (matches) {
+
+                    visibleCount++;
+
+                }
+
+            });
+
+
+            document.getElementById("emptyState").style.display =
+
+                visibleCount === 0 ? "block" : "none";
+
+        });
+
+
+    </script>
+
+    <!-- ================= LOGOUT CONFIRMATION POPUP MODAL ================= -->
+    <div class="modal-backdrop-custom" id="logoutModal" onclick="handleBackdropClick(event)">
+        <div class="modal-box-custom">
+            <div class="modal-icon-badge">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 class="modal-title-custom">Confirm Sign Out</h3>
+            <p class="modal-desc-custom">
+                Are you sure you want to log out of your WEGNEX account?
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">
+                    No, Cancel
+                </button>
+                <a href="{% url 'logout' %}" class="btn-modal-confirm">
+                    Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleBackdropClick(event) {
+            if (event.target === document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLogoutModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

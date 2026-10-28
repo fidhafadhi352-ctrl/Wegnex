@@ -352,15 +352,16 @@
             min-width: 7px;
             max-width: 17px;
 
-            /* color */
-            background: #333;
+            /* golden color */
+            background: linear-gradient(to top, #b8860b, #f5c518);
 
             /* smooth top */
             border-radius: 3px 3px 0 0;
 
             /* subtle highlight */
             box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.04);
+                inset 0 1px 0 rgba(255,255,255,0.15),
+                0 0 6px rgba(245,197,24,0.18);
 
             /* animation */
             transition:
@@ -387,7 +388,7 @@
 
             height: 1px;
 
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.28);
 
             border-radius: 5px;
         }
@@ -397,14 +398,14 @@
 
         .bar:hover {
 
-            background: #555;
+            background: linear-gradient(to top, #a07800, #ffd700);
 
             transform: scaleX(1.12);
 
             cursor: pointer;
 
             box-shadow:
-                0 0 10px rgba(255,255,255,0.08);
+                0 0 14px rgba(245,197,24,0.45);
         }
 
 
@@ -417,16 +418,16 @@
             min-width: 7px;
             max-width: 17px;
 
-            background: #f1f1f1;
+            background: linear-gradient(to top, #c8970d, #ffe040);
 
             box-shadow:
-                0 0 12px rgba(255,255,255,0.08);
+                0 0 18px rgba(255,215,0,0.55);
         }
 
 
         .bar.highlight:hover {
 
-            background: #ffffff;
+            background: linear-gradient(to top, #b8860b, #ffd700);
 
             transform: scaleX(1.12);
         }
@@ -764,8 +765,10 @@
             </li>
 
             <li>
-                <span>♧</span>
-                <span>ORDERS</span>
+                <a href="{% url 'order_management' %}">
+                    <span>♧</span>
+                    <span>ORDERS</span>
+                </a>
             </li>
 
             <li>
@@ -783,18 +786,38 @@
             </li>
 
             <li>
-                <span>♙</span>
-                <span>CUSTOMERS</span>
+                <a href="{% url 'user_management' %}">
+                    <span>♙</span>
+                    <span>CUSTOMERS</span>
+                </a>
             </li>
 
             <li>
-                <span>♜</span>
-                <span>COUPONS</span>
+                <a href="{% url 'coupon' %}">
+                    <span>♜</span>
+                    <span>COUPONS</span>
+                </a>
             </li>
 
             <li>
-                <span>▣</span>
-                <span>REVIEWS</span>
+                <a href="{% url 'offer.html' %}">
+                    <span>🏷</span>
+                    <span>OFFERS</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'sales_report' %}">
+                    <span>📊</span>
+                    <span>SALES REPORT</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'review_management' %}">
+                    <span>⭐</span>
+                    <span>REVIEWS</span>
+                </a>
             </li>
 
         </ul>
@@ -856,9 +879,9 @@
 
             <!-- SALES REPORT -->
 
-            <button class="sales-btn">
+            <a href="{% url 'sales_report' %}" class="sales-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                 ⇩ &nbsp; Sales Report
-            </button>
+            </a>
 
 
 
@@ -874,11 +897,11 @@
                     </div>
 
                     <div class="stat-value">
-                        $1,284,920
+                        ₹{{ total_revenue|floatformat:0 }}
                     </div>
 
                     <div class="stat-bottom">
-                        ⌁ 18.6% VS LAST MONTH
+                        ⌁ FROM ALL VALID ORDERS
                     </div>
 
                 </div>
@@ -892,11 +915,11 @@
                     </div>
 
                     <div class="stat-value">
-                        4,862
+                        {{ total_orders_count }}
                     </div>
 
                     <div class="stat-bottom">
-                        🛒 156 NEW ORDERS TODAY
+                        🛒 ALL TIME ORDERS
                     </div>
 
                 </div>
@@ -910,7 +933,7 @@
                     </div>
 
                     <div class="stat-value">
-                        42
+                        {{ pending_orders_count }}
                     </div>
 
                     <div class="stat-bottom">
@@ -932,11 +955,11 @@
                     </div>
 
                     <div class="stat-value">
-                        21,480
+                        {{ total_customers }}
                     </div>
 
                     <div class="stat-bottom">
-                        ♙ +12% GROWTH
+                        ♙ {{ active_users }} ACTIVE · {{ blocked_users }} BLOCKED
                     </div>
 
                 </div>
@@ -983,191 +1006,46 @@
 
 
 
-                    <!-- CHART -->
+                    <!-- CHART - Real Revenue Data -->
 
-                    <div class="chart">
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:45px;">
-                            </div>
-
-                            <div class="month">
-                                JAN
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:67px;">
-                            </div>
-
-                            <div class="month">
-                                FEB
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:60px;">
-                            </div>
-
-                            <div class="month">
-                                MAR
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:90px;">
-                            </div>
-
-                            <div class="month">
-                                APR
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar highlight"
-                                style="height:107px;">
-                            </div>
-
-                            <div class="month">
-                                MAY
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:76px;">
-                            </div>
-
-                            <div class="month">
-                                JUN
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:70px;">
-                            </div>
-
-                            <div class="month">
-                                JUL
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:96px;">
-                            </div>
-
-                            <div class="month">
-                                AUG
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:58px;">
-                            </div>
-
-                            <div class="month">
-                                SEP
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:65px;">
-                            </div>
-
-                            <div class="month">
-                                OCT
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:48px;">
-                            </div>
-
-                            <div class="month">
-                                NOV
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="bar-wrapper">
-
-                            <div
-                                class="bar"
-                                style="height:85px;">
-                            </div>
-
-                            <div class="month">
-                                DEC
-                            </div>
-
-                        </div>
-
-
+                    <div class="chart" id="revenueChart">
+                        <!-- bars rendered by JS below -->
                     </div>
+
+                    <script>
+                    (function(){
+                        var labels = {{ revenue_labels|safe }};
+                        var data   = {{ revenue_data|safe }};
+                        var maxVal = {{ max_revenue }};
+                        var chart  = document.getElementById('revenueChart');
+                        var maxBarH = 107;
+                        if(!chart) return;
+                        var maxD = Math.max.apply(null, data);
+                        if(maxD <= 0) maxD = 1;
+                        var maxIdx = data.indexOf(maxD);
+                        labels.forEach(function(lbl, idx){
+                            var h = Math.max(8, Math.round((data[idx] / maxD) * maxBarH));
+                            var isHigh = idx === maxIdx && data[idx] > 0;
+                            var wrapper = document.createElement('div');
+                            wrapper.className = 'bar-wrapper';
+                            var tip = document.createElement('div');
+                            tip.style.cssText='position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:#1c1c1c;color:#f5c518;font-size:7px;padding:2px 5px;border-radius:3px;white-space:nowrap;opacity:0;transition:.2s;pointer-events:none;border:1px solid #3a3000;';
+                            tip.textContent = data[idx] > 0 ? '\u20b9' + Number(data[idx]).toLocaleString('en-IN', {maximumFractionDigits:0}) : '\u20b90';
+                            var bar = document.createElement('div');
+                            bar.className = isHigh ? 'bar highlight' : 'bar';
+                            bar.style.height = h + 'px';
+                            bar.appendChild(tip);
+                            bar.addEventListener('mouseenter', function(){ tip.style.opacity='1'; });
+                            bar.addEventListener('mouseleave', function(){ tip.style.opacity='0'; });
+                            var month = document.createElement('div');
+                            month.className = 'month';
+                            month.textContent = lbl.toUpperCase();
+                            wrapper.appendChild(bar);
+                            wrapper.appendChild(month);
+                            chart.appendChild(wrapper);
+                        });
+                    })();
+                    </script>
 
                 </div>
 
@@ -1189,113 +1067,38 @@
 
                     <div class="categories">
 
+                        {% if top_categories %}
+                            {% for cat in top_categories %}
+                            <div class="category">
 
-                        <div class="category">
+                                <div class="category-info">
 
-                            <div class="category-info">
+                                    <span>
+                                        {{ cat.name|upper }}
+                                    </span>
 
-                                <span>
-                                    SWISS LUXURY
-                                </span>
+                                    <span>
+                                        {{ cat.pct }}%
+                                    </span>
 
-                                <span>
-                                    46%
-                                </span>
-
-                            </div>
-
-
-                            <div class="progress">
-
-                                <span
-                                    style="width:46%;">
-                                </span>
-
-                            </div>
-
-                        </div>
+                                </div>
 
 
+                                <div class="progress">
 
-                        <div class="category">
+                                    <span
+                                        style="width:{{ cat.pct }}%;">
+                                    </span>
 
-                            <div class="category-info">
-
-                                <span>
-                                    AUTOMATIC
-                                </span>
-
-                                <span>
-                                    29%
-                                </span>
+                                </div>
 
                             </div>
-
-
-                            <div class="progress">
-
-                                <span
-                                    style="width:29%;">
-                                </span>
-
+                            {% endfor %}
+                        {% else %}
+                            <div style="color:#555;font-size:9px;padding:20px 0;text-align:center;">
+                                No sales data yet
                             </div>
-
-                        </div>
-
-
-
-                        <div class="category">
-
-                            <div class="category-info">
-
-                                <span>
-                                    CHRONOGRAPHS
-                                </span>
-
-                                <span>
-                                    16%
-                                </span>
-
-                            </div>
-
-
-                            <div class="progress">
-
-                                <span
-                                    style="width:16%;">
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="category">
-
-                            <div class="category-info">
-
-                                <span>
-                                    LIMITED EDITIONS
-                                </span>
-
-                                <span>
-                                    9%
-                                </span>
-
-                            </div>
-
-
-                            <div class="progress">
-
-                                <span
-                                    style="width:9%;">
-                                </span>
-
-                            </div>
-
-                        </div>
-
+                        {% endif %}
 
                     </div>
 
@@ -1326,7 +1129,7 @@
                             font-size:8px;
                             color:#aaa;
                         ">
-                            VIEW ALL
+                            <a href="{% url 'admin_product_list' %}" style="color:#aaa;text-decoration:none;">VIEW ALL</a>
                         </div>
 
                     </div>
@@ -1340,7 +1143,7 @@
                         </div>
 
                         <div>
-                            Category
+                            CATEGORY
                         </div>
 
                         <div>
@@ -1348,133 +1151,56 @@
                         </div>
 
                         <div>
-                            STATUS
+                            SOLD
                         </div>
 
                     </div>
 
 
+                    {% if top_products %}
+                        {% for prod in top_products %}
+                        <div class="product-row">
 
-                    <!-- PRODUCT 1 -->
 
-                    <div class="product-row">
+                            <div class="product">
 
+                                <div class="watch">
+                                    ⌚
+                                </div>
 
-                        <div class="product">
+                                <span title="{{ prod.product_name }}">
+                                    {{ prod.product_name|truncatechars:22 }}
+                                </span>
 
-                            <div class="watch">
-                                ⌚
                             </div>
 
-                            <span>
-                                Nautilus
-                            </span>
 
-                        </div>
-
-
-                        <div>
-                            Patek Philippe
-                        </div>
-
-
-                        <div>
-                            $105,000
-                        </div>
-
-
-                        <div>
-
-                            <span class="status">
-                                PRE-ORDER
-                            </span>
-
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- PRODUCT 2 -->
-
-                    <div class="product-row">
-
-
-                        <div class="product">
-
-                            <div class="watch">
-                                ⌚
+                            <div>
+                                {{ prod.product__category__name|default:"—" }}
                             </div>
 
-                            <span>
-                                Submariner
-                            </span>
 
-                        </div>
-
-
-                        <div>
-                            Rolex
-                        </div>
-
-
-                        <div>
-                            $12,400
-                        </div>
-
-
-                        <div>
-
-                            <span class="status stock">
-                                IN STOCK
-                            </span>
-
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- PRODUCT 3 -->
-
-                    <div class="product-row">
-
-
-                        <div class="product">
-
-                            <div class="watch">
-                                ⌚
+                            <div>
+                                ₹{{ prod.price|floatformat:0 }}
                             </div>
 
-                            <span>
-                                Speedmaster
-                            </span>
+
+                            <div>
+
+                                <span class="status stock">
+                                    {{ prod.total_sold }} SOLD
+                                </span>
+
+                            </div>
+
 
                         </div>
-
-
-                        <div>
-                            Omega
+                        {% endfor %}
+                    {% else %}
+                        <div style="padding:24px 17px;color:#555;font-size:9px;">
+                            No sales data yet.
                         </div>
-
-
-                        <div>
-                            $6,300
-                        </div>
-
-
-                        <div>
-
-                            <span class="status stock">
-                                IN STOCK
-                            </span>
-
-                        </div>
-
-
-                    </div>
+                    {% endif %}
 
 
                 </div>
@@ -1498,59 +1224,27 @@
                     <div class="activity">
 
 
-                        <div class="activity-item">
+                        {% if recent_activity %}
+                            {% for act in recent_activity %}
+                            <div class="activity-item"
+                                 {% if act.status == 'CANCELLED' or act.status == 'RETURNED' %}style="--dot-color:#ff6b6b;"{% elif act.status == 'DELIVERED' %}style="--dot-color:#6bffb8;"{% elif act.status == 'PENDING' or act.status == 'CONFIRMED' %}style="--dot-color:#f5c518;"{% endif %}
+                            >
 
-                            <div class="activity-title">
-                                New Rolex Submariner Order
+                                <div class="activity-title">
+                                    {{ act.title|truncatechars:32 }}
+                                </div>
+
+                                <div class="activity-desc">
+                                    {{ act.time }} &nbsp;·&nbsp; {{ act.order_number }} &nbsp;·&nbsp; {{ act.status_display }} &nbsp;·&nbsp; ₹{{ act.amount|floatformat:0 }}
+                                </div>
+
                             </div>
-
-                            <div class="activity-desc">
-                                2 mins ago • Order #8492
+                            {% endfor %}
+                        {% else %}
+                            <div style="color:#555;font-size:9px;padding:20px 0;text-align:center;">
+                                No recent orders
                             </div>
-
-                        </div>
-
-
-
-                        <div class="activity-item">
-
-                            <div class="activity-title">
-                                Omega Inventory Updated
-                            </div>
-
-                            <div class="activity-desc">
-                                15 mins ago • Stock +5 Units
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="activity-item">
-
-                            <div class="activity-title">
-                                Refund Issued
-                            </div>
-
-                            <div class="activity-desc">
-                                1 hour ago • Order #8210 • -$6,500
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="activity-item">
-
-                            <div class="activity-title">
-                                Customer Review Received
-                            </div>
-
-                            <div class="activity-desc">
-                                2 hours ago • ★ Review by J. Doe
-                            </div>
-
-                        </div>
+                        {% endif %}
 
 
                     </div>
